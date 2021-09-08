@@ -1,5 +1,5 @@
-# ThinkRchive
-An app showing all details for various Lenovo Thinkpad models. Made to try out Jepack Compose for Android.
+# PowerSH
+An app showing all details for various Shoes collections. Made by Jepack Compose for Android.
 
 WORK IN PROGRESS
 GOALS:
@@ -13,11 +13,4 @@ GOALS:
 4. Compose Navigation ✅
 
 5. Impelement animations ✅
- 
-7. Use MotionLayout
- 
-8. Implement Tests
- 
-9. Implement a Desktop version with Compose for Desktop
- 
-10. Attempt Kotlin Multiplatform Mobile
+
