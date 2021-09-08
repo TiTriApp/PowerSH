@@ -28,6 +28,12 @@ import akram.bensalem.powersh.ui.theme.Dimens
 import akram.bensalem.powersh.ui.theme.Shapes
 import akram.bensalem.powersh.ui.theme.PowerSHTheme
 import akram.bensalem.powersh.utils.Constants
+import androidx.compose.foundation.text.BasicText
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextDecoration
 
 @Composable
 fun ProductShoesEntry(
@@ -35,7 +41,6 @@ fun ProductShoesEntry(
     onEntryClick: () -> Unit = {},
     shoeProduct: ShoeProduct
 ) {
-    //Scale animation
     val animatedProgress = remember {
         Animatable(initialValue = 1.15f)
     }
@@ -51,17 +56,6 @@ fun ProductShoesEntry(
             scaleX = animatedProgress.value,
             scaleY = animatedProgress.value
         )
-
-    val divider = " - "
-    val marketPrice by remember(shoeProduct) {
-        derivedStateOf {
-            buildAnnotatedString {
-                append("${shoeProduct.marketPriceStart} DA")
-                append(divider)
-                append("${shoeProduct.marketPriceEnd} DA")
-            }.text
-        }
-    }
 
     var imageLoading by remember {
         mutableStateOf(true)
@@ -90,8 +84,7 @@ fun ProductShoesEntry(
 
     ) {
         Column(
-            modifier = Modifier
-              //  .padding(bottom = Dimens.MediumPadding.size),
+            modifier = Modifier.fillMaxWidth()
             ) {
 
 
@@ -110,15 +103,18 @@ fun ProductShoesEntry(
                 Image(
                     painter = coilPainter,
                     contentDescription = "${shoeProduct.title} Image",
+                    contentScale = ContentScale.FillBounds,
                     modifier = Modifier
-                        .size(130.dp)
-                        .padding(Dimens.MediumPadding.size)
+                        .fillMaxWidth()
+                        .aspectRatio(1f)
+                        .padding(vertical = Dimens.ZeroPadding.size, horizontal = Dimens.ZeroPadding.size)
                 )
 
                 Column(
                     Modifier
                         .fillMaxWidth()
-                        .height(160.dp)
+                        .fillMaxWidth()
+                        .aspectRatio(1f)
                         .align(Alignment.Center)
                         .background(
                             color = CardCoverPink.copy(alpha = 0.1f)
@@ -134,7 +130,7 @@ fun ProductShoesEntry(
                 Column(
                     modifier = Modifier
                         .weight(1f)
-                        .padding(start =Dimens.MediumPadding.size)
+                        .padding(start = Dimens.MediumPadding.size)
                 ) {
                     Text(
                         text = shoeProduct.title,
@@ -144,14 +140,34 @@ fun ProductShoesEntry(
                         overflow = TextOverflow.Ellipsis,
                         modifier = Modifier.padding(top = 8.dp)
                     )
-                    Text(
-                        text = "${marketPrice}",
-                        color = MaterialTheme.colors.primary,
-                        style = MaterialTheme.typography.subtitle2,
-                        maxLines=1,
-                        overflow = TextOverflow.Ellipsis,
-                        modifier = Modifier.padding(top = 4.dp, bottom = Dimens.SmallPadding.size)
-                    )
+                    Row(
+                        modifier = Modifier.padding(
+                            top = Dimens.MiniSmallPadding.size,
+                            bottom = Dimens.SmallPadding.size
+                        )
+                    ) {
+                        if (shoeProduct.marketPriceStart != shoeProduct.marketPriceEnd) {
+                            Text(
+                                text = "${shoeProduct.marketPriceEnd} DA",
+                                color = MaterialTheme.colors.primary,
+                                style = MaterialTheme.typography.subtitle2,
+                                textDecoration = TextDecoration.LineThrough,
+                                maxLines = 1,
+                                overflow = TextOverflow.Ellipsis,
+                                modifier = Modifier.padding(end = Dimens.MiniSmallPadding.size)
+                            )
+                        }
+                        Text(
+                            text = "${shoeProduct.marketPriceStart} DA",
+                            color = MaterialTheme.colors.primary,
+                            style = MaterialTheme.typography.subtitle2,
+                            fontWeight = FontWeight.Medium,
+                            maxLines=1,
+                            overflow = TextOverflow.Ellipsis,
+                            modifier = Modifier
+                        )
+                    }
+
                 }
 
                 IconButton(
@@ -231,19 +247,6 @@ private fun LoadingImage(
                 shape = Shapes.large
             )
     )
-}
-
-@Preview(
-    showBackground = true
-)
-@Composable
-private fun SubtitleTextPreview() {
-    PowerSHTheme {
-        SubtitleText(
-            subtitleName = "Market Price",
-            subtitleData = "$250 - $2050"
-        )
-    }
 }
 
 @Preview

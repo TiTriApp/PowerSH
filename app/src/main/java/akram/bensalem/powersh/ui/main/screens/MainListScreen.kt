@@ -292,12 +292,7 @@ fun ThinkpadListScreen(
                 modifier = Modifier.fillMaxWidth(),
                 scope = scope
             )
-
-
-
         }
-
-
     }
 
 

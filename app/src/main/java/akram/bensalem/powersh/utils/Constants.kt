@@ -1,6 +1,7 @@
 package akram.bensalem.powersh.utils
 
 import akram.bensalem.powersh.data.model.ShoeProduct
+import akram.bensalem.powersh.data.types.ShoeType
 
 object Constants {
  //  const val BASE_URL = "https://docs.google.com/spreadsheets/d/1cFrYzzAP7i3bzSLKuBMykz3ZNUbf-YPTqRSEAwINy_E/"
@@ -16,6 +17,7 @@ object Constants {
             id = 0,
             title = "Thinkpad T450",
             imageUrl = "https://raw.githubusercontent.com/racka98/ThinkRchive/main/thinkpad_images/thinkpadt450.png",
+            type= ShoeType.MEN,
             releaseDate = "Jan, 2015",
             marketPriceStart = 250,
             marketPriceEnd = 500,
@@ -24,6 +26,7 @@ object Constants {
             id = 1,
             title = "Thinkpad T450",
             imageUrl = "https://raw.githubusercontent.com/racka98/ThinkRchive/main/thinkpad_images/thinkpadt450.png",
+            type= ShoeType.MEN,
             releaseDate = "Jan, 2015",
             marketPriceStart = 250,
             marketPriceEnd = 500,
@@ -32,6 +35,7 @@ object Constants {
             id = 2,
             title = "Thinkpad T450",
             imageUrl = "https://raw.githubusercontent.com/racka98/ThinkRchive/main/thinkpad_images/thinkpadt450.png",
+            type= ShoeType.WOMEN,
             releaseDate = "Jan, 2015",
             marketPriceStart = 250,
             marketPriceEnd = 500,
@@ -40,6 +44,7 @@ object Constants {
             id = 3,
             title = "Thinkpad T450",
             imageUrl = "https://raw.githubusercontent.com/racka98/ThinkRchive/main/thinkpad_images/thinkpadt450.png",
+            type= ShoeType.WOMEN,
             releaseDate = "Jan, 2015",
             marketPriceStart = 250,
             marketPriceEnd = 500,
@@ -48,6 +53,7 @@ object Constants {
             id = 4,
             title = "Thinkpad T450",
             imageUrl = "https://raw.githubusercontent.com/racka98/ThinkRchive/main/thinkpad_images/thinkpadt450.png",
+            type= ShoeType.BABY,
             releaseDate = "Jan, 2015",
             marketPriceStart = 250,
             marketPriceEnd = 500,

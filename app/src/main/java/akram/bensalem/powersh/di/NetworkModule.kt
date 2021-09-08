@@ -29,7 +29,7 @@ object NetworkModule {
         .addSheet(
             sheetName = "all_shoes",
             columns = arrayOf(
-                "id","title", "image_url", "release_date", "market_price_start", "market_price_end",
+                "id","title", "image_url", "type","release_date", "market_price_start", "market_price_end",
             )
 
         )

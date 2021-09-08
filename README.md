@@ -2,7 +2,6 @@
 An app showing all details for various Shoes collections. Made by Jepack Compose for Android.
 
 WORK IN PROGRESS
-GOALS:
 
 1. Use Retrofit ✅
 
