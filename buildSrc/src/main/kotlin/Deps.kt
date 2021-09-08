@@ -52,6 +52,16 @@ object Deps {
     // Accompanist
     val accompanistInsets by lazy { "com.google.accompanist:accompanist-insets:${Versions.accompanist}" }
     val accompanistNavigationAnimations by lazy { "com.google.accompanist:accompanist-navigation-animation:${Versions.accompanist}" }
+    val accompanistPager by lazy {"com.google.accompanist:accompanist-pager:${Versions.accompanist}"}
+
+
+    val accompanistSystemUiController by lazy {"com.google.accompanist:accompanist-systemuicontroller:${Versions.accompanist}"}
+    val accompanistPagerIndication by lazy {"com.google.accompanist:accompanist-pager-indicators:${Versions.accompanist}"}
+    val accompanistSwiperefresh by lazy {"com.google.accompanist:accompanist-swiperefresh:${Versions.accompanist}"}
+    val accompanistInsetsUi by lazy {"com.google.accompanist:accompanist-insets-ui:${Versions.accompanist}"}
+
+
+
 
     // Room
     val roomRuntime by lazy { "androidx.room:room-runtime:${Versions.room}" }

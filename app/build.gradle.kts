@@ -107,7 +107,11 @@ dependencies {
     // Accompanist
     implementation(Deps.accompanistInsets)
     implementation(Deps.accompanistNavigationAnimations)
+    implementation(Deps.accompanistPager)
+    implementation(Deps.accompanistSwiperefresh)
+    implementation(Deps.accompanistPagerIndication)
 
+    
     // Room database
     implementation(Deps.roomRuntime)
     implementation(Deps.roomKtx)

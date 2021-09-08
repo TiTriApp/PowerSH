@@ -35,7 +35,7 @@ object Versions {
     const val timber = "4.7.1"
 
     // Helpers
-    const val accompanist = "0.17.0"
+    const val accompanist = "0.18.0"
     const val coilImage = "1.3.2"
 
     // Networking & JSON
