@@ -4,10 +4,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.material.icons.rounded.Close
@@ -17,8 +13,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
-import androidx.compose.ui.focus.FocusManager
-import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
@@ -33,25 +27,32 @@ import akram.bensalem.powersh.R
 import akram.bensalem.powersh.ui.theme.Dimens
 import akram.bensalem.powersh.ui.theme.Shapes
 import akram.bensalem.powersh.ui.theme.PowerSHTheme
+import akram.bensalem.powersh.utils.asAutoCompleteEntities
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.*
+import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.outlined.Email
 import androidx.compose.material.icons.outlined.Visibility
 import androidx.compose.material.icons.outlined.VisibilityOff
 import androidx.compose.ui.autofill.AutofillType
-import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.focus.*
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.*
 import com.akram.bensalem.powersh.ui.screens.login.autofill
+import java.util.*
 
+@ExperimentalAnimationApi
+@OptIn(ExperimentalAnimationApi::class)
 @ExperimentalComposeUiApi
 @Composable
 fun CustomSearchBar(
@@ -100,173 +101,242 @@ fun CustomSearchBar(
         targetValue = if (isHintActive) 1F else 0.5f
     )
 
-    Row(
-        modifier = modifier.fillMaxWidth()
+
+    val items = listOf(
+        "Addidas",
+        "Basket",
+        "Nike",
+        "Versac",
+        "Air"
+    )
+    val autoCompleteEntities = items.asAutoCompleteEntities(
+        filter = { item, query ->
+            item.toLowerCase(Locale.getDefault())
+                .startsWith(query.toLowerCase(Locale.getDefault()))
+        }
+    )
+
+
+    AutoCompleteBox(
+        items = autoCompleteEntities,
+        itemContent = { item ->
+            ValueAutoCompleteItem(item.value)
+        }
     ) {
-        BoxWithConstraints(
-            contentAlignment = Alignment.Center,
-            modifier = Modifier
-                .padding(horizontal = paddingSize)
-                .weight(1f)
-                .background(
-                    color = MaterialTheme.colors.surface,
-                    shape = CircleShape
-                )
+
+        onItemSelected { item ->
+            searchText = item.value
+            filter(searchText)
+            onSearch(searchText)
+            keyboardController?.hide()
+            focusManager.clearFocus()
+            isTyping = searchText.isNotBlank()
+
+        }
+
+
+        Row(
+            modifier = modifier
+                .fillMaxWidth()
         ) {
-            ConstraintLayout(Modifier.fillMaxWidth()) {
-                val (search, field, options) = createRefs()
-
-                Box(
-                    contentAlignment = Alignment.Center,
-                    modifier = Modifier
-                        .constrainAs(search) {
-                            top.linkTo(parent.top)
-                            bottom.linkTo(parent.bottom)
-                            start.linkTo(parent.start)
-                        }
-                ) {
-                    if (isHintActive) {
-                        Icon(
-                            imageVector = Icons.Rounded.Search,
-                            contentDescription = stringResource(id = R.string.search_icon),
-                            tint = MaterialTheme.colors.onSurface,
-                            modifier = Modifier
-                                .padding(Dimens.MediumPadding.size)
-                                .rotate(searchAndOptionsAngle)
-                        )
-                    } else {
-                        IconButton(
-                            onClick = {
-                                keyboardController?.hide()
-                                focusManager.clearFocus()
-                                isTyping = searchText.isNotBlank()
-                            },
-                            modifier = Modifier
-                                .padding(4.dp)
-                        ) {
-                            Icon(
-                                imageVector = Icons.Rounded.ArrowBack,
-                                contentDescription = stringResource(id = R.string.back_icon),
-                                tint = MaterialTheme.colors.onSurface,
-                                modifier = Modifier.rotate(angle)
-                            )
-                        }
-                    }
-
-                }
-
-                Box(
-                    contentAlignment = Alignment.CenterStart,
-                    modifier = Modifier
-                        .padding(vertical = Dimens.SmallPadding.size)
-                        .constrainAs(field) {
-                            top.linkTo(parent.top)
-                            bottom.linkTo(parent.bottom)
-                            start.linkTo(search.end)
-                            end.linkTo(options.start)
-                            width = Dimension.fillToConstraints
-                        }
-                ) {
-                    if (!isTyping) {
-                        Text(
-                            text = hint,
-                            color = MaterialTheme.colors.onSurface
-                                .copy(alpha = hintAlpha),
-                            style = MaterialTheme.typography.subtitle1
-                        )
-                    }
-                    BasicTextField(
-                        value = searchText,
-                        onValueChange = {
-                            searchText = it
-                            onSearch(it)
-                            isTyping = searchText.isNotBlank()
-                        },
-                        maxLines = 1,
-                        cursorBrush = SolidColor(MaterialTheme.colors.primary),
-                        singleLine = true,
-                        textStyle = MaterialTheme.typography.subtitle1
-                            .copy(color = MaterialTheme.colors.onSurface),
-                        keyboardOptions = KeyboardOptions(
-                            capitalization = KeyboardCapitalization.Words,
-                            imeAction = ImeAction.Search
-                        ),
-                        keyboardActions = KeyboardActions(
-                            onSearch = {
-                                keyboardController?.hide()
-                                if (searchText.isBlank()) {
-                                    focusManager.clearFocus()
-                                }
-                            }
-                        ),
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .onFocusChanged {
-                                isHintActive = !it.isFocused
-                            }
+            BoxWithConstraints(
+                contentAlignment = Alignment.Center,
+                modifier = Modifier
+                    .padding(horizontal = paddingSize)
+                    .weight(1f)
+                    .background(
+                        color = MaterialTheme.colors.surface,
+                        shape = CircleShape
                     )
-                }
+            ) {
+                ConstraintLayout(Modifier.fillMaxWidth()) {
+                    val (search, field, options) = createRefs()
 
-                Box(
-                    contentAlignment = Alignment.Center,
-                    modifier = Modifier
-                        .constrainAs(options) {
-                            top.linkTo(parent.top)
-                            bottom.linkTo(parent.bottom)
-                            end.linkTo(parent.end)
-                        }
-                ) {
-                    if (!isHintActive) {
-                        IconButton(
-                            onClick = {
-                                onDismissSearchClicked()
-                                searchText = ""
-                                keyboardController?.hide()
-                                focusManager.clearFocus()
-                                isTyping = searchText.isNotBlank()
-                            },
-                            modifier = Modifier
-                                .padding(4.dp)
-                        ) {
+                    Box(
+                        contentAlignment = Alignment.Center,
+                        modifier = Modifier
+                            .constrainAs(search) {
+                                top.linkTo(parent.top)
+                                bottom.linkTo(parent.bottom)
+                                start.linkTo(parent.start)
+                            }
+                    ) {
+                        if (isHintActive) {
                             Icon(
-                                imageVector = Icons.Rounded.Close,
-                                contentDescription = stringResource(id = R.string.clear_icon),
+                                imageVector = Icons.Rounded.Search,
+                                contentDescription = stringResource(id = R.string.search_icon),
                                 tint = MaterialTheme.colors.onSurface,
-                                modifier = Modifier.rotate(angle)
+                                modifier = Modifier
+                                    .padding(Dimens.MediumPadding.size)
+                                    .rotate(searchAndOptionsAngle)
                             )
+                        } else {
+                            IconButton(
+                                onClick = {
+                                    keyboardController?.hide()
+                                    focusManager.clearFocus()
+                                    isTyping = searchText.isNotBlank()
+                                },
+                                modifier = Modifier
+                                    .padding(4.dp)
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Rounded.ArrowBack,
+                                    contentDescription = stringResource(id = R.string.back_icon),
+                                    tint = MaterialTheme.colors.onSurface,
+                                    modifier = Modifier.rotate(angle)
+                                )
+                            }
+                        }
+
+                    }
+
+                    Box(
+                        contentAlignment = Alignment.CenterStart,
+                        modifier = Modifier
+                            .padding(vertical = Dimens.SmallPadding.size)
+                            .constrainAs(field) {
+                                top.linkTo(parent.top)
+                                bottom.linkTo(parent.bottom)
+                                start.linkTo(search.end)
+                                end.linkTo(options.start)
+                                width = Dimension.fillToConstraints
+                            }
+                    ) {
+                        if (!isTyping ) {
+                            Text(
+                                text = hint,
+                                color = MaterialTheme.colors.onSurface
+                                    .copy(alpha = hintAlpha),
+                                style = MaterialTheme.typography.subtitle1
+                            )
+                        }
+                        BasicTextField(
+                            value = searchText,
+                            onValueChange = {
+                                searchText = it
+                                onSearch(it)
+                                isTyping = searchText.isNotBlank()
+                                filter(searchText)
+                            },
+                            maxLines = 1,
+                            cursorBrush = SolidColor(MaterialTheme.colors.primary),
+                            singleLine = true,
+                            textStyle = MaterialTheme.typography.subtitle1
+                                .copy(color = MaterialTheme.colors.onSurface),
+                            keyboardOptions = KeyboardOptions(
+                                capitalization = KeyboardCapitalization.Words,
+                                imeAction = ImeAction.Search
+                            ),
+                            keyboardActions = KeyboardActions(
+                                onSearch = {
+                                    keyboardController?.hide()
+                                    if (searchText.isBlank()) {
+                                        focusManager.clearFocus()
+                                    }
+                                }
+                            ),
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .onFocusChanged {
+                                    isHintActive = !it.isFocused
+                                    isSearching = it.isFocused
+                                }
+                        )
+                    }
+
+                    Box(
+                        contentAlignment = Alignment.Center,
+                        modifier = Modifier
+                            .constrainAs(options) {
+                                top.linkTo(parent.top)
+                                bottom.linkTo(parent.bottom)
+                                end.linkTo(parent.end)
+                            }
+                    ) {
+                        if (!isHintActive) {
+                            IconButton(
+                                onClick = {
+                                    onDismissSearchClicked()
+                                    searchText = ""
+                                    keyboardController?.hide()
+                                    focusManager.clearFocus()
+                                    isTyping = searchText.isNotBlank()
+                                    filter(searchText)
+                                },
+                                modifier = Modifier
+                                    .padding(4.dp)
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Rounded.Close,
+                                    contentDescription = stringResource(id = R.string.clear_icon),
+                                    tint = MaterialTheme.colors.onSurface,
+                                    modifier = Modifier.rotate(angle)
+                                )
+                            }
                         }
                     }
                 }
             }
-        }
 
-        IconButton(
-            modifier = Modifier
-                .align(Alignment.CenterVertically)
-                .padding(start = Dimens.ElevationPadding.size)
-                .size(36.dp)
-                .background(MaterialTheme.colors.primary, shape = Shapes.large),
-
-            onClick = {
-                onOptionsClicked()
-                keyboardController?.hide()
-                focusManager.clearFocus()
-            }
-        ) {
-            Icon(
-                modifier =
-                Modifier
+            IconButton(
+                modifier = Modifier
                     .align(Alignment.CenterVertically)
-                    .size(24.dp)
-                    .rotate(searchAndOptionsAngle),
-                tint = Color.White,
-                painter = painterResource(id = R.drawable.ic_filter),
-                contentDescription = stringResource(id = R.string.option_icon),
-            )
+                    .padding(start = Dimens.ElevationPadding.size)
+                    .size(36.dp)
+                    .background(MaterialTheme.colors.primary, shape = Shapes.large),
+
+                onClick = {
+                    onOptionsClicked()
+                    keyboardController?.hide()
+                    focusManager.clearFocus()
+                }
+            ) {
+                Icon(
+                    modifier =
+                    Modifier
+                        .align(Alignment.CenterVertically)
+                        .size(24.dp)
+                        .rotate(searchAndOptionsAngle),
+                    tint = Color.White,
+                    painter = painterResource(id = R.drawable.ic_filter),
+                    contentDescription = stringResource(id = R.string.option_icon),
+                )
+            }
+
         }
+
 
     }
+
+
+
+
+
 }
+
+
+
+@Composable
+fun ValueAutoCompleteItem(item: String) {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(16.dp),
+        verticalArrangement = Arrangement.spacedBy(8.dp)
+    ) {
+        Text(
+             text = item,
+             style = MaterialTheme.typography.subtitle1,
+             color = MaterialTheme.colors.onSurface
+        )
+    }
+}
+
+
+
+
+
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
@@ -537,6 +607,7 @@ private fun customEditTextPreview() {
 
 
 
+@OptIn(ExperimentalAnimationApi::class)
 @ExperimentalComposeUiApi
 @Preview
 @Composable
