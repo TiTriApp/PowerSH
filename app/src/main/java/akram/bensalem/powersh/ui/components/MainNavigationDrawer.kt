@@ -26,6 +26,10 @@ import kotlinx.coroutines.launch
 import akram.bensalem.powersh.R
 import akram.bensalem.powersh.ui.main.screens.PowerSHScreens
 import akram.bensalem.powersh.ui.theme.PowerSHTheme
+import akram.bensalem.powersh.utils.authentification.Authentifier
+import android.app.Activity
+import androidx.compose.ui.platform.LocalContext
+import com.google.accompanist.insets.navigationBarsPadding
 
 
 sealed class DrawerScreens(val title: String) {
@@ -52,13 +56,13 @@ fun mainDrawer(
     scope: CoroutineScope,
     selectedScreen: MutableState<String>,
     scaffoldState: ScaffoldState,
+    authentification: Authentifier,
 ) {
     Column(
         modifier
             .fillMaxSize()
-            .padding(start =0.dp, top = 48.dp)
+            .padding(start =0.dp, top = 0.dp)
     ) {
-
 
         Row(
             horizontalArrangement = Arrangement.spacedBy(16.dp),
@@ -68,9 +72,13 @@ fun mainDrawer(
                     interactionSource = remember { MutableInteractionSource() },
                     indication = rememberRipple(radius = 250.dp)
                 ) {
-                    navController.navigate(PowerSHScreens.MainListScreen.name)
+                    if (authentification.user != null) {
+                        navController.navigate(PowerSHScreens.ProfileScreen.name)
+                    }   else {
+                        navController.navigate(PowerSHScreens.AuthentificationScree.name)
+                    }
                 }
-                .padding(start = 16.dp)
+                .padding(start = 16.dp , top = 48.dp)
         ) {
             Image(
                 painter = painterResource(R.drawable.ic_user),
@@ -87,7 +95,7 @@ fun mainDrawer(
 
             ) {
                 Text(
-                    text = "Akram Bensalem",
+                    text =if (authentification.user != null) "Akram Bensalem" else "Sign In",
                     fontSize = 18.sp,
                     textAlign = TextAlign.Start,
                     fontWeight = FontWeight.SemiBold,
@@ -97,7 +105,7 @@ fun mainDrawer(
 
                     )
                 Text(
-                    text = "ak.bensalem@gmail.com",
+                    text = if (authentification.user != null) "ak.bensalem@gmail.com" else "Or Creat an account",
                     fontSize = 14.sp,
                     textAlign = TextAlign.Start,
                     fontWeight = FontWeight.Normal,
@@ -189,6 +197,23 @@ fun mainDrawer(
                 scaffoldState = scaffoldState,
             )
 
+            Spacer(modifier = Modifier.weight(1f))
+
+            if (authentification.user != null) {
+                LogOutDrawerRow(
+                    title = "Log Out",
+                    icon = Icons.Outlined.DoorBack,
+                    id = "LOG OUT",
+                    scope = scope,
+                    selectedScreen = selectedScreen,
+                    scaffoldState = scaffoldState,
+                    authentification = authentification
+                )
+                Spacer(modifier = Modifier.padding(8.dp))
+            }
+            Spacer(modifier = Modifier.navigationBarsPadding())
+
+
         }
     }
 }
@@ -228,14 +253,57 @@ fun DrawerRow(
             fontWeight = FontWeight.Normal,
             modifier = Modifier
                 .align(CenterVertically)
-                .fillMaxWidth()
-            ,
+                .fillMaxWidth(),
             color =if (selectedScreen.value.equals(id.uppercase())) MaterialTheme.colors.primary else MaterialTheme.colors.onBackground,
 
             )
     }
 
 }
+
+
+
+@ExperimentalMaterialApi
+@OptIn(ExperimentalStdlibApi::class)
+@Composable
+fun LogOutDrawerRow(
+    title: String,
+    icon: ImageVector,
+    id: String,
+    scope: CoroutineScope,
+    selectedScreen: MutableState<String>,
+    scaffoldState: ScaffoldState,
+    authentification: Authentifier,
+    ){
+    Row(modifier = Modifier
+        .clickable {
+            scope.launch {
+                scaffoldState.drawerState.close()
+                authentification.signOut()
+            }
+        }
+        .fillMaxWidth()
+        .padding(0.dp)
+        .padding(start = 16.dp),
+        horizontalArrangement = Arrangement.spacedBy(32.dp)
+    ) {
+        Icon(
+            icon,
+            contentDescription = title,
+            modifier = Modifier.size(36.dp),
+            tint =if (selectedScreen.value.equals(id.uppercase())) MaterialTheme.colors.primary  else MaterialTheme.colors.onBackground,
+        )
+        Text(
+            text = title,
+            fontWeight = FontWeight.Normal,
+            modifier = Modifier
+                .align(CenterVertically)
+                .fillMaxWidth(),
+            color =if (selectedScreen.value.equals(id.uppercase())) MaterialTheme.colors.primary else MaterialTheme.colors.onBackground)
+    }
+
+}
+
 
 
 
@@ -253,7 +321,7 @@ fun drawerPreview() {
 
     val selectedItem = remember { mutableStateOf("HOME") }
 
-
+    val activity = LocalContext.current as Activity
     val scope = rememberCoroutineScope()
 
     PowerSHTheme {
@@ -261,7 +329,8 @@ fun drawerPreview() {
             navController,
             scope = scope,
             selectedScreen = selectedItem,
-            scaffoldState = scaffoldState
+            scaffoldState = scaffoldState,
+            authentification = Authentifier(activity)
         )
     }
 }

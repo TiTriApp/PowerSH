@@ -21,24 +21,22 @@ class ListViewModel @Inject constructor(
     private val dataStoreRepository: DataStoreRepository
 ) : ViewModel() {
 
-    private val allThinkpads = MutableStateFlow<List<ShoeProduct>>(listOf())
+    private val allShoes = MutableStateFlow<List<ShoeProduct>>(listOf())
     private val availableThinkpadSeries = MutableStateFlow<List<String>>(listOf())
     private val networkLoading = MutableStateFlow(false)
     private val networkError = MutableStateFlow("")
     private val sortOption = MutableStateFlow(0)
 
-    // This will combine the different Flows emitted in this ViewModel into a single state
-    // that will be observed by the UI.
-    // Compose mutableStateOf can also be used to provide something similar
+
     val uiState: StateFlow<MainListScreenState> = combine(
-        allThinkpads,
+        allShoes,
         networkLoading,
         networkError,
         availableThinkpadSeries,
         sortOption
-    ) { allThinkpads, networkLoading, networkError, availableThinkpadSeries, sortOption ->
+    ) { allShoes, networkLoading, networkError, availableThinkpadSeries, sortOption ->
         MainListScreenState.MainListScreen(
-            shoeProductList = allThinkpads,
+            shoeProductList = allShoes,
             networkLoading = networkLoading,
             networkError = networkError,
             thinkpadSeriesList = availableThinkpadSeries,
@@ -51,18 +49,15 @@ class ListViewModel @Inject constructor(
     )
 
     init {
-        refreshThinkpadList()
+        refreshShoesList()
         getUserSortOption()
-        //getNewThinkpadListFromDatabase()
     }
 
-    // Retrieves new data from the network and inserts it into the database
-    // Also used by pull down to refresh.
-    fun refreshThinkpadList() {
+    fun refreshShoesList() {
         viewModelScope.launch {
             networkLoading.value = true
 
-            Timber.d("loading ThinkpadList")
+            Timber.d("loading Shoes List")
             when (val result = powerSHRepository.getAllShoesFromNetwork()) {
                 is Resource.Success -> {
                     powerSHRepository.refreshShoesList(result.data!!)
@@ -76,53 +71,51 @@ class ListViewModel @Inject constructor(
         }
     }
 
-    // Get the user's preferred Sorting option first the load data from the database
     private fun getUserSortOption() {
         viewModelScope.launch {
             dataStoreRepository.readSortOptionSetting.collect { sortValue ->
                 sortOption.value = sortValue
-                getNewThinkpadListFromDatabase()
+                getNewShoesListFromDatabase(index = 0)
             }
         }
     }
 
-    // Makes sure fresh data is taken from the database even after a network refresh
-    // Also takes search query and returns only the data needed
-    fun getNewThinkpadListFromDatabase(query: String = "") {
+
+    fun getNewShoesListFromDatabase(query: String = "", index: Int ) {
         viewModelScope.launch {
             when (sortOption.value) {
                 0 -> {
-                    powerSHRepository.getShoesAlphaAscending(query)
+                    powerSHRepository.getShoesAlphaAscending(query = query, index = index)
                         .collect {
-                            allThinkpads.value = it.asDomainModel()
-                            if (allThinkpads.value.size > availableThinkpadSeries.value.size) {
+                            allShoes.value = it.asDomainModel()
+                            if (allShoes.value.size > availableThinkpadSeries.value.size) {
                                 availableThinkpadSeries.value =
-                                    allThinkpads.value.getChipNamesList()
+                                    allShoes.value.getChipNamesList()
                             }
                         }
                 }
                 1 -> {
-                    powerSHRepository.getShoesNewestFirst(query)
+                    powerSHRepository.getShoesNewestFirst(query, index = index)
                         .collect {
-                            allThinkpads.value = it.asDomainModel()
+                            allShoes.value = it.asDomainModel()
                         }
                 }
                 2 -> {
-                    powerSHRepository.getShoesOldestFirst(query)
+                    powerSHRepository.getShoesOldestFirst(query, index = index)
                         .collect {
-                            allThinkpads.value = it.asDomainModel()
+                            allShoes.value = it.asDomainModel()
                         }
                 }
                 3 -> {
-                    powerSHRepository.getShoesLowPriceFirst(query)
+                    powerSHRepository.getShoesLowPriceFirst(query, index = index)
                         .collect {
-                            allThinkpads.value = it.asDomainModel()
+                            allShoes.value = it.asDomainModel()
                         }
                 }
                 4 -> {
-                    powerSHRepository.getShoesHighPriceFirst(query)
+                    powerSHRepository.getShoesHighPriceFirst(query, index = index)
                         .collect {
-                            allThinkpads.value = it.asDomainModel()
+                            allShoes.value = it.asDomainModel()
                         }
                 }
             }
@@ -130,30 +123,9 @@ class ListViewModel @Inject constructor(
     }
 
 
-    fun getNewShoesListFromDatabase(index: Int = 0){
-        viewModelScope.launch {
-            when(sortOption.value){
-                0 -> {
-                    powerSHRepository.getShoesAlphaAscending(index.toString())
-                        .collect {
-                            allThinkpads.value = it.asDomainModel()
-                            if (allThinkpads.value.size > availableThinkpadSeries.value.size) {
-                                availableThinkpadSeries.value =
-                                    allThinkpads.value.getChipNamesList()
-                            }
-                        }
-                }
-                1 -> { }
-                2 -> { }
-                3 -> { }
-                4 -> { }
-            }
-        }
-    }
 
-    // Set the sort option from the UI
-    fun sortSelected(sort: Int) {
+    fun sortSelected(sort: Int, index: Int) {
         sortOption.value = sort
-        getNewThinkpadListFromDatabase()
+        getNewShoesListFromDatabase(index = index)
     }
 }

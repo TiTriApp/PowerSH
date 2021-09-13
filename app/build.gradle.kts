@@ -5,13 +5,14 @@ plugins {
     id("kotlin-parcelize")
     id("kotlin-kapt")
     id("dagger.hilt.android.plugin")
+    id("com.google.gms.google-services")
 }
 
 android {
     compileSdk = AppConfig.compileSdkVersion
 
     defaultConfig {
-        applicationId = "work.racka.thinkrchive"
+        applicationId = "com.akram.bensalem.powersh"
         minSdk = AppConfig.minSdkVersion
         targetSdk = AppConfig.targetSdkVersion
         versionCode = AppConfig.versionCode
@@ -60,6 +61,7 @@ dependencies {
     implementation(Deps.appCompat)
     implementation(Deps.material)
     implementation(Deps.lifecycleRuntimeKtx)
+    implementation("com.google.firebase:firebase-auth:21.0.1")
 
     testImplementation(Deps.junit)
     androidTestImplementation(Deps.junitTest)
@@ -125,5 +127,15 @@ dependencies {
 
     // Splash Screen
     implementation(Deps.splashScreenCore)
+
+
+    implementation(Deps.lottiesAnim)
+
+    implementation(Deps.ballonAnchor)
+
+    implementation(Deps.gson)
+
+    implementation(Deps.android_mail)
+    implementation(Deps.android_activation)
 
 }

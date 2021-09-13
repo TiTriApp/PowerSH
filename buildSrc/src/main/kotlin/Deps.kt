@@ -75,4 +75,15 @@ object Deps {
     // Splash Screen
     val splashScreenCore by lazy { "androidx.core:core-splashscreen:${Versions.splashScreen}" }
 
+    val lottiesAnim by lazy { "com.airbnb.android:lottie-compose:${Versions.lottieVersion}" }
+
+    val ballonAnchor by lazy { "com.github.skydoves:orchestra-balloon:${Versions.ballonAnchorVersion}" }
+
+    val gson by lazy { "com.google.code.gson:gson:${Versions.gsonVesrion}" }
+
+    // Email
+    val android_mail by lazy { "com.sun.mail:android-mail:${Versions.emailVesrion}"}
+    val android_activation by lazy { "com.sun.mail:android-activation:${Versions.emailVesrion}"}
+
+
 }

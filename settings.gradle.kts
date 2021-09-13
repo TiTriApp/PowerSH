@@ -7,5 +7,5 @@ dependencyResolutionManagement {
         //jcenter() // Warning: this repository is going to shut down soon
     }
 }
-rootProject.name = "ThinkRchive"
+rootProject.name = "PowerSH"
 include(":app")

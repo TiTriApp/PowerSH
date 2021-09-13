@@ -1,23 +1,17 @@
 package akram.bensalem.powersh.ui.navigation
 
-import android.content.Intent
-import android.net.Uri
+import akram.bensalem.powersh.data.model.CardItem
+import akram.bensalem.powersh.data.model.ShoeProduct
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.navArgument
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
-import timber.log.Timber
 import akram.bensalem.powersh.ui.main.screenStates.DetailsScreenState
 import akram.bensalem.powersh.ui.main.screenStates.MainListScreenState
 import akram.bensalem.powersh.ui.main.screenStates.SettingsScreenState
@@ -29,26 +23,149 @@ import akram.bensalem.powersh.utils.scaleInEnterTransition
 import akram.bensalem.powersh.utils.scaleInPopEnterTransition
 import akram.bensalem.powersh.utils.scaleOutExitTransition
 import akram.bensalem.powersh.utils.scaleOutPopExitTransition
+import androidx.activity.compose.BackHandler
+import androidx.compose.material.DrawerValue
+import androidx.compose.material.rememberDrawerState
+import androidx.compose.material.rememberScaffoldState
+import androidx.compose.runtime.*
+import com.akram.bensalem.powersh.ui.screens.login.authentificationScreen
+import com.akram.bensalem.powersh.ui.screens.onboarding.OnBoardingContent
+import com.google.accompanist.pager.ExperimentalPagerApi
+import kotlinx.coroutines.launch
 
 
-
-
-
+@OptIn(ExperimentalPagerApi::class)
 @ExperimentalMaterialApi
 @ExperimentalAnimationApi
 @ExperimentalComposeUiApi
 @Composable
-fun ThinkrchiveNavHost(
+fun PowerSHNavHost(
     modifier: Modifier = Modifier,
-    navController: NavHostController
+    cartProduct: MutableList<CardItem>,
+    navController: NavHostController,
+    pageState: MutableState<String>,
+    favouriteProduct: MutableList<ShoeProduct>,
 ) {
 
     AnimatedNavHost(
         navController = navController,
-        startDestination = PowerSHScreens.MainListScreen.name
+        startDestination = PowerSHScreens.OnBoardingScreen.name
     ) {
-        Timber.d("thinkpadNavHost called")
-        val thinkpadDetailsScreen = PowerSHScreens.DetailsScreen.name
+
+
+
+
+
+        // Checkout Screen
+        composable(
+            route = PowerSHScreens.CheckoutScreen.name,
+            enterTransition = { _, _ ->
+                scaleInEnterTransition()
+            },
+            exitTransition = { _, _ ->
+                scaleOutExitTransition()
+            },
+            popEnterTransition = { _, _ ->
+                scaleInPopEnterTransition()
+            },
+            popExitTransition = { _, _ ->
+                scaleOutPopExitTransition()
+            }
+        ) {
+
+
+            BackHandler {
+                navController.navigate(PowerSHScreens.MainListScreen.name)
+            }
+            checkoutScreen(navController, cartProduct)
+
+
+        }
+
+
+
+
+
+        // First inetarction Screen
+        composable(
+            route = PowerSHScreens.OnBoardingScreen.name,
+            enterTransition = { _, _ ->
+                scaleInEnterTransition()
+            },
+            exitTransition = { _, _ ->
+                scaleOutExitTransition()
+            },
+            popEnterTransition = { _, _ ->
+                scaleInPopEnterTransition()
+            },
+            popExitTransition = { _, _ ->
+                scaleOutPopExitTransition()
+            }
+        ) {
+
+
+            OnBoardingContent(
+                onActionClicked = {
+                    navController.navigate(
+                        route = PowerSHScreens.MainListScreen.name
+                    )
+                }
+            )
+
+
+            }
+
+
+
+
+// Login  Screen
+        composable(
+            route = PowerSHScreens.AuthentificationScree.name,
+            enterTransition = { _, _ ->
+                scaleInEnterTransition()
+            },
+            exitTransition = { _, _ ->
+                scaleOutExitTransition()
+            },
+            popEnterTransition = { _, _ ->
+                scaleInPopEnterTransition()
+            },
+            popExitTransition = { _, _ ->
+                scaleOutPopExitTransition()
+            }
+        ) {
+
+            var tabState = remember {
+                mutableStateOf(0)
+            }
+
+            BackHandler {
+                if (tabState.value == 0) {
+                    navController.navigate(PowerSHScreens.MainListScreen.name)
+                } else {
+                    tabState.value = 0
+                }
+            }
+
+            authentificationScreen(
+                navController = navController,
+                onBackButtonPressed = {
+                    navController.popBackStack()
+                },
+                onLogged = {
+                    navController.navigate(PowerSHScreens.ProfileScreen.name){
+                        popUpTo(PowerSHScreens.MainListScreen.name)
+                    }
+                }
+            )
+
+        }
+
+
+
+
+
+        val DetailsScreen = PowerSHScreens.DetailsScreen.name
 
         // Main List Screen
         composable(
@@ -70,32 +187,67 @@ fun ThinkrchiveNavHost(
             }
         ) {
             val viewModel: ListViewModel = hiltViewModel()
-            val thinkpadListState by viewModel.uiState.collectAsState()
-            val thinkpadListScreenData =
-                thinkpadListState as MainListScreenState.MainListScreen
+            val listState by viewModel.uiState.collectAsState()
+            val shoesListScreenData =
+                listState as MainListScreenState.MainListScreen
 
-            Timber.d("thinkpadListScreen NavHost called")
 
-            ThinkpadListScreen(
+
+            val tabIndex = remember {
+                mutableStateOf(0)
+            }
+
+            val scaffoldState = rememberScaffoldState(
+                drawerState= rememberDrawerState(DrawerValue.Closed),
+            )
+            val scope = rememberCoroutineScope()
+
+
+            BackHandler {
+
+
+                if (pageState.value.equals("HOME")) {
+                    if (scaffoldState.drawerState.isOpen) {
+                        scope.launch {
+                            scaffoldState.drawerState.close()
+                        }
+                    }
+                } else {
+                    pageState.value = "HOME"
+                }
+
+
+            }
+
+
+
+            MainListScreen(
                 modifier = modifier,
-                shoeProductList = thinkpadListScreenData.shoeProductList,
-                networkLoading = thinkpadListScreenData.networkLoading,
+                navController = navController,
+                shoeProductList = shoesListScreenData.shoeProductList,
+                cartProductList = cartProduct,
+                favouriteProduct = favouriteProduct,
+                networkLoading = shoesListScreenData.networkLoading,
+                pageState = pageState,
+                scaffoldState = scaffoldState,
                 onSearch = { query ->
                     viewModel
-                        .getNewThinkpadListFromDatabase(query)
+                        .getNewShoesListFromDatabase(query, index = tabIndex.value)
                 },
                 onEntryClick = { thinkpad ->
                     navController.navigate(
-                        route = "$thinkpadDetailsScreen/${thinkpad.title}"
+                        route = "$DetailsScreen/${thinkpad.title}"
                     )
                 },
-                onTabClicked = { tabIndex ->
-                   // viewModel.
+                onTabClicked = { index ->
+                    tabIndex.value = index
+                    viewModel
+                        .getNewShoesListFromDatabase("", index = index)
                 } ,
-                networkError = thinkpadListScreenData.networkError,
-                currentSortOption = thinkpadListScreenData.sortOption,
+                networkError = shoesListScreenData.networkError,
+                currentSortOption = shoesListScreenData.sortOption,
                 onSortOptionClicked = { sort ->
-                    viewModel.sortSelected(sort)
+                    viewModel.sortSelected(sort, tabIndex.value)
                 },
                 onSettingsClicked = {
                     navController.navigate(
@@ -108,14 +260,14 @@ fun ThinkrchiveNavHost(
                     )
                 },
                 onCheckUpdates = {
-                    // TODO: Check updates implementation
+                    viewModel.refreshShoesList()
                 }
             )
         }
 
         // Details Screen
         composable(
-            route = "$thinkpadDetailsScreen/{thinkpad}",
+            route = "$DetailsScreen/{thinkpad}",
             arguments = listOf(
                 navArgument(name = "thinkpad") {
                     type = NavType.StringType
@@ -136,26 +288,39 @@ fun ThinkrchiveNavHost(
         ) {
 
             val detailsViewModel: DetailsViewModel = hiltViewModel()
-            val thinkpadDetail = detailsViewModel.uiState.collectAsState()
-            val context = LocalContext.current
+            val shoeDetail = detailsViewModel.uiState.collectAsState()
 
-            if (thinkpadDetail.value is DetailsScreenState.Detail) {
-                val thinkpad =
-                    (thinkpadDetail.value as DetailsScreenState.Detail).shoeProduct
-                val intent = remember {
-                    Intent(
-                        Intent.ACTION_VIEW,
-                        Uri.parse("https://psref.lenovo.com/syspool/Sys/PDF/ThinkPad/ThinkPad_T450/ThinkPad_T450_Spec.PDF")
-                    )
+            if (shoeDetail.value is DetailsScreenState.Detail) {
+                val shoe =
+                    (shoeDetail.value as DetailsScreenState.Detail).shoeProduct
+
+
+
+                val favourite = remember {
+                    mutableStateOf(favouriteProduct.contains(shoe))
                 }
-                ThinkpadDetailsScreen(
+
+                DetailsScreen(
                     modifier = modifier,
-                    shoeProduct = thinkpad,
+                    shoeProduct = shoe,
+                    cartProduct = cartProduct,
+                    favourite =favourite,
                     onBackButtonPressed = {
                         navController.popBackStack()
                     },
-                    onExternalLinkClicked = {
-                        context.startActivity(intent)
+                    onfavouriteClick = {
+
+                        if (favourite.value) {
+                            favouriteProduct.remove(shoe)
+                        }else{
+                            favouriteProduct.add(shoe)
+                        }
+
+                        favourite.value = !favourite.value
+                    },
+                    onNavigateToCartScreen = {
+                        pageState.value = "CART"
+                        navController.popBackStack()
                     }
                 )
             }
@@ -184,7 +349,7 @@ fun ThinkrchiveNavHost(
                 val settingsScreenData =
                     settingsScreenState as SettingsScreenState.Settings
 
-                ThinkpadSettingsScreen(
+                SettingsScreen(
                     currentTheme = settingsScreenData.themeOption,
                     currentSortOption = settingsScreenData.sortOption,
                     onThemeOptionClicked = {
@@ -199,6 +364,42 @@ fun ThinkrchiveNavHost(
                 )
             }
         }
+
+
+        //Profile Screen
+        composable(
+            route = PowerSHScreens.ProfileScreen.name,
+            enterTransition = { _, _ ->
+                scaleInEnterTransition()
+            },
+            exitTransition = { _, _ ->
+                scaleOutExitTransition()
+            },
+            popEnterTransition = { _, _ ->
+                scaleInPopEnterTransition()
+            },
+            popExitTransition = { _, _ ->
+                scaleOutPopExitTransition()
+            }
+        ) {
+            /* AboutScreen(
+                 onCheckUpdates = {
+                     // TODO: Check updates implementation
+                 },
+                 onBackButtonPressed = {
+                     navController.popBackStack()
+                 }
+             )*/
+
+            profileScreen(
+                onBackButtonPressed = {
+                    navController.popBackStack()
+                }
+            )
+
+        }
+
+
 
         // About Screen
         composable(
@@ -216,7 +417,7 @@ fun ThinkrchiveNavHost(
                 scaleOutPopExitTransition()
             }
         ) {
-            ThinkpadAboutScreen(
+            AboutScreen(
                 onCheckUpdates = {
                     // TODO: Check updates implementation
                 },
@@ -224,6 +425,7 @@ fun ThinkrchiveNavHost(
                     navController.popBackStack()
                 }
             )
+
         }
     }
 

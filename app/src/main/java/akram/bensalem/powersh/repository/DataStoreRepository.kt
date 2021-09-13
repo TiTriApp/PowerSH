@@ -12,6 +12,7 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
 import timber.log.Timber
 import akram.bensalem.powersh.utils.Constants
+import androidx.datastore.preferences.core.booleanPreferencesKey
 import java.io.IOException
 
 @ActivityScoped
@@ -21,6 +22,7 @@ class DataStoreRepository(
     private object PreferenceKeys {
         val themeOption = intPreferencesKey(name = "theme_option")
         val sortOption = intPreferencesKey(name = "sort_option")
+        val startMainPage = booleanPreferencesKey(name = "start_main_page")
     }
 
     private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(
@@ -32,6 +34,26 @@ class DataStoreRepository(
             settings[PreferenceKeys.themeOption] = value
         }
     }
+
+    suspend fun saveOnBoardingStart(value: Boolean) {
+        context.dataStore.edit { settings ->
+            settings[PreferenceKeys.startMainPage] = value
+        }
+    }
+
+
+
+    val readOnBoardingOption: Flow<Boolean> = context.dataStore.data
+        .catch { exception ->
+            if (exception is IOException) {
+                Timber.d(exception.message.toString())
+            } else {
+                throw exception
+            }
+        }.map { settings ->
+            settings[PreferenceKeys.startMainPage] ?: false
+        }
+
 
     val readThemeSetting: Flow<Int> = context.dataStore.data
         .catch { exception ->

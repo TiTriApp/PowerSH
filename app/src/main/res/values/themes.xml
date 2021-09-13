@@ -1,6 +1,6 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Theme.ThinkRchive" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+    <style name="Theme.PowerSH" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/purple_500</item>
         <item name="colorPrimaryVariant">@color/purple_700</item>
@@ -17,20 +17,20 @@
         <!-- Customize your theme here. -->
     </style>
 
-    <style name="Theme.ThinkRchive.NoActionBar">
+    <style name="Theme.PowerSH.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>
 
-    <style name="Theme.ThinkRchive.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+    <style name="Theme.PowerSH.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
-    <style name="Theme.ThinkRchive.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+    <style name="Theme.PowerSH.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
     <!-- Splash Screen Theme. -->
     <style name="Theme.AppSplash" parent="Theme.SplashScreen">
-        <item name="windowSplashScreenBackground">@color/dark</item>
-        <item name="windowSplashScreenAnimatedIcon">@drawable/app_logo_big</item>
-        <item name="windowSplashScreenAnimationDuration">300</item>
-        <item name="postSplashScreenTheme">@style/Theme.ThinkRchive</item>
+        <item name="windowSplashScreenBackground">@color/powerSH</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/big_circle_powersh</item>
+        <item name="windowSplashScreenAnimationDuration">10</item>
+        <item name="postSplashScreenTheme">@style/Theme.PowerSH</item>
     </style>
 </resources>

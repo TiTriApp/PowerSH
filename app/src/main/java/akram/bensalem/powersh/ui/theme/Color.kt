@@ -34,6 +34,8 @@ val PowerSHRed = Color(0xffcf4a4b)
 val PowerSHLight= Color(0xFF7B77)
 val PowerSHDark= Color(0x981123)
 
+val PowerSHLightRed = Color(0x5CF4A4B)
+
 
 val MainCardList = Color(0xFFFCFCFF)
 

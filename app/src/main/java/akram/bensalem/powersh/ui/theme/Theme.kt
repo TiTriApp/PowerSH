@@ -1,5 +1,6 @@
 package akram.bensalem.powersh.ui.theme
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.darkColors
@@ -16,13 +17,14 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 
+@SuppressLint("ConflictingOnColor")
 private val DarkColorPalette = darkColors(
     primary = PowerSHRed,
     onPrimary = YellowDefaultDarkerOn,
-    primaryVariant = YellowDefaultVariant,
+    primaryVariant = Color.White,
     secondary = YellowDefault,
     onSecondary = YellowDefaultDarkerOn,
-    secondaryVariant = YellowDefaultVariant,
+    secondaryVariant = Color.Black,
     background = Color.Black,
     onBackground = LightGrayBackground,
     surface = LightDark,
@@ -32,10 +34,10 @@ private val DarkColorPalette = darkColors(
 private val LightColorPalette = lightColors(
     primary = PowerSHRed,
     onPrimary = YellowDefaultDarkerOn,
-    primaryVariant = YellowDefaultVariant,
+    primaryVariant = Color.Black,
     secondary = YellowDefault,
     onSecondary = YellowDefaultDarkerOn,
-    secondaryVariant = YellowDefaultVariant,
+    secondaryVariant = Color.White,
     background = LightGrayBackground,
     onBackground = LightDark,
     onSurface = LightGrayText

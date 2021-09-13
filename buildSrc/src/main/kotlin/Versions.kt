@@ -48,4 +48,16 @@ object Versions {
 
     // DataStore
     const val dataStore = "1.0.0"
+
+    // lotties
+    const val lottieVersion = "1.0.0-rc01-1"
+
+    // baloon
+    const val ballonAnchorVersion = "1.1.0"
+
+    //GSON
+    const val gsonVesrion ="2.8.6"
+
+    //Email
+    const val emailVesrion ="1.6.0"
 }

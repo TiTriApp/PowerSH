@@ -1,5 +1,6 @@
 package akram.bensalem.powersh.ui.main.screens
 
+import akram.bensalem.powersh.data.model.CardItem
 import android.content.res.Configuration
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.layout.Spacer
@@ -28,17 +29,20 @@ import akram.bensalem.powersh.ui.components.DetailsCards
 import akram.bensalem.powersh.ui.components.ToolbarImage
 import akram.bensalem.powersh.ui.theme.PowerSHTheme
 import akram.bensalem.powersh.utils.Constants
+import androidx.compose.runtime.MutableState
 
 @ExperimentalAnimationApi
 @Composable
-fun ThinkpadDetailsScreen(
+fun DetailsScreen(
     modifier: Modifier = Modifier,
     shoeProduct: ShoeProduct,
+    cartProduct: MutableList<CardItem>,
     onBackButtonPressed: () -> Unit = { },
-    onExternalLinkClicked: () -> Unit = { },
-    listState: LazyListState = rememberLazyListState()
+    onfavouriteClick: () -> Unit = { },
+    listState: LazyListState = rememberLazyListState(),
+    favourite: MutableState<Boolean>,
+    onNavigateToCartScreen: () -> Unit,
 ) {
-    // CollapsingToolbar Implementation
     val toolbarHeight = 250.dp
     val toolbarHeightPx = with(LocalDensity.current) { toolbarHeight.roundToPx().toFloat() }
     val toolbarOffsetHeightPx = remember { mutableStateOf(0f) }
@@ -48,7 +52,6 @@ fun ThinkpadDetailsScreen(
                 val delta = available.y
                 val newOffset = toolbarOffsetHeightPx.value + delta
                 toolbarOffsetHeightPx.value = newOffset.coerceIn(-toolbarHeightPx, 0f)
-                // Returning Zero so we just observe the scroll but don't execute it
                 return Offset.Zero
             }
         }
@@ -82,7 +85,10 @@ fun ThinkpadDetailsScreen(
             item {
                 DetailsCards(
                     shoeProduct = shoeProduct,
-                    onExternalLinkClick = onExternalLinkClicked
+                    cartProduct = cartProduct,
+                    onfavouriteClick = onfavouriteClick,
+                    favourite = favourite,
+                    onNavigateToCartScreen = onNavigateToCartScreen
                 )
             }
 
@@ -100,7 +106,17 @@ fun ThinkpadDetailsScreen(
 )
 @Composable
 private fun ThinkpadDetailsScreenPreview() {
+
+    val favourite = remember {
+        mutableStateOf(false)
+    }
+
+    val cartProduct = remember { Constants.cartList }
+
     PowerSHTheme {
-        ThinkpadDetailsScreen(shoeProduct = Constants.ShoesListPreview[0])
+        DetailsScreen(shoeProduct = Constants.ShoesListPreview[0],
+            cartProduct = cartProduct,
+            favourite = favourite, onNavigateToCartScreen =  {}
+        )
     }
 }

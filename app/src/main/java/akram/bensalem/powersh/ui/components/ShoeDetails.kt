@@ -22,24 +22,23 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import akram.bensalem.powersh.R
 import akram.bensalem.powersh.data.model.ShoeProduct
-import akram.bensalem.powersh.ui.theme.BlueLinkColor
-import akram.bensalem.powersh.ui.theme.Dimens
-import akram.bensalem.powersh.ui.theme.Shapes
-import akram.bensalem.powersh.ui.theme.PowerSHTheme
+import akram.bensalem.powersh.ui.theme.*
 import akram.bensalem.powersh.utils.Constants
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.material.ripple.rememberRipple
 
 @Composable
-fun ThinkpadDetails(
+fun ShoeDetails(
     modifier: Modifier = Modifier,
     shoeProduct: ShoeProduct,
-    onExternalLinkClick: () -> Unit = { }
+    favourite: MutableState<Boolean>,
+    onfavouriteClick: () -> Unit = { }
 ) {
-    //Scale animation
     val animatedProgress = remember {
         Animatable(initialValue = 0.7f)
     }
@@ -56,16 +55,6 @@ fun ThinkpadDetails(
             scaleY = animatedProgress.value
         )
 
-    val divider = " - "
-    val marketPrice by remember(shoeProduct) {
-        derivedStateOf {
-            buildAnnotatedString {
-                append("$${shoeProduct.marketPriceStart}")
-                append(divider)
-                append("$${shoeProduct.marketPriceEnd}")
-            }.text
-        }
-    }
 
     var maxLines by remember {
         mutableStateOf(1)
@@ -100,16 +89,28 @@ fun ThinkpadDetails(
                     .padding(horizontal = Dimens.MediumPadding.size)
             )
             IconButton(
-                onClick = onExternalLinkClick,
+                onClick = {
+                    onfavouriteClick()
+                          },
                 modifier = Modifier
                     .padding(horizontal = Dimens.SmallPadding.size)
             ) {
-                Icon(
-                    imageVector = Icons.Outlined.Launch,
-                    contentDescription = stringResource(id = R.string.external_link),
-                    tint = BlueLinkColor
+                Icon(imageVector = if (favourite.value) Icons.Outlined.Favorite else Icons.Outlined.FavoriteBorder,
+                    contentDescription = "Heart",
+                    tint = MaterialTheme.colors.primary.copy(alpha = 0.8f),
+                    modifier = Modifier
                 )
             }
+
+
+
+
+
+
+
+
+
+
         }
         Box(
             modifier = Modifier
@@ -132,6 +133,59 @@ fun ThinkpadDetails(
                     .padding(Dimens.MediumPadding.size)
             ) {
                 SubtitleTextWithIcon(
+                    subtitleName = "Reference",
+                    subtitleData = "2887670 / GJN068",
+                    style = MaterialTheme.typography.body1,
+                    icon = Icons.Outlined.Pin,
+                    maxLines = maxLines
+                )
+
+                SubtitleTextWithIcon(
+                    subtitleName = "Description",
+                    subtitleData = "Pas de béton ? Pas de problème. Cette chaussure pour homme plaira aux runners qui n'ont pas peur de sortir des sentiers battus. La semelle extérieure en caoutchouc texturée assure une adhérence optimale sur les surfaces glissantes ou accidentées. La semelle intermédiaire allie douceur et réactivité pour t'offrir un confort supérieur.\n" +
+                            "- tige textile.\n" +
+                            "- parfaite pour la course à pied.\n" +
+                            "- matière douce et respirante.\n" +
+                            "- semelle intermédiaire fuelfoam pour un juste équilibre entre amorti et réactivité.\n" +
+                            "- semelle extérieure en caoutchouc texturée pour plus d'adhérence et de résistance.",
+                    style = MaterialTheme.typography.body1,
+                    icon = Icons.Outlined.Description,
+                    maxLines = maxLines
+                )
+
+
+
+                SubtitleTextWithIcon(
+                    subtitleName = "Type of Use",
+                    subtitleData = "sport (Running)",
+                    style = MaterialTheme.typography.body1,
+                    icon = Icons.Outlined.Category,
+                    maxLines = maxLines
+                )
+                SubtitleTextWithIcon(
+                    subtitleName = "Heel Type",
+                    subtitleData = "Plat",
+                    style = MaterialTheme.typography.body1,
+                    icon = Icons.Outlined.IceSkating,
+                    maxLines = maxLines
+                )
+                SubtitleTextWithIcon(
+                    subtitleName = "Shoe Closure",
+                    subtitleData = "A lacets",
+                    style = MaterialTheme.typography.body1,
+                    icon = Icons.Outlined.Inventory2,
+                    maxLines = maxLines
+                )
+
+                SubtitleTextWithIcon(
+                    subtitleName = "Top/Stem",
+                    subtitleData = "100% polyester",
+                    style = MaterialTheme.typography.body1,
+                    icon = Icons.Outlined.Checkroom,
+                    maxLines = maxLines
+                )
+
+                SubtitleTextWithIcon(
                     subtitleName = "Release Date",
                     subtitleData = shoeProduct.releaseDate,
                     style = MaterialTheme.typography.body1,
@@ -140,11 +194,12 @@ fun ThinkpadDetails(
                 )
                 SubtitleTextWithIcon(
                     subtitleName = "Market Value",
-                    subtitleData = marketPrice,
+                    subtitleData =  "${shoeProduct.marketPriceStart} DA",
                     style = MaterialTheme.typography.body1,
                     icon = Icons.Outlined.Loyalty,
                     maxLines = maxLines
                 )
+
 
             }
 
@@ -182,8 +237,13 @@ fun ThinkpadDetails(
 )
 @Composable
 private fun ThinkpadFeaturesPreview() {
+
+    val favourite = remember {
+        mutableStateOf(false)
+    }
+
     PowerSHTheme {
-        ThinkpadDetails(shoeProduct = Constants.ShoesListPreview[0])
+        ShoeDetails(shoeProduct = Constants.ShoesListPreview[0], favourite = favourite)
     }
 }
 

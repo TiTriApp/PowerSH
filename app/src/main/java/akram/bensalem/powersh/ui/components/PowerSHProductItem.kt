@@ -1,5 +1,7 @@
 package akram.bensalem.powersh.ui.components
 
+import akram.bensalem.powersh.data.model.CardItem
+import akram.bensalem.powersh.data.model.ShoeProduct
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -14,7 +16,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
@@ -22,16 +23,12 @@ import androidx.compose.ui.unit.dp
 import coil.compose.rememberImagePainter
 import com.google.accompanist.insets.ProvideWindowInsets
 import com.google.accompanist.insets.statusBarsPadding
-import akram.bensalem.powersh.data.model.ShoeProduct
 import akram.bensalem.powersh.ui.theme.CardCoverPink
 import akram.bensalem.powersh.ui.theme.Dimens
 import akram.bensalem.powersh.ui.theme.Shapes
 import akram.bensalem.powersh.ui.theme.PowerSHTheme
 import akram.bensalem.powersh.utils.Constants
-import androidx.compose.foundation.text.BasicText
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.text.AnnotatedString
-import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
 
@@ -93,6 +90,18 @@ fun ProductShoesEntry(
                 contentAlignment = Alignment.Center,
                 modifier = Modifier.fillMaxWidth()
             ) {
+
+                Column(
+                    Modifier
+                        .fillMaxWidth()
+                        .fillMaxWidth()
+                        .aspectRatio(1f)
+                        .align(Alignment.Center)
+                        .background(
+                            color = CardCoverPink.copy(alpha = 0.2f)
+                        )
+                ) {}
+
                 if (imageLoading) {
                     LoadingImage(
                         modifier = Modifier
@@ -107,19 +116,10 @@ fun ProductShoesEntry(
                     modifier = Modifier
                         .fillMaxWidth()
                         .aspectRatio(1f)
-                        .padding(vertical = Dimens.ZeroPadding.size, horizontal = Dimens.ZeroPadding.size)
+                        .padding(vertical = Dimens.SmallPadding.size, horizontal = Dimens.SmallPadding.size)
                 )
 
-                Column(
-                    Modifier
-                        .fillMaxWidth()
-                        .fillMaxWidth()
-                        .aspectRatio(1f)
-                        .align(Alignment.Center)
-                        .background(
-                            color = CardCoverPink.copy(alpha = 0.1f)
-                        )
-                ) {}
+
 
             }
 
@@ -223,7 +223,7 @@ fun SubtitleText(
 }
 
 @Composable
-private fun LoadingImage(
+fun LoadingImage(
     modifier: Modifier = Modifier
 ) {
     val infiniteTransition = rememberInfiniteTransition()

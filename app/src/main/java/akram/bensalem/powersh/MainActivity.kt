@@ -1,5 +1,7 @@
 package akram.bensalem.powersh
 
+import akram.bensalem.powersh.data.model.CardItem
+import akram.bensalem.powersh.data.model.ShoeProduct
 import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
@@ -15,7 +17,9 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import timber.log.Timber
 import akram.bensalem.powersh.repository.DataStoreRepository
-import akram.bensalem.powersh.ui.navigation.ThinkrchiveApp
+import akram.bensalem.powersh.ui.navigation.PowerSHApp
+import akram.bensalem.powersh.utils.authentification.Authentifier
+import androidx.compose.runtime.mutableStateListOf
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -23,6 +27,8 @@ class MainActivity : AppCompatActivity() {
 
     @Inject
     lateinit var dataStoreRepository: DataStoreRepository
+
+     var authentifier : Authentifier = Authentifier(this)
 
 
     @ExperimentalMaterialApi
@@ -37,7 +43,12 @@ class MainActivity : AppCompatActivity() {
 
         Timber.d("onCreate called")
 
+
         setContent {
+            val cartProduct = remember {  mutableStateListOf<CardItem>() }
+
+            val favouriteProduct = remember {  mutableStateListOf<ShoeProduct>() }
+
             val themeValue = remember {
                 mutableStateOf(-1)
             }
@@ -46,8 +57,11 @@ class MainActivity : AppCompatActivity() {
                     themeValue.value = it
                 }
             }
-            ThinkrchiveApp(themeValue.value)
+            PowerSHApp(themeValue.value, cartProduct = cartProduct, favouriteProduct = favouriteProduct)
             Timber.d("setContent called")
         }
+
+
+
     }
 }

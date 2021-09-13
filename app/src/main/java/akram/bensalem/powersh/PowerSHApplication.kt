@@ -13,7 +13,7 @@ import akram.bensalem.powersh.repository.DataStoreRepository
 import javax.inject.Inject
 
 @HiltAndroidApp
-class ThinkrchiveApplication: Application() {
+class PowerSHApplication: Application() {
     @Inject lateinit var dataStoreRepository: DataStoreRepository
     override fun onCreate() {
         val scope = CoroutineScope(SupervisorJob() + Dispatchers.Main)

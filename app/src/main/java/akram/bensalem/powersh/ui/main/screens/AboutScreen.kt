@@ -1,8 +1,5 @@
 package akram.bensalem.powersh.ui.main.screens
 
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -34,9 +31,11 @@ import akram.bensalem.powersh.ui.components.AboutTopSection
 import akram.bensalem.powersh.ui.components.CollapsingToolbarBase
 import akram.bensalem.powersh.ui.theme.Dimens
 import akram.bensalem.powersh.ui.theme.PowerSHTheme
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.*
 
 @Composable
-fun ThinkpadAboutScreen(
+fun AboutScreen(
     modifier: Modifier = Modifier,
     listState: LazyListState = rememberLazyListState(),
     onCheckUpdates: () -> Unit = { },
@@ -70,8 +69,8 @@ fun ThinkpadAboutScreen(
             ) {
                 AboutTopSection(
                     appName = stringResource(id = R.string.app_name),
-                    version = BuildConfig.VERSION_NAME,
-                    appLogo = painterResource(id = R.drawable.app_icon),
+                    version = "1.0.0",
+                    appLogo = painterResource(id = R.drawable.big_circle_powersh),
                     onCheckUpdatesClicked = onCheckUpdates
                 )
             }
@@ -99,6 +98,35 @@ fun ThinkpadAboutScreen(
                 .nestedScroll(nestedScrollConnection),
             state = listState
         ) {
+            item {
+                Image(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(16.dp),
+                    painter = painterResource(id = R.drawable.ic_about),
+                    contentDescription = stringResource(id = R.string.app_logo)
+                )
+            }
+
+            item {
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(Dimens.MediumPadding.size)
+                ) {
+                    Text(
+                        "This project is made by:",
+                        color = MaterialTheme.colors.onBackground,
+                        style = MaterialTheme.typography.body1,
+                    )
+                    Text(
+                        "- Akram Bensalem \n- Arbaoui Slimane\n- BELMILOUD ILIES DHIAEDDINE\n- Abdelkader YAHIAOUI\n- HADJ SADOK MOHAMMED NAZIM\n- ABDELLATIF ABDERAOUF\n- Merouan Boughedda",
+                        color = MaterialTheme.colors.onSurface,
+                        style = MaterialTheme.typography.body1,
+                        )
+                }
+
+            }
 
         }
 
@@ -109,6 +137,6 @@ fun ThinkpadAboutScreen(
 @Composable
 private fun AboutScreenPrev() {
     PowerSHTheme {
-        ThinkpadAboutScreen()
+        AboutScreen()
     }
 }

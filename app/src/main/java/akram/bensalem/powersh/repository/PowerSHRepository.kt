@@ -35,25 +35,65 @@ class PowerSHRepository @Inject constructor(
         return powerSHDao.searchDatabase("%$query%")
     }
 
-    fun getShoesAlphaAscending(query: String): Flow<List<PowerSHDatabaseObject>> {
-        return powerSHDao.getShoesAlphaAscending("%$query%")
+    fun getShoesAlphaAscending(query: String, index:Int): Flow<List<PowerSHDatabaseObject>> {
+        return if (index != 0){
+            powerSHDao.getShoesByTabAlphaAscending(query = "%$query%", index = index)
+
+        }else {
+            powerSHDao.getShoesAlphaAscending(query = "%$query%")
+
+        }
+
     }
 
 
-    fun getShoesNewestFirst(query: String): Flow<List<PowerSHDatabaseObject>> {
-        return powerSHDao.getShoesNewestFirst("%$query%")
+    fun getShoesNewestFirst(query: String, index: Int): Flow<List<PowerSHDatabaseObject>> {
+        return if (index != 0){
+            powerSHDao.getShoesByTabNewestFirst(query = "%$query%", index = index)
+
+        }else {
+            powerSHDao.getShoesNewestFirst("%$query%")
+
+        }
     }
 
-    fun getShoesOldestFirst(query: String): Flow<List<PowerSHDatabaseObject>> {
-        return powerSHDao.getShoesOldestFirst("%$query%")
+    fun getShoesOldestFirst(query: String, index: Int): Flow<List<PowerSHDatabaseObject>> {
+
+        return if (index != 0){
+            powerSHDao.getShoesByTabsOldestFirst(query = "%$query%", index = index)
+
+        }else {
+            powerSHDao.getShoesOldestFirst("%$query%")
+
+        }
+
     }
 
-    fun getShoesLowPriceFirst(query: String): Flow<List<PowerSHDatabaseObject>> {
-        return powerSHDao.getShoesLowPriceFirst("%$query%")
+    fun getShoesLowPriceFirst(query: String, index: Int): Flow<List<PowerSHDatabaseObject>> {
+
+
+        return if (index != 0){
+            powerSHDao.getShoesByTabsLowPriceFirst(query = "%$query%", index = index)
+
+        }else {
+            powerSHDao.getShoesLowPriceFirst("%$query%")
+
+        }
+
+
     }
 
-    fun getShoesHighPriceFirst(query: String): Flow<List<PowerSHDatabaseObject>> {
-        return powerSHDao.getShoesHighPriceFirst("%$query%")
+    fun getShoesHighPriceFirst(query: String, index: Int): Flow<List<PowerSHDatabaseObject>> {
+
+        return if (index != 0){
+            powerSHDao.getShoesByTabsHighPriceFirst(query = "%$query%", index = index)
+
+        }else {
+            powerSHDao.getShoesHighPriceFirst("%$query%")
+
+        }
+
+
     }
 
     suspend fun refreshShoesList(powerSHShoesList: List<PowerSHShoesResponse>) {

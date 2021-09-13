@@ -38,7 +38,7 @@ import akram.bensalem.powersh.utils.Sort
 
 @ExperimentalMaterialApi
 @Composable
-fun ThinkpadSettingsScreen(
+fun SettingsScreen(
     modifier: Modifier = Modifier,
     listState: LazyListState = rememberLazyListState(),
     onThemeOptionClicked: (Int) -> Unit = { },
@@ -185,6 +185,6 @@ fun ThinkpadSettingsScreen(
 @Composable
 private fun ThinkpadSettingsScreenPrev() {
     PowerSHTheme {
-        ThinkpadSettingsScreen(currentTheme = 2, currentSortOption = 1)
+        SettingsScreen(currentTheme = 2, currentSortOption = 1)
     }
 }

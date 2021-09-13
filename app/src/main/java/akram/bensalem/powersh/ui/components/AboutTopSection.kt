@@ -25,6 +25,7 @@ import androidx.compose.ui.unit.sp
 import akram.bensalem.powersh.R
 import akram.bensalem.powersh.ui.theme.Dimens
 import akram.bensalem.powersh.ui.theme.PowerSHTheme
+import androidx.compose.ui.graphics.Color
 
 @Composable
 fun AboutTopSection(
@@ -65,7 +66,7 @@ fun AboutTopSection(
             color = MaterialTheme.colors.onSurface,
             style = MaterialTheme.typography.subtitle2,
             modifier = Modifier
-                .padding(4.dp)
+                .padding(top = Dimens.MiniSmallPadding.size, end =Dimens.MiniSmallPadding.size, start = Dimens.MiniSmallPadding.size, bottom = Dimens.SmallPadding.size)
         )
 
         Button(
@@ -80,11 +81,12 @@ fun AboutTopSection(
             Icon(
                 imageVector = Icons.Outlined.SecurityUpdate,
                 contentDescription = null,
-                tint = MaterialTheme.colors.onPrimary
+                tint = Color.White
             )
             Spacer(modifier = Modifier.width(4.dp))
             Text(
                 text = "Check Updates",
+                color = Color.White,
                 modifier = Modifier
                     .padding(
                         horizontal = 4.dp,
@@ -99,6 +101,7 @@ fun AboutTopSection(
                 overflow = TextOverflow.Ellipsis
             )
         }
+
     }
 }
 
@@ -107,9 +110,9 @@ fun AboutTopSection(
 private fun AboutTopSectionPrev() {
     PowerSHTheme {
         AboutTopSection(
-            appName = "ThinkRchive",
-            version = "1.0.1-alpha01",
-            appLogo = painterResource(id = R.drawable.app_icon)
+                appName = "PowerSH",
+            version = "1.0.0",
+            appLogo = painterResource(id = R.drawable.big_circle_powersh)
         )
     }
 }
