@@ -1,6 +1,7 @@
 package akram.bensalem.powersh.ui.components
 
 
+import akram.bensalem.powersh.ui.theme.Dimens
 import android.util.Log
 import androidx.compose.animation.*
 import androidx.compose.animation.core.animateDp
@@ -27,6 +28,8 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 
 private enum class QuantityToggleState { Zero, NonZero }
+
+private enum class ImageToggleState { Uploaded, NonUploaded }
 
 @Composable
 fun QuantityToggle(
@@ -123,6 +126,107 @@ fun QuantityToggle(
                     .padding(
                         start = if (!isAddedToCart.value) 10.dp else 0.dp,
                         end = 10.dp,
+                        top = 0.dp,
+                        bottom = 0.dp
+                    )
+            )
+        }
+    }
+}
+
+
+
+@Composable
+fun UploadImageToggle(
+    modifier: Modifier = Modifier,
+    isImageSelected: Boolean,
+    onAddClicked: () -> Unit,
+    onRemoveClicked: () -> Unit,
+) {
+
+    val transition = updateTransition(
+        if (!isImageSelected) ImageToggleState.NonUploaded else ImageToggleState.Uploaded,
+        label = ""
+    )
+
+    val backgroundColor by transition.animateColor { state ->
+        when (state) {
+            ImageToggleState.NonUploaded -> MaterialTheme.colors.primary
+            ImageToggleState.Uploaded -> MaterialTheme.colors.surface
+        }
+    }
+
+    val contentColor by transition.animateColor { state ->
+        when (state) {
+            ImageToggleState.NonUploaded -> MaterialTheme.colors.primary
+            ImageToggleState.Uploaded -> LocalContentColor.current
+        }
+    }
+
+    val iconSize by transition.animateDp { state ->
+        when (state) {
+            ImageToggleState.NonUploaded -> 0.dp
+            ImageToggleState.Uploaded -> 18.dp
+        }
+    }
+
+
+//
+    Button(
+        border = BorderStroke(1.dp, MaterialTheme.colors.primary),
+        colors = ButtonDefaults.buttonColors(
+            backgroundColor = backgroundColor,
+            contentColor = contentColor,
+        ),
+        shape = RoundedCornerShape(14.dp),
+        modifier = modifier
+            .padding(end = 8.dp),
+        onClick = {
+            if (isImageSelected) {
+                onRemoveClicked()
+            } else {
+                onAddClicked()
+            }
+
+        }) {
+
+
+        Row(
+            modifier = Modifier,
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+
+            if (isImageSelected) {
+
+                Icon(
+                    Icons.Rounded.Done,
+                    contentDescription = "Uploaded",
+                    tint = if (!isImageSelected) Color.White else MaterialTheme.colors.primary,
+                    modifier = Modifier
+                        .padding(
+                            start = Dimens.MiniSmallPadding.size,
+                            end = Dimens.MiniSmallPadding.size,
+                            top = 0.dp,
+                            bottom = 0.dp
+                        )
+                        .size(iconSize)
+
+                )
+            }
+            Text(
+                text = if (!isImageSelected) "UPLOAD" else "UPLOADED",
+                style = MaterialTheme.typography.button,
+                textAlign = TextAlign.Center,
+                color = if (!isImageSelected) Color.White else MaterialTheme.colors.primary,
+                fontStyle = FontStyle.Normal,
+                fontWeight =if (!isImageSelected) FontWeight.Normal else FontWeight.Medium,
+                fontSize = 11.sp,
+                modifier = Modifier
+                    .animateContentSize()
+                    .padding(
+                        start = if (!isImageSelected) Dimens.MiniSmallPadding.size else 0.dp,
+                        end = Dimens.MiniSmallPadding.size,
                         top = 0.dp,
                         bottom = 0.dp
                     )

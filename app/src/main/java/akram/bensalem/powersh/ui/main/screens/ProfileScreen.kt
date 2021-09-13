@@ -4,6 +4,8 @@ import akram.bensalem.powersh.R
 import akram.bensalem.powersh.ui.components.CollapsingToolbarBase
 import akram.bensalem.powersh.ui.theme.Dimens
 import akram.bensalem.powersh.ui.theme.PowerSHTheme
+import akram.bensalem.powersh.utils.authentification.Authentifier
+import android.app.Activity
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.tween
@@ -31,6 +33,7 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -47,9 +50,11 @@ import com.google.accompanist.insets.navigationBarsPadding
 @Composable
 fun profileScreen(
     modifier: Modifier = Modifier,
+    authentification : Authentifier = Authentifier(LocalContext.current as Activity),
     listState: LazyListState = rememberLazyListState(),
     onEditeClicked: () -> Unit = {},
     onBackButtonPressed: () -> Unit = { },
+    onSwitchChange : (Boolean) -> Unit = {},
     onLogOutClick: () -> Unit = { },
     onViewHistoryClicked: () -> Unit = { },
     onInviteClicked : () -> Unit = { }
@@ -86,8 +91,8 @@ fun profileScreen(
                 onBackButtonPressed = onBackButtonPressed
             ) {
                 profileHeader(
-                userName= "Akram Bensalem",
-                email= "ak.bensalem@esi-sba.dz",
+                userName= authentification.userName,
+                email= authentification.userEmail,
                 profileLogo = painterResource(id = R.drawable.ic_user),
                     onEditeClicked = onEditeClicked
                 )
@@ -151,11 +156,14 @@ fun profileScreen(
 
                     profileItem(
                         title = "Notification",
-                        content = "Activate notifications",
+                        content = if (checkedState.value) "Deactivate the Notifications" else "Activate the Notifications",
                     ){
                         Switch(
                             checked = checkedState.value,
-                            onCheckedChange = { checkedState.value = it },
+                            onCheckedChange = {
+                                checkedState.value = it
+                                onSwitchChange(it)
+                                              },
                             modifier = it
                         )
                     }

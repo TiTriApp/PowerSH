@@ -236,7 +236,7 @@ fun ShoeDetails(
     showBackground = true
 )
 @Composable
-private fun ThinkpadFeaturesPreview() {
+private fun FeaturesPreview() {
 
     val favourite = remember {
         mutableStateOf(false)

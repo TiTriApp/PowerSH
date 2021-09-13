@@ -1,20 +1,17 @@
 package akram.bensalem.powersh.ui.components
 
 import akram.bensalem.powersh.R
+import akram.bensalem.powersh.data.model.OrderItem
 import akram.bensalem.powersh.ui.theme.CardCoverPink
 import akram.bensalem.powersh.ui.theme.YellowOnboarding
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
@@ -26,7 +23,9 @@ import androidx.compose.ui.unit.sp
 
 
 @Composable
-fun ConfirmAlertDialog(openDialog : MutableState<Boolean>) {
+fun ConfirmAlertDialog(openDialog: MutableState<Boolean>,
+                       orderItem: OrderItem,
+                       onConfirmClicked: (OrderItem) -> Unit) {
             if (openDialog.value) {
 
                 AlertDialog(
@@ -77,7 +76,8 @@ fun ConfirmAlertDialog(openDialog : MutableState<Boolean>) {
                             modifier = Modifier
                                 .background(color = CardCoverPink, shape = RoundedCornerShape(14.dp)),
                             onClick = {
-                            openDialog.value = false
+                                openDialog.value = false
+                                onConfirmClicked(orderItem)
                             }) {
                             Text(
                                 text = "Confirm",

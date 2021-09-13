@@ -43,7 +43,7 @@ fun ToolbarImage(
 
     Image(
         painter = coilPainter,
-        contentDescription = stringResource(id = R.string.thinkpad_image),
+        contentDescription = stringResource(id = R.string.image),
         modifier = modifier
             .padding(Dimens.MediumPadding.size)
             .animateContentSize(

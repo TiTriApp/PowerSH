@@ -196,6 +196,7 @@ fun contactScreen(){
                     fieldState = messageState,
                     icon = null,
                     iconTint = MaterialTheme.colors.primary,
+                    singleLine = false,
                     isPassword = false,
                     focusRequester = messageRequester,
                     autofillType = AutofillType.NewPassword,
@@ -282,11 +283,12 @@ fun contactScreen(){
 
 
 
-private fun sendEmail(
+fun sendEmail(
     context: Context,
     recipient: String,
     subject: String,
     message: String,
+    title : String = "Send Email",
     isMessageSent: MutableState<Boolean>
 ) {
     val mIntent = Intent(Intent.ACTION_SEND)
@@ -298,7 +300,7 @@ private fun sendEmail(
 
     try {
         //start email intent
-        context.startActivity(Intent.createChooser(mIntent, "Send Email"))
+        context.startActivity(Intent.createChooser(mIntent, title))
         isMessageSent.value = true
     }
     catch (e: Exception){

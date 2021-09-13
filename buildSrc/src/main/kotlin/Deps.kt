@@ -60,6 +60,13 @@ object Deps {
     val accompanistSwiperefresh by lazy {"com.google.accompanist:accompanist-swiperefresh:${Versions.accompanist}"}
     val accompanistInsetsUi by lazy {"com.google.accompanist:accompanist-insets-ui:${Versions.accompanist}"}
 
+    val accompanistPermissions by lazy {"com.google.accompanist:accompanist-permissions:${Versions.accompanist}"}
+
+
+    /*
+
+     */
+
 
 
 

@@ -132,7 +132,6 @@ fun ShoeFeatures(
                         quantity = quantity.value,
                         price = (quantity.value * shoeProduct.marketPriceStart).toDouble(),
                         onClick = {
-                          //  pageState.value = "CART"
                             onNavigateToCartScreen()
 
                         }

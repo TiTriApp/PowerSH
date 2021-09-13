@@ -229,12 +229,11 @@ fun forgetPasswordBottomSheet(
 @Composable
 fun authentificationScreen(
     navController : NavController,
+    authentification : Authentifier = Authentifier(LocalContext.current as Activity),
     onBackButtonPressed: () -> Unit = { },
     onLogged: () -> Unit = {}
 ){
-    val activity = LocalContext.current as Activity
 
-    var authentification : Authentifier = Authentifier(activity)
 
     val bottomSheetScaffoldState = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden)
 

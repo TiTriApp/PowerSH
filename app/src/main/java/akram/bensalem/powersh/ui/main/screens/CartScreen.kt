@@ -6,19 +6,16 @@ import akram.bensalem.powersh.ui.components.cartListProducts
 import akram.bensalem.powersh.ui.theme.CardCoverPink
 import akram.bensalem.powersh.ui.theme.PowerSHTheme
 import akram.bensalem.powersh.utils.Constants
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.ExperimentalAnimationApi
+import android.content.res.Configuration
+import androidx.compose.animation.*
 import androidx.compose.animation.core.tween
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
+import androidx.compose.animation.core.updateTransition
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -35,6 +32,10 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.google.accompanist.insets.navigationBarsPadding
+
+
+private enum class CartModeState { FILL, EMPTY }
+
 
 @OptIn(ExperimentalAnimationApi::class)
 @ExperimentalMaterialApi
@@ -56,6 +57,28 @@ fun cartScreen(
     for (item in cartProduct) {
         totalPrice.value += item.price * item.quantity
     }
+
+
+    val transition = updateTransition(
+        if (totalPrice.value > 0 ) CartModeState.FILL else  CartModeState.EMPTY,
+        label = ""
+    )
+
+
+    val backgroundColor by transition.animateColor { state ->
+        when (state) {
+            CartModeState.FILL -> MaterialTheme.colors.primary
+            CartModeState.EMPTY -> MaterialTheme.colors.surface
+        }
+    }
+
+    val contentColor by transition.animateColor { state ->
+        when (state) {
+            CartModeState.FILL -> MaterialTheme.colors.primary
+            CartModeState.EMPTY -> LocalContentColor.current
+        }
+    }
+
 
 
     Column(
@@ -152,23 +175,20 @@ fun cartScreen(
                enabled = totalPrice.value > 0,
                shape = RoundedCornerShape(14.dp),
                colors = ButtonDefaults.buttonColors(
-                   backgroundColor =if (totalPrice.value > 0) MaterialTheme.colors.primary else CardCoverPink,
-               //    contentColor = if (totalPrice.value > 0) Color.White else CardCoverPink,
-                   disabledBackgroundColor = CardCoverPink,
-               //    disabledContentColor = CardCoverPink,
+                   backgroundColor = backgroundColor,
+                   contentColor = contentColor,
+                   disabledBackgroundColor = backgroundColor,
+                   disabledContentColor= contentColor
+
                ),
                modifier = Modifier
-                   .background(color = CardCoverPink, shape = RoundedCornerShape(14.dp))
                    .align(Alignment.CenterVertically),
                onClick = {
                 navController.navigate(PowerSHScreens.CheckoutScreen.name)
                }) {
                Text(
                    text =if (totalPrice.value > 0) "CHECKOUT" else "Empty Cart" ,
-                   color =if (totalPrice.value > 0) Color.White else Color.DarkGray ,
-                   style = TextStyle(
-                       background = if (totalPrice.value > 0) MaterialTheme.colors.primary else CardCoverPink,
-                   ),
+                   color = if (totalPrice.value > 0) Color.White else  MaterialTheme.colors.onSurface,
                    textAlign = TextAlign.Center,
                    modifier = Modifier.padding(
                        start = 24.dp,
@@ -192,10 +212,63 @@ fun cartScreen(
 @OptIn(ExperimentalMaterialApi::class)
 @Preview
 @Composable
-fun cartPreview() {
+fun emptyCartPreview() {
+
+    val navController = rememberNavController()
+    val cartProduct = remember { Constants.cartListEmpty }
+    PowerSHTheme {
+        cartScreen(
+            navController =navController,
+            cartProduct = cartProduct,
+        )
+    }
+}
+
+
+@OptIn(ExperimentalMaterialApi::class)
+@Preview
+@Composable
+fun fullCartPreview() {
 
     val navController = rememberNavController()
     val cartProduct = remember { Constants.cartList }
+    PowerSHTheme {
+        cartScreen(
+            navController =navController,
+            cartProduct = cartProduct,
+        )
+    }
+}
+
+
+
+@OptIn(ExperimentalMaterialApi::class)
+@Preview(
+    showBackground = true,
+    uiMode = Configuration.UI_MODE_NIGHT_YES
+)@Composable
+fun fullCartNightPreview() {
+
+    val navController = rememberNavController()
+    val cartProduct = remember { Constants.cartList }
+    PowerSHTheme {
+        cartScreen(
+            navController =navController,
+            cartProduct = cartProduct,
+        )
+    }
+}
+
+
+@OptIn(ExperimentalMaterialApi::class)
+@Preview(
+    showBackground = true,
+    uiMode = Configuration.UI_MODE_NIGHT_YES
+)@Composable
+fun emptyCartNightPreview() {
+
+    val navController = rememberNavController()
+    val cartProduct = remember { Constants.cartListEmpty }
     PowerSHTheme {
         cartScreen(
             navController =navController,

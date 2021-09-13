@@ -1,6 +1,7 @@
 package akram.bensalem.powersh
 
 import akram.bensalem.powersh.data.model.CardItem
+import akram.bensalem.powersh.data.model.OrderItem
 import akram.bensalem.powersh.data.model.ShoeProduct
 import android.os.Bundle
 import androidx.activity.compose.setContent
@@ -49,6 +50,9 @@ class MainActivity : AppCompatActivity() {
 
             val favouriteProduct = remember {  mutableStateListOf<ShoeProduct>() }
 
+            val orderList = remember {  mutableStateListOf<OrderItem>() }
+
+
             val themeValue = remember {
                 mutableStateOf(-1)
             }
@@ -57,7 +61,11 @@ class MainActivity : AppCompatActivity() {
                     themeValue.value = it
                 }
             }
-            PowerSHApp(themeValue.value, cartProduct = cartProduct, favouriteProduct = favouriteProduct)
+            PowerSHApp(themeValue.value,
+                cartProduct = cartProduct,
+                favouriteProduct = favouriteProduct,
+                orderList = orderList
+            )
             Timber.d("setContent called")
         }
 

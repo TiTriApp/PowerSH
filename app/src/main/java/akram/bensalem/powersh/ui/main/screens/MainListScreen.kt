@@ -2,6 +2,7 @@ package akram.bensalem.powersh.ui.main.screens
 
 import akram.bensalem.powersh.R
 import akram.bensalem.powersh.data.model.CardItem
+import akram.bensalem.powersh.data.model.OrderItem
 import android.content.res.Configuration
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.layout.*
@@ -38,7 +39,6 @@ import akram.bensalem.powersh.utils.Constants
 import akram.bensalem.powersh.utils.authentification.Authentifier
 import android.app.Activity
 import androidx.compose.foundation.Image
-import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -70,6 +70,7 @@ fun MainListScreen(
     currentSortOption: Int,
     shoeProductList: List<ShoeProduct>,
     cartProductList: MutableList<CardItem>,
+    orderList : MutableList<OrderItem>,
     networkLoading: Boolean,
     networkError: String,
     favouriteProduct: MutableList<ShoeProduct>
@@ -120,6 +121,7 @@ fun MainListScreen(
             scaffoldState = scaffoldState,
             topBar = {
                 mainTopBar(
+                    pageState = pageState,
                     onOpenMenu = {
                         scope.launch {
                             if (scaffoldState.drawerState.isOpen) {
@@ -173,7 +175,7 @@ fun MainListScreen(
                         modifier = modifier,
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
-                        Timber.d("thinkpadListScreen Contents called")
+                        Timber.d("MainListScreen Contents called")
                         item {
                             CustomSearchBar(
                                 focusManager = focusManager,
@@ -286,6 +288,10 @@ fun MainListScreen(
                     pageState.value.equals("ABOUT")
                 ){
                     aboutScreen()
+                } else if (
+                    pageState.value.equals("ORDERS")
+                ){
+                    orderScreen(orderList = orderList, onInfo = {}, onEntryClick = onEntryClick)
                 } else {
                     Text(
                         text = pageState.value,
@@ -421,7 +427,7 @@ fun SettingsPage(
     device = Devices.PIXEL_4
 )
 @Composable
-private fun ThinkpadListScreenPreview() {
+private fun ListScreenPreview() {
     val scaffoldState = rememberScaffoldState(
         drawerState= rememberDrawerState(DrawerValue.Closed),
     )
@@ -444,6 +450,7 @@ private fun ThinkpadListScreenPreview() {
             networkLoading = false,
             networkError = "",
             favouriteProduct = Constants.ShoesListPreview as MutableList<ShoeProduct>,
+            orderList = ArrayList()
         )
     }
 }

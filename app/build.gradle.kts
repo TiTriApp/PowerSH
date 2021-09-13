@@ -112,6 +112,7 @@ dependencies {
     implementation(Deps.accompanistPager)
     implementation(Deps.accompanistSwiperefresh)
     implementation(Deps.accompanistPagerIndication)
+    implementation(Deps.accompanistPermissions)
 
     
     // Room database

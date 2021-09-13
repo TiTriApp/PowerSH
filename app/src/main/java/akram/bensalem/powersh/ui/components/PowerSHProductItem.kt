@@ -27,17 +27,31 @@ import akram.bensalem.powersh.ui.theme.CardCoverPink
 import akram.bensalem.powersh.ui.theme.Dimens
 import akram.bensalem.powersh.ui.theme.Shapes
 import akram.bensalem.powersh.ui.theme.PowerSHTheme
+import akram.bensalem.powersh.utils.BalloonUtils
 import akram.bensalem.powersh.utils.Constants
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.ripple.rememberRipple
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
+import androidx.constraintlayout.compose.ConstraintLayout
+import com.skydoves.orchestra.tooltips.BalloonAnchor
 
 @Composable
 fun ProductShoesEntry(
     modifier: Modifier = Modifier,
     onEntryClick: () -> Unit = {},
+    onInfo:() -> Unit = {},
     shoeProduct: ShoeProduct
 ) {
+
+    val context = LocalContext.current
+    val lifecycleOwner = LocalLifecycleOwner.current
+
     val animatedProgress = remember {
         Animatable(initialValue = 1.15f)
     }
@@ -77,7 +91,8 @@ fun ProductShoesEntry(
         backgroundColor = MaterialTheme.colors.surface,
         elevation = Dimens.ElevationPadding.size,
         modifier = animatedModifier
-            .clickable { onEntryClick() }
+            .clip(Shapes.large)
+            .clickable{ onEntryClick() }
 
     ) {
         Column(
@@ -124,9 +139,9 @@ fun ProductShoesEntry(
             }
 
             Row(
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier
+                    .fillMaxWidth()
             ) {
-
                 Column(
                     modifier = Modifier
                         .weight(1f)
@@ -170,9 +185,12 @@ fun ProductShoesEntry(
 
                 }
 
+
                 IconButton(
                     modifier = Modifier.align(Alignment.CenterVertically),
-                    onClick = {  }) {
+                    onClick = {
+                        onEntryClick()
+                    }) {
                     Icon(
                         imageVector = Icons.Outlined.Info ,
                         contentDescription = "More",

@@ -5,6 +5,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import akram.bensalem.powersh.data.model.ShoeProduct
 import android.content.Context
+import android.content.Intent
 import android.util.Log
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.snapshots.SnapshotStateList
@@ -14,9 +15,26 @@ import java.io.IOException
 import android.net.NetworkCapabilities
 
 import android.net.ConnectivityManager
+import android.net.Uri
+import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.collections.ArrayList
 
 
 
+
+fun callPhone(context: Context, phoneNumber : String = "+213799434259") {
+      val dialIntent = Intent(Intent.ACTION_DIAL)
+      dialIntent.data = Uri.parse("tel:" + "8344814819")
+      context.startActivity(dialIntent)
+   }
+
+
+fun getCurrentDate() : String{
+    val sdf = SimpleDateFormat("dd/MM/yyyy hh:mm:ss")
+    val currentDate = sdf.format(Date())
+    return currentDate
+}
 
 suspend fun List<ShoeProduct>.getChipNamesList(): List<String> {
     return withContext(Dispatchers.Default) {

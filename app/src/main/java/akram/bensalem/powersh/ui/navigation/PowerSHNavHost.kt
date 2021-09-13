@@ -1,6 +1,7 @@
 package akram.bensalem.powersh.ui.navigation
 
 import akram.bensalem.powersh.data.model.CardItem
+import akram.bensalem.powersh.data.model.OrderItem
 import akram.bensalem.powersh.data.model.ShoeProduct
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.material.ExperimentalMaterialApi
@@ -19,21 +20,24 @@ import akram.bensalem.powersh.ui.main.screens.*
 import akram.bensalem.powersh.ui.main.viewModel.DetailsViewModel
 import akram.bensalem.powersh.ui.main.viewModel.ListViewModel
 import akram.bensalem.powersh.ui.main.viewModel.SettingsViewModel
-import akram.bensalem.powersh.utils.scaleInEnterTransition
-import akram.bensalem.powersh.utils.scaleInPopEnterTransition
-import akram.bensalem.powersh.utils.scaleOutExitTransition
-import akram.bensalem.powersh.utils.scaleOutPopExitTransition
+import akram.bensalem.powersh.utils.*
+import akram.bensalem.powersh.utils.authentification.Authentifier
+import android.app.Activity
+import android.widget.Toast
 import androidx.activity.compose.BackHandler
 import androidx.compose.material.DrawerValue
 import androidx.compose.material.rememberDrawerState
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.*
+import androidx.compose.ui.platform.LocalContext
 import com.akram.bensalem.powersh.ui.screens.login.authentificationScreen
 import com.akram.bensalem.powersh.ui.screens.onboarding.OnBoardingContent
 import com.google.accompanist.pager.ExperimentalPagerApi
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import kotlinx.coroutines.launch
 
 
+@ExperimentalPermissionsApi
 @OptIn(ExperimentalPagerApi::class)
 @ExperimentalMaterialApi
 @ExperimentalAnimationApi
@@ -41,7 +45,10 @@ import kotlinx.coroutines.launch
 @Composable
 fun PowerSHNavHost(
     modifier: Modifier = Modifier,
+    startDestination : String = PowerSHScreens.OnBoardingScreen.name,
+    authentification : Authentifier = Authentifier(LocalContext.current as Activity),
     cartProduct: MutableList<CardItem>,
+    orderList : MutableList<OrderItem>,
     navController: NavHostController,
     pageState: MutableState<String>,
     favouriteProduct: MutableList<ShoeProduct>,
@@ -49,11 +56,8 @@ fun PowerSHNavHost(
 
     AnimatedNavHost(
         navController = navController,
-        startDestination = PowerSHScreens.OnBoardingScreen.name
+        startDestination = startDestination
     ) {
-
-
-
 
 
         // Checkout Screen
@@ -77,13 +81,23 @@ fun PowerSHNavHost(
             BackHandler {
                 navController.navigate(PowerSHScreens.MainListScreen.name)
             }
-            checkoutScreen(navController, cartProduct)
+
+
+            checkoutScreen(
+                navController,
+                cartProduct,
+                onConfirmClicked = {
+                    orderList.add(
+                        it
+                    )
+                    pageState.value="HOME"
+                    navController.navigate(PowerSHScreens.MainListScreen.name)
+                    cartProduct.clear()
+                }
+            )
 
 
         }
-
-
-
 
 
         // First inetarction Screen
@@ -113,9 +127,7 @@ fun PowerSHNavHost(
             )
 
 
-            }
-
-
+        }
 
 
 // Login  Screen
@@ -149,20 +161,18 @@ fun PowerSHNavHost(
 
             authentificationScreen(
                 navController = navController,
+                authentification = authentification,
                 onBackButtonPressed = {
                     navController.popBackStack()
                 },
                 onLogged = {
-                    navController.navigate(PowerSHScreens.ProfileScreen.name){
+                    navController.navigate(PowerSHScreens.ProfileScreen.name) {
                         popUpTo(PowerSHScreens.MainListScreen.name)
                     }
                 }
             )
 
         }
-
-
-
 
 
         val DetailsScreen = PowerSHScreens.DetailsScreen.name
@@ -192,13 +202,12 @@ fun PowerSHNavHost(
                 listState as MainListScreenState.MainListScreen
 
 
-
             val tabIndex = remember {
                 mutableStateOf(0)
             }
 
             val scaffoldState = rememberScaffoldState(
-                drawerState= rememberDrawerState(DrawerValue.Closed),
+                drawerState = rememberDrawerState(DrawerValue.Closed),
             )
             val scope = rememberCoroutineScope()
 
@@ -226,6 +235,7 @@ fun PowerSHNavHost(
                 navController = navController,
                 shoeProductList = shoesListScreenData.shoeProductList,
                 cartProductList = cartProduct,
+                orderList =orderList,
                 favouriteProduct = favouriteProduct,
                 networkLoading = shoesListScreenData.networkLoading,
                 pageState = pageState,
@@ -243,7 +253,7 @@ fun PowerSHNavHost(
                     tabIndex.value = index
                     viewModel
                         .getNewShoesListFromDatabase("", index = index)
-                } ,
+                },
                 networkError = shoesListScreenData.networkError,
                 currentSortOption = shoesListScreenData.sortOption,
                 onSortOptionClicked = { sort ->
@@ -295,7 +305,6 @@ fun PowerSHNavHost(
                     (shoeDetail.value as DetailsScreenState.Detail).shoeProduct
 
 
-
                 val favourite = remember {
                     mutableStateOf(favouriteProduct.contains(shoe))
                 }
@@ -304,7 +313,7 @@ fun PowerSHNavHost(
                     modifier = modifier,
                     shoeProduct = shoe,
                     cartProduct = cartProduct,
-                    favourite =favourite,
+                    favourite = favourite,
                     onBackButtonPressed = {
                         navController.popBackStack()
                     },
@@ -312,7 +321,7 @@ fun PowerSHNavHost(
 
                         if (favourite.value) {
                             favouriteProduct.remove(shoe)
-                        }else{
+                        } else {
                             favouriteProduct.add(shoe)
                         }
 
@@ -382,23 +391,56 @@ fun PowerSHNavHost(
                 scaleOutPopExitTransition()
             }
         ) {
-            /* AboutScreen(
-                 onCheckUpdates = {
-                     // TODO: Check updates implementation
-                 },
-                 onBackButtonPressed = {
-                     navController.popBackStack()
-                 }
-             )*/
+            val isInviteSent = remember {
+                mutableStateOf(false)
+            }
+
+            val context = LocalContext.current
 
             profileScreen(
+                authentification = authentification,
                 onBackButtonPressed = {
                     navController.popBackStack()
+                },
+                onLogOutClick = {
+                    authentification.signOut()
+                    navController.navigate(PowerSHScreens.AuthentificationScree.name){
+                        popUpTo(PowerSHScreens.MainListScreen.name)
+                    }
+                },
+                onSwitchChange = {
+                    val msg = if (it) {
+                        "The notification have been activated"
+                    } else {
+                        "The notification have been desactivated"
+                    }
+
+                    Toast.makeText(
+                        context,
+                        msg,
+                        Toast.LENGTH_SHORT
+                    ).show()
+                },
+                onViewHistoryClicked = {
+                    Toast.makeText(
+                        context,
+                        "You don't have any history to view!",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                },
+                onInviteClicked = {
+                    sendEmail(
+                        context = context,
+                        recipient = "powersshoes2@gmail.com",
+                        subject = "PowerSH",
+                        message = "Hi, I'm invite you to use this app",
+                        title = "Invite your friends",
+                        isMessageSent = isInviteSent
+                    )
                 }
             )
 
         }
-
 
 
         // About Screen

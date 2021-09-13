@@ -2,6 +2,7 @@ package akram.bensalem.powersh.utils
 
 import akram.bensalem.powersh.R
 import akram.bensalem.powersh.data.model.CardItem
+import akram.bensalem.powersh.data.model.OrderItem
 import akram.bensalem.powersh.data.model.ShoeProduct
 import akram.bensalem.powersh.data.model.Step
 import akram.bensalem.powersh.data.types.ShoeType
@@ -19,7 +20,7 @@ object Constants {
     val ShoesListPreview = listOf(
         ShoeProduct(
             id = 0,
-            title = "Thinkpad T450",
+            title = "Nike",
             imageUrl = "https://raw.githubusercontent.com/racka98/ThinkRchive/main/thinkpad_images/thinkpadt450.png",
             type= ShoeType.MEN,
             releaseDate = "Jan, 2015",
@@ -28,7 +29,7 @@ object Constants {
         ),
         ShoeProduct(
             id = 1,
-            title = "Thinkpad T450",
+            title = "Adidas",
             imageUrl = "https://raw.githubusercontent.com/racka98/ThinkRchive/main/thinkpad_images/thinkpadt450.png",
             type= ShoeType.MEN,
             releaseDate = "Jan, 2015",
@@ -37,7 +38,7 @@ object Constants {
         ),
         ShoeProduct(
             id = 2,
-            title = "Thinkpad T450",
+            title = "Puma",
             imageUrl = "https://raw.githubusercontent.com/racka98/ThinkRchive/main/thinkpad_images/thinkpadt450.png",
             type= ShoeType.WOMEN,
             releaseDate = "Jan, 2015",
@@ -46,7 +47,7 @@ object Constants {
         ),
         ShoeProduct(
             id = 3,
-            title = "Thinkpad T450",
+            title = "Versac",
             imageUrl = "https://raw.githubusercontent.com/racka98/ThinkRchive/main/thinkpad_images/thinkpadt450.png",
             type= ShoeType.WOMEN,
             releaseDate = "Jan, 2015",
@@ -55,7 +56,7 @@ object Constants {
         ),
         ShoeProduct(
             id = 4,
-            title = "Thinkpad T450",
+            title = "Nike",
             imageUrl = "https://raw.githubusercontent.com/racka98/ThinkRchive/main/thinkpad_images/thinkpadt450.png",
             type= ShoeType.BABY,
             releaseDate = "Jan, 2015",
@@ -175,8 +176,47 @@ object Constants {
 
 
 
+    val cartListEmpty = mutableStateListOf<CardItem>()
 
 
+
+    val cartList1 = arrayListOf<CardItem>(
+        CardItem(
+            quantity = 1,
+            description = "Les chaussures de basket-ball sont les chaussures utilisées par les pratiquants du basket-ball. Bien qu'apparentées aux baskets classiques, elles ont une forme spécifique : elles sont montantes, afin de cacher la malléole médiale et de minimiser les risques de torsion de la cheville.",
+            color = "White",
+            size = 38,
+            id = 1,
+            title = "Basket",
+            price = 7000,
+            ImageId = "R.drawable.baby"
+        ),
+        CardItem(
+            quantity = 2,
+            description = "Les sneakers désignent une paire de chaussures de sport détournée à un usage citadin et quotidien. Dérivées des modèles conçus pour le sport, elles sont appréciées pour leur confort et leur style.",
+            color = "Blue",
+            size = 37,
+            id = 2,
+            title = "Sneaker",
+            price = 6000,
+            ImageId = "R.drawable.men"
+        ),
+        CardItem(
+            quantity = 2,
+            color = "Black",
+            size = 41,
+            id = 3,
+            title = "Sebago Classic Dan Waxy, Mocassins (Loafer)",
+            description = "Dessus: Autres Cuir\n" +
+                    "Doublure: Cuir\n" +
+                    "Semelle intérieure: Cuir\n" +
+                    "Matériau de semelle: Cuir\n" +
+                    "Largeur de la chaussure: Moyen\n" +
+                    "Fermeture: Enfiler",
+            price = 8000,
+            ImageId = "R.drawable.baby,"
+        ),
+    )
 
     val cartList = mutableStateListOf<CardItem>(
 
@@ -215,45 +255,6 @@ object Constants {
             price = 8000,
             ImageId = "R.drawable.baby,"
         ),
-        CardItem(
-            quantity = 1,
-            color = "Blue",
-            description ="Basket Versace\n" +
-                    "Version basse\n" +
-                    "Bout de la chaussure : Rond\n" +
-                    "Fermeture : À lacets\n" +
-                    "Dessus/Tige : Cuir / Synthétique\n" +
-                    "Doublure : Textile\n" +
-                    "Semelle intérieure : Textile\n" +
-                    "Semelle extérieure : Caoutchouc\n" +
-                    "Versace imprimé sur la languette\n" +
-                    "Confort exceptionnel\n" +
-                    "Composition : Cuir et Synthétique",
-            size = 39,
-            id = 4,
-            title = "Basket Versace=",
-            price = 4000,
-            ImageId = "R.drawable.men"
-        ),
-        CardItem(
-            quantity = 1,
-            color = "Brown",
-            size = 42,
-            id = 5,
-            title = "Timberland Classic Unlined",
-            description ="Dessus: Cuir\n" +
-                    "Doublure: Textile\n" +
-                    "Semelle intérieure: Textile\n" +
-                    "Matériau de semelle: Caoutchouc\n" +
-                    "Type de talons: Plat\n" +
-                    "Largeur de la chaussure: Medium\n" +
-                    "Fermeture: Lacet",
-            price = 3000,
-            ImageId = "R.drawable.woman2"
-        ),
     )
-
-
-
 
 }

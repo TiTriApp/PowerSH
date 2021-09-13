@@ -64,13 +64,20 @@ public class Authentifier {
         return utilisateur;
     }
 
-
     public String getUserName() {
-        return this.user.getName();
+        if (this.getFireBaseUser() == null){
+            return "Sign In";
+        } else {
+            return this.getFireBaseUser().getName();
+        }
     }
 
     public String getUserEmail() {
-        return this.user.getEmail();
+        if (this.getFireBaseUser() == null){
+            return "or Creat an Account";
+        } else {
+            return this.getFireBaseUser().getEmail();
+        }
     }
 
     public void  creatNewUser(

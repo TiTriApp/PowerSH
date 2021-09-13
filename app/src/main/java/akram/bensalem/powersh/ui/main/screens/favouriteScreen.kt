@@ -55,12 +55,7 @@ fun favouriteScreen(
         if (
             cartFavourite.size != 0
         ){
-           /* cartListProducts(
-                cartProduct = cartFavourite
-            ) {
-                cartFavourite.removeAt(it)
-            }
-*/
+
             LazyColumn(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier.align(Alignment.TopCenter)

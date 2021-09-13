@@ -25,6 +25,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import akram.bensalem.powersh.R
 import akram.bensalem.powersh.ui.main.screens.PowerSHScreens
+import akram.bensalem.powersh.ui.theme.Dimens
 import akram.bensalem.powersh.ui.theme.PowerSHTheme
 import akram.bensalem.powersh.utils.authentification.Authentifier
 import android.app.Activity
@@ -78,7 +79,7 @@ fun mainDrawer(
                         navController.navigate(PowerSHScreens.AuthentificationScree.name)
                     }
                 }
-                .padding(start = 16.dp , top = 48.dp)
+                .padding(start = 16.dp , top = 48.dp , bottom = Dimens.MediumPadding.size)
         ) {
             Image(
                 painter = painterResource(R.drawable.ic_user),
@@ -95,7 +96,7 @@ fun mainDrawer(
 
             ) {
                 Text(
-                    text =if (authentification.user != null) "Akram Bensalem" else "Sign In",
+                    text =if (authentification.user != null) authentification.userName else "Sign In",
                     fontSize = 18.sp,
                     textAlign = TextAlign.Start,
                     fontWeight = FontWeight.SemiBold,
@@ -105,7 +106,7 @@ fun mainDrawer(
 
                     )
                 Text(
-                    text = if (authentification.user != null) "ak.bensalem@gmail.com" else "Or Creat an account",
+                    text = if (authentification.user != null) authentification.userEmail else "Or Creat an account",
                     fontSize = 14.sp,
                     textAlign = TextAlign.Start,
                     fontWeight = FontWeight.Normal,

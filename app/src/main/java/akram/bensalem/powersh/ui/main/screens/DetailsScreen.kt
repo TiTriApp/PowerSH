@@ -105,7 +105,7 @@ fun DetailsScreen(
     device = Devices.PIXEL_4
 )
 @Composable
-private fun ThinkpadDetailsScreenPreview() {
+private fun DetailsScreenPreview() {
 
     val favourite = remember {
         mutableStateOf(false)
