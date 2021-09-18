@@ -36,13 +36,13 @@ fun cartListProducts(
     onRemoveItem: (Int) -> Unit
 
 ) {
-    LazyColumn (
+    LazyColumn(
         modifier = Modifier.padding(start = 0.dp, end = 0.dp),
         contentPadding = PaddingValues(
             top = 2.dp,
             bottom = 2.dp
         )
-    ){
+    ) {
 
         itemsIndexed(cartProduct) { index, row ->
             cardItemEntry(
@@ -61,10 +61,6 @@ fun cartListProducts(
 
 
 }
-
-
-
-
 
 
 @OptIn(ExperimentalCoilApi::class)
@@ -128,7 +124,7 @@ fun cardItemEntry(
                         .background(
                             color = CardCoverPink.copy(alpha = 0.2f),
                             shape = Shapes.large,
-                            )
+                        )
                 ) {}
 
                 if (imageLoading) {
@@ -206,6 +202,6 @@ fun cardItemEntry(
         }
     }
 
-    }
+}
 
 

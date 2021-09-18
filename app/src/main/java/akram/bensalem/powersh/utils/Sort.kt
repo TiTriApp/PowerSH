@@ -1,13 +1,12 @@
 package akram.bensalem.powersh.utils
 
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.*
+import androidx.compose.material.icons.outlined.IceSkating
+import androidx.compose.material.icons.outlined.Inventory2
+import androidx.compose.material.icons.outlined.PriceChange
+import androidx.compose.material.icons.outlined.SortByAlpha
 import androidx.compose.ui.graphics.vector.ImageVector
 
-// Holds data for all the sorting options
-// Used in ViewModel to set respective Sorting option
-// Used in ThinkpadListScreen and it's composables to
-// display and select the respective Sorting option
 enum class Sort(
     val type: String,
     val icon: ImageVector,

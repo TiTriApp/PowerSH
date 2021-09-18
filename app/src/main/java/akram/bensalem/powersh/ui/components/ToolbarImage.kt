@@ -1,5 +1,8 @@
 package akram.bensalem.powersh.ui.components
 
+import akram.bensalem.powersh.R
+import akram.bensalem.powersh.ui.theme.Dimens
+import akram.bensalem.powersh.ui.theme.PowerSHTheme
 import androidx.compose.animation.*
 import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.tween
@@ -11,11 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import coil.compose.rememberImagePainter
-import akram.bensalem.powersh.R
-import akram.bensalem.powersh.ui.theme.Dimens
-import akram.bensalem.powersh.ui.theme.PowerSHTheme
 
-// Must always be used inside a BoxScope for proper alignment
 @ExperimentalAnimationApi
 @Composable
 fun ToolbarImage(
@@ -65,7 +64,7 @@ fun ToolbarImage(
 private fun TopCardWithImagePreview() {
     PowerSHTheme {
         ToolbarImage(
-            imageUrl = "https://raw.githubusercontent.com/racka98/ThinkRchive/main/thinkpad_images/thinkpadt450.png",
+            imageUrl = "https://raw.githubusercontent.com/akram/main/shoe.png",
         )
     }
 }

@@ -1,7 +1,8 @@
 package akram.bensalem.powersh.ui.components
 
-import akram.bensalem.powersh.data.model.CardItem
 import akram.bensalem.powersh.data.model.ShoeProduct
+import akram.bensalem.powersh.ui.theme.*
+import akram.bensalem.powersh.utils.Constants
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -13,9 +14,15 @@ import androidx.compose.material.icons.outlined.Info
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
@@ -23,29 +30,12 @@ import androidx.compose.ui.unit.dp
 import coil.compose.rememberImagePainter
 import com.google.accompanist.insets.ProvideWindowInsets
 import com.google.accompanist.insets.statusBarsPadding
-import akram.bensalem.powersh.ui.theme.CardCoverPink
-import akram.bensalem.powersh.ui.theme.Dimens
-import akram.bensalem.powersh.ui.theme.Shapes
-import akram.bensalem.powersh.ui.theme.PowerSHTheme
-import akram.bensalem.powersh.utils.BalloonUtils
-import akram.bensalem.powersh.utils.Constants
-import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.ripple.rememberRipple
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalLifecycleOwner
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextDecoration
-import androidx.constraintlayout.compose.ConstraintLayout
-import com.skydoves.orchestra.tooltips.BalloonAnchor
 
 @Composable
 fun ProductShoesEntry(
     modifier: Modifier = Modifier,
     onEntryClick: () -> Unit = {},
-    onInfo:() -> Unit = {},
+    onInfo: () -> Unit = {},
     shoeProduct: ShoeProduct
 ) {
 
@@ -92,13 +82,12 @@ fun ProductShoesEntry(
         elevation = Dimens.ElevationPadding.size,
         modifier = animatedModifier
             .clip(Shapes.large)
-            .clickable{ onEntryClick() }
+            .clickable { onEntryClick() }
 
     ) {
         Column(
             modifier = Modifier.fillMaxWidth()
-            ) {
-
+        ) {
 
 
             Box(
@@ -131,9 +120,11 @@ fun ProductShoesEntry(
                     modifier = Modifier
                         .fillMaxWidth()
                         .aspectRatio(1f)
-                        .padding(vertical = Dimens.SmallPadding.size, horizontal = Dimens.SmallPadding.size)
+                        .padding(
+                            vertical = Dimens.SmallPadding.size,
+                            horizontal = Dimens.SmallPadding.size
+                        )
                 )
-
 
 
             }
@@ -150,7 +141,7 @@ fun ProductShoesEntry(
                     Text(
                         text = shoeProduct.title,
                         style = MaterialTheme.typography.body1,
-                        maxLines=1,
+                        maxLines = 1,
                         color = MaterialTheme.colors.onBackground,
                         overflow = TextOverflow.Ellipsis,
                         modifier = Modifier.padding(top = 8.dp)
@@ -174,10 +165,10 @@ fun ProductShoesEntry(
                         }
                         Text(
                             text = "${shoeProduct.marketPriceStart} DA",
-                            color = MaterialTheme.colors.primary,
+                            color = PowerSHGreen,
                             style = MaterialTheme.typography.subtitle2,
                             fontWeight = FontWeight.Medium,
-                            maxLines=1,
+                            maxLines = 1,
                             overflow = TextOverflow.Ellipsis,
                             modifier = Modifier
                         )
@@ -192,7 +183,7 @@ fun ProductShoesEntry(
                         onEntryClick()
                     }) {
                     Icon(
-                        imageVector = Icons.Outlined.Info ,
+                        imageVector = Icons.Outlined.Info,
                         contentDescription = "More",
                         tint = Color.LightGray
                     )
@@ -202,7 +193,6 @@ fun ProductShoesEntry(
         }
 
     }
-
 
 
 }

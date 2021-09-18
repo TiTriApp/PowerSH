@@ -13,7 +13,7 @@ import javax.inject.Inject
 @HiltViewModel
 class OnBoardingViewModel @Inject constructor(
     private val dataStoreRepository: DataStoreRepository
-): ViewModel() {
+) : ViewModel() {
 
     private val _state = MutableStateFlow(false)
     val viewState: StateFlow<Boolean>

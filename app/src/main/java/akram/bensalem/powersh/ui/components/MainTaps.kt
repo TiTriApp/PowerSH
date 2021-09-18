@@ -1,5 +1,8 @@
 package akram.bensalem.powersh.ui.components
 
+import akram.bensalem.powersh.R
+import akram.bensalem.powersh.ui.theme.PowerSHRed
+import akram.bensalem.powersh.ui.theme.PowerSHTheme
 import androidx.compose.animation.animateColor
 import androidx.compose.animation.core.updateTransition
 import androidx.compose.foundation.BorderStroke
@@ -21,9 +24,6 @@ import androidx.compose.ui.unit.dp
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.PagerState
 import com.google.accompanist.pager.rememberPagerState
-import akram.bensalem.powersh.R
-import akram.bensalem.powersh.ui.theme.PowerSHRed
-import akram.bensalem.powersh.ui.theme.PowerSHTheme
 
 data class ScreenState(var state: Screen = Screen.TOUS) {
 
@@ -42,7 +42,7 @@ data class ScreenState(var state: Screen = Screen.TOUS) {
 @Composable
 fun TabsPanel(
     pagerState: PagerState,
-    onTabSelected : (Int) -> Unit = {},
+    onTabSelected: (Int) -> Unit = {},
 ) {
 
 
@@ -58,27 +58,18 @@ fun TabsPanel(
         divider = {},
         tabs = {
             tabs.forEachIndexed { index, tab ->
-                    CategoryTab(
-                        category = tab.title,
-                        icon = tab.icon,
-                        selected = index == pagerState.currentPage,
-                        onClick = {   onTabSelected(index) },
-                        modifier = Modifier.padding(horizontal = 8.dp, vertical = 16.dp)
-                    )
+                CategoryTab(
+                    category = tab.title,
+                    icon = tab.icon,
+                    selected = index == pagerState.currentPage,
+                    onClick = { onTabSelected(index) },
+                    modifier = Modifier.padding(horizontal = 8.dp, vertical = 16.dp)
+                )
 
             }
         }
     )
 }
-
-
-
-
-
-
-
-
-
 
 
 private enum class CategoryTabState { Selected, NotSelected }
@@ -92,12 +83,13 @@ private fun CategoryTab(
     icon: Int
 ) {
 
-    val transition = updateTransition(if (selected) CategoryTabState.Selected else CategoryTabState.NotSelected)
+    val transition =
+        updateTransition(if (selected) CategoryTabState.Selected else CategoryTabState.NotSelected)
 
     val backgroundColor by transition.animateColor { state ->
         when (state) {
             CategoryTabState.Selected -> MaterialTheme.colors.primary
-            CategoryTabState.NotSelected -> MaterialTheme.colors.surface
+            CategoryTabState.NotSelected -> MaterialTheme.colors.background
         }
     }
     val contentColor by transition.animateColor { state ->
@@ -146,15 +138,6 @@ private fun CategoryTab(
         }
     }
 }
-
-
-
-
-
-
-
-
-
 
 
 @OptIn(ExperimentalPagerApi::class)

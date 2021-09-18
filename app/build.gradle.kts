@@ -6,6 +6,7 @@ plugins {
     id("kotlin-kapt")
     id("dagger.hilt.android.plugin")
     id("com.google.gms.google-services")
+    id ("com.github.ben-manes.versions")
 }
 
 android {
@@ -46,6 +47,14 @@ android {
     composeOptions {
         kotlinCompilerExtensionVersion = Versions.compose
     }
+
+    tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
+        kotlinOptions.freeCompilerArgs = listOf(
+            "-Xopt-in=kotlin.RequiresOptIn"
+        )
+    }
+
+
     packagingOptions {
         resources {
             excludes += mutableSetOf(
@@ -62,6 +71,7 @@ dependencies {
     implementation(Deps.material)
     implementation(Deps.lifecycleRuntimeKtx)
     implementation("com.google.firebase:firebase-auth:21.0.1")
+    implementation("com.google.firebase:firebase-firestore-ktx:23.0.3")
 
     testImplementation(Deps.junit)
     androidTestImplementation(Deps.junitTest)

@@ -1,7 +1,5 @@
 package akram.bensalem.powersh.utils.email;
 
-import android.util.Log;
-
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -25,16 +23,15 @@ import javax.mail.internet.MimeMultipart;
 
 public class GMailSender extends javax.mail.Authenticator {
 
-    private String mailhost = "smtp.gmail.com";
-    private String user;
-    private String password;
-    private Session session;
-
-    private Multipart _multipart = new MimeMultipart();
-
     static {
         Security.addProvider(new JSSEProvider());
     }
+
+    private final String mailhost = "smtp.gmail.com";
+    private final String user;
+    private final String password;
+    private final Session session;
+    private final Multipart _multipart = new MimeMultipart();
 
     public GMailSender(String user, String password) {
         this.user = user;
@@ -96,7 +93,7 @@ public class GMailSender extends javax.mail.Authenticator {
 
     public class ByteArrayDataSource implements DataSource {
 
-        private byte[] data;
+        private final byte[] data;
         private String type;
 
         public ByteArrayDataSource(byte[] data, String type) {

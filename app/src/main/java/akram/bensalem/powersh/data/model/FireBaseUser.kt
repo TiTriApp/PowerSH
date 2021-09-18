@@ -6,7 +6,7 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class FireBaseUser(
-    val providerId:String,
+    val providerId: String,
     val uid: String,
     val name: String,
     val email: String,

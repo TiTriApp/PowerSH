@@ -11,6 +11,6 @@ import androidx.room.TypeConverters
 )
 
 @TypeConverters(Converter::class)
-abstract class PowerSHDatabase: RoomDatabase() {
+abstract class PowerSHDatabase : RoomDatabase() {
     abstract val powerSHDao: PowerSHDao
 }

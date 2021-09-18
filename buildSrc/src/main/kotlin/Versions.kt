@@ -1,19 +1,19 @@
 object Versions {
     // Kotlin
-    const val kotlin = "1.5.21"
+    const val kotlin = "1.5.30"
 
     // Essentials
     const val material = "1.4.0"
     const val splashScreen = "1.0.0-alpha01"
-    const val appCompat = "1.3.1"
+    const val appCompat = "1.4.0-alpha03"
     const val gradlePlugin = "7.0.2"
     const val coreKtx = "1.6.0"
 
     // Compose Base
-    const val composeKotlin = "1.5.21"
-    const val compose = "1.1.0-alpha02"
+    const val composeKotlin = "1.5.30"
+    const val compose = "1.1.0-alpha04"
     const val composeConstraintLayout = "1.0.0-beta02"
-    const val activityCompose = "1.3.1"
+    const val activityCompose = "1.4.0-alpha02"
 
     // Navigation
     const val composeNavigation = "2.4.0-alpha05"

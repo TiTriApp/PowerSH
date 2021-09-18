@@ -4,21 +4,20 @@ import akram.bensalem.powersh.data.model.CardItem
 import akram.bensalem.powersh.data.model.OrderItem
 import akram.bensalem.powersh.data.model.ShoeProduct
 import akram.bensalem.powersh.ui.main.screens.PowerSHScreens
+import akram.bensalem.powersh.ui.theme.PowerSHTheme
+import akram.bensalem.powersh.utils.authentification.Authenticate
+import android.app.Activity
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.ExperimentalComposeUiApi
-import androidx.compose.ui.Modifier
-import com.google.accompanist.insets.ProvideWindowInsets
-import com.google.accompanist.navigation.animation.rememberAnimatedNavController
-import akram.bensalem.powersh.ui.theme.PowerSHTheme
-import akram.bensalem.powersh.utils.Constants
-import akram.bensalem.powersh.utils.authentification.Authentifier
-import android.app.Activity
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.snapshots.SnapshotStateList
+import androidx.compose.ui.ExperimentalComposeUiApi
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import com.google.accompanist.insets.ProvideWindowInsets
+import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 
 @OptIn(ExperimentalPermissionsApi::class)
@@ -30,15 +29,24 @@ fun PowerSHApp(
     themeValue: Int = 0,
     cartProduct: MutableList<CardItem>,
     favouriteProduct: SnapshotStateList<ShoeProduct>,
-    orderList : MutableList<OrderItem>,
-    ) {
+    orderList: MutableList<OrderItem>,
+) {
 
-   var pageState = remember {
-       mutableStateOf("HOME")
-   }
+    var pageState = remember {
+        mutableStateOf("HOME")
+    }
 
-     val activity = LocalContext.current as Activity
-     var authentification : Authentifier = Authentifier(activity)
+    val activity = LocalContext.current as Activity
+    val authentication = remember {
+        mutableStateOf(Authenticate(activity))
+    }
+
+    val isLogged = remember {
+        mutableStateOf(authentication.value.user != null)
+    }
+
+    isLogged.value = (authentication.value.user != null)
+
 
 
     ProvideWindowInsets {
@@ -46,13 +54,14 @@ fun PowerSHApp(
             val navController = rememberAnimatedNavController()
             PowerSHNavHost(
                 modifier = Modifier,
-                startDestination = PowerSHScreens.MainListScreen.name ,
-                authentification =authentification,
+                startDestination = PowerSHScreens.MainListScreen.name,
+                authentication = authentication,
                 navController = navController,
                 cartProduct = cartProduct,
                 favouriteProduct = favouriteProduct,
                 orderList = orderList,
-                pageState = pageState
+                pageState = pageState,
+                isLogged = isLogged,
             )
         }
     }

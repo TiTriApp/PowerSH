@@ -8,10 +8,10 @@ import akram.bensalem.powersh.data.types.ShoeType
 fun List<PowerSHShoesResponse>.asDatabaseModel(): Array<PowerSHDatabaseObject> {
     return map {
         PowerSHDatabaseObject(
-            id= it.id,
+            id = it.id,
             title = it.title,
             imageUrl = it.imageUrl,
-            type=  toShoeType(it.type),
+            type = toShoeType(it.type),
             releaseDate = it.releaseDate,
             marketPriceStart = it.marketPriceStart,
             marketPriceEnd = it.marketPriceEnd,
@@ -20,9 +20,8 @@ fun List<PowerSHShoesResponse>.asDatabaseModel(): Array<PowerSHDatabaseObject> {
 }
 
 
-
 private fun toShoeType(shoeType: Int): ShoeType {
-    return when (shoeType){
+    return when (shoeType) {
         1 -> ShoeType.MEN
         2 -> ShoeType.WOMEN
         3 -> ShoeType.BABY
@@ -44,7 +43,7 @@ fun List<PowerSHDatabaseObject>.asDomainModel(): List<ShoeProduct> {
     }
 }
 
-fun PowerSHDatabaseObject.asThinkpad(): ShoeProduct {
+fun PowerSHDatabaseObject.asPowerSHshoes(): ShoeProduct {
     return ShoeProduct(
         id = this.id,
         title = this.title,

@@ -5,7 +5,11 @@ import androidx.lifecycle.LifecycleOwner
 import com.skydoves.balloon.*
 
 object BalloonUtils {
-    fun getEditBalloon(context: Context, lifecycleOwner: LifecycleOwner, description : String): Balloon {
+    fun getEditBalloon(
+        context: Context,
+        lifecycleOwner: LifecycleOwner,
+        description: String
+    ): Balloon {
         return Balloon.Builder(context)
             .setText(description)
             .setArrowSize(10)

@@ -21,7 +21,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 @Composable
-fun checkYourConectivityAlertDialog(openDialog : MutableState<Boolean>) {
+fun checkYourConectivityAlertDialog(openDialog: MutableState<Boolean>) {
     if (!openDialog.value) {
 
         AlertDialog(
@@ -36,24 +36,34 @@ fun checkYourConectivityAlertDialog(openDialog : MutableState<Boolean>) {
                     fontSize = 18.sp,
                     fontWeight = FontWeight.Bold,
                     textAlign = TextAlign.Start,
-                    modifier = Modifier.padding(start = 16.dp, end = 8.dp, top = 16.dp, bottom = 4.dp)
+                    modifier = Modifier.padding(
+                        start = 16.dp,
+                        end = 8.dp,
+                        top = 16.dp,
+                        bottom = 4.dp
+                    )
                 )
             },
             text = {
 
-                Column() {
+                Column {
                     Text(
                         text = "There is a problem with your internet! \n Check it again, please",
                         color = MaterialTheme.colors.onSurface,
                         fontSize = 14.sp,
                         fontWeight = FontWeight.Medium,
                         textAlign = TextAlign.Start,
-                        modifier = Modifier.padding(start = 16.dp, end = 8.dp, top = 16.dp, bottom = 4.dp)
+                        modifier = Modifier.padding(
+                            start = 16.dp,
+                            end = 8.dp,
+                            top = 16.dp,
+                            bottom = 4.dp
+                        )
                     )
 
                     Image(
                         painter = painterResource(id = R.drawable.ic_order_confirm),
-                        contentDescription ="confirm",
+                        contentDescription = "confirm",
                         modifier = Modifier
                             .padding(32.dp, 32.dp)
                     )

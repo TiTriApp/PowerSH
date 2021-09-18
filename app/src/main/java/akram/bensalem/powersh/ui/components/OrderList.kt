@@ -2,11 +2,9 @@ package akram.bensalem.powersh.ui.components
 
 import akram.bensalem.powersh.data.model.OrderItem
 import akram.bensalem.powersh.ui.components.checkout.factureText
-import akram.bensalem.powersh.ui.main.screens.MainPayOptions
 import akram.bensalem.powersh.ui.theme.Dimens
 import akram.bensalem.powersh.ui.theme.PowerSHTheme
 import akram.bensalem.powersh.ui.theme.Shapes
-import akram.bensalem.powersh.utils.BalloonUtils
 import akram.bensalem.powersh.utils.Constants
 import android.util.Log
 import androidx.compose.animation.core.Animatable
@@ -18,28 +16,23 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.ZeroCornerSize
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.DeleteForever
 import androidx.compose.material.icons.outlined.Info
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.constraintlayout.compose.ConstraintLayout
 import coil.annotation.ExperimentalCoilApi
-import com.skydoves.orchestra.tooltips.BalloonAnchor
 
 @ExperimentalMaterialApi
 @OptIn(ExperimentalFoundationApi::class)
@@ -49,13 +42,13 @@ fun ordersList(
     onClickEntry: () -> Unit,
     onInfo: () -> Unit
 ) {
-    LazyColumn (
+    LazyColumn(
         modifier = Modifier.padding(start = 0.dp, end = 0.dp),
         contentPadding = PaddingValues(
             top = 2.dp,
             bottom = 2.dp
         )
-    ){
+    ) {
 
         itemsIndexed(cartProduct) { index, row ->
             orderItemEntry(
@@ -76,10 +69,6 @@ fun ordersList(
 }
 
 
-
-
-
-
 @ExperimentalMaterialApi
 @OptIn(ExperimentalCoilApi::class)
 @Composable
@@ -87,7 +76,7 @@ fun orderItemEntry(
     modifier: Modifier = Modifier,
     order: OrderItem,
     onClickEntry: () -> Unit = {},
-    onInfo : () -> Unit = {},
+    onInfo: () -> Unit = {},
 ) {
 
     val animatedProgress = remember {
@@ -157,7 +146,7 @@ fun orderItemEntry(
                         )
                     factureText(
                         title = "Total:",
-                        detail = order.total.toString() +" DA",
+                        detail = order.total.toString() + " DA",
                         titleColor = MaterialTheme.colors.onBackground,
                         detailColor = MaterialTheme.colors.onSurface,
 
@@ -214,14 +203,14 @@ fun orderItemEntry(
                 fontWeight = FontWeight.Medium,
                 textAlign = TextAlign.Start,
                 modifier = Modifier
-                    .padding(start = 16.dp ,top = 4.dp, bottom = 8.dp)
+                    .padding(start = 16.dp, top = 4.dp, bottom = 8.dp)
             )
 
 
-            Log.d("AkramBensalem","order.productList size id ${order.productList}")
+            Log.d("AkramBensalem", "order.productList size id ${order.productList}")
 
-            order.productList.forEach {row ->
-                finalCartItem(product = row){}
+            order.productList.forEach { row ->
+                finalCartItem(product = row) {}
                 Spacer(modifier = Modifier.padding(Dimens.LargePadding.size))
             }
 
@@ -234,19 +223,16 @@ fun orderItemEntry(
 }
 
 
-
-
-
 @OptIn(ExperimentalMaterialApi::class)
 @Preview
 @Composable
-fun orderItemEntryPreview(){
-    PowerSHTheme() {
+fun orderItemEntryPreview() {
+    PowerSHTheme {
         orderItemEntry(
-            modifier= Modifier,
-           order=  OrderItem(
-            productList = Constants.cartList1
-           ),
+            modifier = Modifier,
+            order = OrderItem(
+                productList = Constants.cartList1
+            ),
         )
     }
 }

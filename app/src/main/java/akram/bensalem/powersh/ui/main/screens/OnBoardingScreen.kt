@@ -10,13 +10,7 @@ import androidx.compose.animation.core.*
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.Surface
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Button
-import androidx.compose.material.Text
-import androidx.compose.material.Icon
-import androidx.compose.material.TextButton
-import androidx.compose.material.IconButton
+import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.KeyboardArrowRight
 import androidx.compose.runtime.*
@@ -42,7 +36,6 @@ const val currentPageAnimation = "currentPageAnimation"
 const val rotateAnimation = "rotateAnimation"
 
 @ExperimentalAnimationApi
-@VisibleForTesting
 @Composable
 fun OnBoardingContent(
     onActionClicked: () -> Unit = { },
@@ -59,7 +52,8 @@ fun OnBoardingContent(
     val pagerState = remember { PagerState() }
     pagerState.maxPage = (onBoardingItemsList.size - 1).coerceAtLeast(0)
 
-    val transition = updateTransition(targetState = pagerState.currentPage, label = currentPageAnimation)
+    val transition =
+        updateTransition(targetState = pagerState.currentPage, label = currentPageAnimation)
     val rotation by transition.animateFloat(
         {
             tween(durationMillis = 1000)
@@ -117,11 +111,15 @@ fun OnBoardingContent(
             )
         }
         OnboardingPageOptions(
-            getStartedVisible =  getStartedVisible,
-            currentPage =  pagerState.currentPage,
+            getStartedVisible = getStartedVisible,
+            currentPage = pagerState.currentPage,
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = Dimens.MediumPadding.size, start = Dimens.MediumPadding.size, end = Dimens.MediumPadding.size )
+                .padding(
+                    top = Dimens.MediumPadding.size,
+                    start = Dimens.MediumPadding.size,
+                    end = Dimens.MediumPadding.size
+                )
                 .navigationBarsPadding(bottom = true)
                 .constrainAs(options) {
                     bottom.linkTo(parent.bottom)
@@ -138,13 +136,7 @@ fun OnBoardingContent(
             }
         }
     }
-    }
-
-
-
-
-
-
+}
 
 
 @OptIn(ExperimentalAnimationApi::class)
@@ -239,9 +231,6 @@ fun OnboardingPageOptions(
 }
 
 
-
-
-
 @Composable
 fun OnboardingPageItem(item: OnBoardingItem, rotation: Float) {
     Column(
@@ -259,7 +248,7 @@ fun OnboardingPageItem(item: OnBoardingItem, rotation: Float) {
             iterations = LottieConstants.IterateForever,
         )
 
-       
+
 
         LottieAnimation(
             composition = composition,
@@ -271,7 +260,7 @@ fun OnboardingPageItem(item: OnBoardingItem, rotation: Float) {
         )
 
         Text(
-            text =item.titleId,
+            text = item.titleId,
             style = MaterialTheme.typography.h5,
             fontWeight = FontWeight.Medium,
             textAlign = TextAlign.Center,

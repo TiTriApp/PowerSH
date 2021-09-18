@@ -1,10 +1,8 @@
 package akram.bensalem.powersh.ui.main.screens
 
 import akram.bensalem.powersh.R
-import akram.bensalem.powersh.data.model.CardItem
 import akram.bensalem.powersh.data.model.ShoeProduct
 import akram.bensalem.powersh.ui.components.ProductShoesEntry
-import akram.bensalem.powersh.ui.components.cartListProducts
 import akram.bensalem.powersh.ui.theme.CardCoverPink
 import akram.bensalem.powersh.ui.theme.Dimens
 import androidx.compose.animation.AnimatedVisibility
@@ -17,14 +15,9 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -35,7 +28,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavController
 import com.google.accompanist.insets.navigationBarsPadding
 
 @OptIn(ExperimentalAnimationApi::class)
@@ -44,7 +36,7 @@ import com.google.accompanist.insets.navigationBarsPadding
 fun favouriteScreen(
     cartFavourite: MutableList<ShoeProduct>,
     onEntryClick: (ShoeProduct) -> Unit = { },
-){
+) {
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -54,14 +46,14 @@ fun favouriteScreen(
 
         if (
             cartFavourite.size != 0
-        ){
+        ) {
 
             LazyColumn(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier.align(Alignment.TopCenter)
             ) {
-                itemsIndexed(cartFavourite){ index, item ->
-                    if (index % 2 == 0 ) {
+                itemsIndexed(cartFavourite) { index, item ->
+                    if (index % 2 == 0) {
                         Row(
                             horizontalArrangement = Arrangement.SpaceBetween,
                             modifier = Modifier
@@ -112,7 +104,7 @@ fun favouriteScreen(
                 .fillMaxWidth()
                 .align(Alignment.Center)
         ) {
-            Column() {
+            Column {
                 Image(
                     modifier = Modifier
                         .align(Alignment.CenterHorizontally)
@@ -121,12 +113,12 @@ fun favouriteScreen(
                     contentDescription = "Add To Cart"
                 )
                 Text(
-                    color = Color.DarkGray,
+                    color = MaterialTheme.colors.onSurface,
                     fontStyle = FontStyle.Normal,
                     fontWeight = FontWeight.Bold,
                     fontSize = 18.sp,
                     textAlign = TextAlign.Center,
-                    text = "Cart is empty",
+                    text = "You don't have favourites yet!",
                     modifier = Modifier
                         .padding(top = 20.dp)
                         .align(Alignment.CenterHorizontally)
@@ -170,37 +162,36 @@ fun favouriteScreen(
             }
             Spacer(modifier = Modifier.weight(1f))
             if (cartFavourite.size > 0)
-            Button(
-                enabled = cartFavourite.size > 0,
-                shape = RoundedCornerShape(14.dp),
-                colors = ButtonDefaults.buttonColors(
-                    backgroundColor =if (cartFavourite.size > 0) MaterialTheme.colors.primary else CardCoverPink,
-                    //    contentColor = if (totalPrice.value > 0) Color.White else CardCoverPink,
-                    disabledBackgroundColor = CardCoverPink,
-                    //    disabledContentColor = CardCoverPink,
-                ),
-                modifier = Modifier
-                    .background(color = CardCoverPink, shape = RoundedCornerShape(14.dp))
-                    .align(Alignment.CenterVertically),
-                onClick = {
-                    cartFavourite.clear()
-                }) {
-                Text(
-                    text =if (cartFavourite.size > 0) "Remove All" else "" ,
-                    color =if (cartFavourite.size > 0) Color.White else Color.DarkGray ,
-                    style = TextStyle(
-                        background = if (cartFavourite.size > 0) MaterialTheme.colors.primary else CardCoverPink,
+                Button(
+                    enabled = cartFavourite.size > 0,
+                    shape = RoundedCornerShape(14.dp),
+                    colors = ButtonDefaults.buttonColors(
+                        backgroundColor = if (cartFavourite.size > 0) MaterialTheme.colors.primary else CardCoverPink,
+                        //    contentColor = if (totalPrice.value > 0) Color.White else CardCoverPink,
+                        disabledBackgroundColor = CardCoverPink,
+                        //    disabledContentColor = CardCoverPink,
                     ),
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier.padding(
-                        start = 24.dp,
-                        end = 24.dp,
-                        top = 6.dp,
-                        bottom = 6.dp
+                    modifier = Modifier
+                        .background(color = CardCoverPink, shape = RoundedCornerShape(14.dp))
+                        .align(Alignment.CenterVertically),
+                    onClick = {
+                        cartFavourite.clear()
+                    }) {
+                    Text(
+                        text = if (cartFavourite.size > 0) "Remove All" else "",
+                        color = if (cartFavourite.size > 0) Color.White else Color.DarkGray,
+                        style = TextStyle(
+                            background = if (cartFavourite.size > 0) MaterialTheme.colors.primary else CardCoverPink,
+                        ),
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier.padding(
+                            start = 24.dp,
+                            end = 24.dp,
+                            top = 6.dp,
+                            bottom = 6.dp
+                        )
                     )
-                )
-            }
-
+                }
 
 
         }

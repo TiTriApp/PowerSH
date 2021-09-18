@@ -4,7 +4,7 @@ import androidx.room.TypeConverter
 
 class Converter {
     @TypeConverter
-     fun fromShoeType(type: ShoeType):Int{
+    fun fromShoeType(type: ShoeType): Int {
         return when (type) {
             ShoeType.MEN -> 1
             ShoeType.WOMEN -> 2
@@ -15,7 +15,7 @@ class Converter {
 
     @TypeConverter
     fun toShoeType(shoeType: Int): ShoeType {
-        return when (shoeType){
+        return when (shoeType) {
             1 -> ShoeType.MEN
             2 -> ShoeType.WOMEN
             3 -> ShoeType.BABY

@@ -1,18 +1,15 @@
 package akram.bensalem.powersh.utils
 
-import akram.bensalem.powersh.R
 import akram.bensalem.powersh.data.model.CardItem
-import akram.bensalem.powersh.data.model.OrderItem
 import akram.bensalem.powersh.data.model.ShoeProduct
 import akram.bensalem.powersh.data.model.Step
 import akram.bensalem.powersh.data.types.ShoeType
 import androidx.compose.runtime.mutableStateListOf
 
 object Constants {
- //  const val BASE_URL = "https://docs.google.com/spreadsheets/d/1cFrYzzAP7i3bzSLKuBMykz3ZNUbf-YPTqRSEAwINy_E/"
-
-   const val BASE_URL = "https://docs.google.com/spreadsheets/d/1ryFLEuVNeEnzczIWqeJ9pLP3doZA7Vr1g5qdTdThj_o/"
-    const val POWERSH_LIST_TABLE = "thinkpad_list"
+    const val BASE_URL =
+        "https://docs.google.com/spreadsheets/d/1ryFLEuVNeEnzczIWqeJ9pLP3doZA7Vr1g5qdTdThj_o/"
+    const val POWERSH_LIST_TABLE = "shoes_list"
     const val PREFERENCE_NAME = "settings_preference"
     const val THEME_OPTIONS = "Theme Options"
     const val SORT_OPTIONS = "Default Sort Option"
@@ -21,8 +18,8 @@ object Constants {
         ShoeProduct(
             id = 0,
             title = "Nike",
-            imageUrl = "https://raw.githubusercontent.com/racka98/ThinkRchive/main/thinkpad_images/thinkpadt450.png",
-            type= ShoeType.MEN,
+            imageUrl = "https://raw.githubusercontent.com/akram/main/images/shoe.png",
+            type = ShoeType.MEN,
             releaseDate = "Jan, 2015",
             marketPriceStart = 250,
             marketPriceEnd = 500,
@@ -30,8 +27,8 @@ object Constants {
         ShoeProduct(
             id = 1,
             title = "Adidas",
-            imageUrl = "https://raw.githubusercontent.com/racka98/ThinkRchive/main/thinkpad_images/thinkpadt450.png",
-            type= ShoeType.MEN,
+            imageUrl = "https://raw.githubusercontent.com/akram/main/images/shoe.png",
+            type = ShoeType.MEN,
             releaseDate = "Jan, 2015",
             marketPriceStart = 250,
             marketPriceEnd = 500,
@@ -39,8 +36,8 @@ object Constants {
         ShoeProduct(
             id = 2,
             title = "Puma",
-            imageUrl = "https://raw.githubusercontent.com/racka98/ThinkRchive/main/thinkpad_images/thinkpadt450.png",
-            type= ShoeType.WOMEN,
+            imageUrl = "https://raw.githubusercontent.com/akram/main/images/shoe.png",
+            type = ShoeType.WOMEN,
             releaseDate = "Jan, 2015",
             marketPriceStart = 250,
             marketPriceEnd = 500,
@@ -48,8 +45,8 @@ object Constants {
         ShoeProduct(
             id = 3,
             title = "Versac",
-            imageUrl = "https://raw.githubusercontent.com/racka98/ThinkRchive/main/thinkpad_images/thinkpadt450.png",
-            type= ShoeType.WOMEN,
+            imageUrl = "https://raw.githubusercontent.com/akram/main/images/shoe.png",
+            type = ShoeType.WOMEN,
             releaseDate = "Jan, 2015",
             marketPriceStart = 250,
             marketPriceEnd = 500,
@@ -57,8 +54,8 @@ object Constants {
         ShoeProduct(
             id = 4,
             title = "Nike",
-            imageUrl = "https://raw.githubusercontent.com/racka98/ThinkRchive/main/thinkpad_images/thinkpadt450.png",
-            type= ShoeType.BABY,
+            imageUrl = "https://raw.githubusercontent.com/akram/main/images/shoe.png",
+            type = ShoeType.BABY,
             releaseDate = "Jan, 2015",
             marketPriceStart = 250,
             marketPriceEnd = 500,
@@ -78,8 +75,6 @@ object Constants {
             title = "Confirmation",
         ),
     )
-
-
 
 
     val wilayaList = mutableStateListOf<String>(
@@ -145,10 +140,6 @@ object Constants {
     )
 
 
-
-
-
-
     val cartList2 = mutableStateListOf<CardItem>(
 
         CardItem(
@@ -174,10 +165,7 @@ object Constants {
     )
 
 
-
-
     val cartListEmpty = mutableStateListOf<CardItem>()
-
 
 
     val cartList1 = arrayListOf<CardItem>(

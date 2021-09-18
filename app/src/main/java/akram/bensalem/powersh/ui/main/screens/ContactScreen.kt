@@ -20,6 +20,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.AccountCircle
 import androidx.compose.material.icons.outlined.Email
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -40,12 +41,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.google.accompanist.insets.navigationBarsPadding
 import com.google.accompanist.insets.statusBarsPadding
-import androidx.compose.runtime.MutableState
 
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
-fun contactScreen(){
+fun contactScreen() {
 
 
     var emailState = remember {
@@ -127,7 +127,7 @@ fun contactScreen(){
                 )
 
 
-                akram.bensalem.powersh.ui.components.customTextField(
+                akram.bensalem.powersh.ui.components.CustomTextField(
                     modifier = Modifier
                         .padding(0.dp, 8.dp)
                         .fillMaxWidth()
@@ -155,7 +155,7 @@ fun contactScreen(){
                 )
 
 
-                akram.bensalem.powersh.ui.components.customTextField(
+                akram.bensalem.powersh.ui.components.CustomTextField(
                     modifier = Modifier
                         .padding(0.dp, 8.dp)
                         .fillMaxWidth()
@@ -182,7 +182,7 @@ fun contactScreen(){
                     }
                 )
 
-                akram.bensalem.powersh.ui.components.customTextField(
+                akram.bensalem.powersh.ui.components.CustomTextField(
                     modifier = Modifier
                         .padding(0.dp, 8.dp)
                         .fillMaxWidth()
@@ -224,13 +224,13 @@ fun contactScreen(){
             onClick = {
                 isOnline.value = isOnline(context = context)
                 if (isOnline.value && emailState.value.text.isNotEmpty() && messageState.value.text.isNotEmpty() && nameState.value.text.isNotEmpty()) {
-                   // send message
+                    // send message
 //      isMessageSent.value = true
                     sendEmail(
                         context = context,
                         recipient = "powersshoes2@gmail.com",
-                        subject=  nameState.value.text,
-                        message= "Email is : ${emailState.value.text} + ${messageState.value.text}",
+                        subject = nameState.value.text,
+                        message = "Email is : ${emailState.value.text} + ${messageState.value.text}",
                         isMessageSent = isMessageSent
                     )
 
@@ -245,8 +245,9 @@ fun contactScreen(){
 */
 
 
-                } else if (isOnline.value){
-                    Toast.makeText(context, "One of filed or many are empty" , Toast.LENGTH_SHORT).show()
+                } else if (isOnline.value) {
+                    Toast.makeText(context, "One of filed or many are empty", Toast.LENGTH_SHORT)
+                        .show()
                 }
 
 
@@ -274,13 +275,7 @@ fun contactScreen(){
     }
 
 
-
 }
-
-
-
-
-
 
 
 fun sendEmail(
@@ -288,7 +283,7 @@ fun sendEmail(
     recipient: String,
     subject: String,
     message: String,
-    title : String = "Send Email",
+    title: String = "Send Email",
     isMessageSent: MutableState<Boolean>
 ) {
     val mIntent = Intent(Intent.ACTION_SEND)
@@ -302,20 +297,17 @@ fun sendEmail(
         //start email intent
         context.startActivity(Intent.createChooser(mIntent, title))
         isMessageSent.value = true
-    }
-    catch (e: Exception){
+    } catch (e: Exception) {
         Toast.makeText(context, e.message, Toast.LENGTH_LONG).show()
     }
 
 }
 
 
-
-
 @Preview
 @Composable
-fun contactScreenPreview(){
-    PowerSHTheme() {
+fun contactScreenPreview() {
+    PowerSHTheme {
         contactScreen()
     }
 }
@@ -326,8 +318,8 @@ fun contactScreenPreview(){
     uiMode = Configuration.UI_MODE_NIGHT_YES
 )
 @Composable
-fun contactScreenNightPreview(){
-    PowerSHTheme() {
+fun contactScreenNightPreview() {
+    PowerSHTheme {
         contactScreen()
     }
 }

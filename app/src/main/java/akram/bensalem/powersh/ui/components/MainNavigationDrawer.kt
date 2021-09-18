@@ -1,6 +1,12 @@
 package akram.bensalem.powersh.ui.components
 
 
+import akram.bensalem.powersh.R
+import akram.bensalem.powersh.ui.main.screens.PowerSHScreens
+import akram.bensalem.powersh.ui.theme.Dimens
+import akram.bensalem.powersh.ui.theme.PowerSHTheme
+import akram.bensalem.powersh.utils.authentification.Authenticate
+import android.app.Activity
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -13,6 +19,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -21,48 +28,27 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.google.accompanist.insets.navigationBarsPadding
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
-import akram.bensalem.powersh.R
-import akram.bensalem.powersh.ui.main.screens.PowerSHScreens
-import akram.bensalem.powersh.ui.theme.Dimens
-import akram.bensalem.powersh.ui.theme.PowerSHTheme
-import akram.bensalem.powersh.utils.authentification.Authentifier
-import android.app.Activity
-import androidx.compose.ui.platform.LocalContext
-import com.google.accompanist.insets.navigationBarsPadding
-
-
-sealed class DrawerScreens(val title: String) {
-    object Home : DrawerScreens("Home")
-    object Account : DrawerScreens("Cart")
-    object Help : DrawerScreens( "Favourite")
-}
-
-private val screens = listOf(
-    DrawerScreens.Home,
-    DrawerScreens.Account,
-    DrawerScreens.Help
-)
-
-
-
 
 @ExperimentalMaterialApi
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun mainDrawer(
+fun MainDrawer(
     navController: NavController,
     modifier: Modifier = Modifier,
+    cartListSize : Int = 0,
     scope: CoroutineScope,
     selectedScreen: MutableState<String>,
     scaffoldState: ScaffoldState,
-    authentification: Authentifier,
+    authentication: Authenticate,
+    isLogged : MutableState<Boolean>
 ) {
     Column(
         modifier
             .fillMaxSize()
-            .padding(start =0.dp, top = 0.dp)
+            .padding(start = 0.dp, top = 0.dp)
     ) {
 
         Row(
@@ -73,13 +59,13 @@ fun mainDrawer(
                     interactionSource = remember { MutableInteractionSource() },
                     indication = rememberRipple(radius = 250.dp)
                 ) {
-                    if (authentification.user != null) {
+                    if (isLogged.value) {
                         navController.navigate(PowerSHScreens.ProfileScreen.name)
-                    }   else {
+                    } else {
                         navController.navigate(PowerSHScreens.AuthentificationScree.name)
                     }
                 }
-                .padding(start = 16.dp , top = 48.dp , bottom = Dimens.MediumPadding.size)
+                .padding(start = 16.dp, top = 48.dp, bottom = Dimens.MediumPadding.size)
         ) {
             Image(
                 painter = painterResource(R.drawable.ic_user),
@@ -96,7 +82,7 @@ fun mainDrawer(
 
             ) {
                 Text(
-                    text =if (authentification.user != null) authentification.userName else "Sign In",
+                    text = if (authentication.user != null) authentication.userName else "Sign In",
                     fontSize = 18.sp,
                     textAlign = TextAlign.Start,
                     fontWeight = FontWeight.SemiBold,
@@ -106,7 +92,7 @@ fun mainDrawer(
 
                     )
                 Text(
-                    text = if (authentification.user != null) authentification.userEmail else "Or Creat an account",
+                    text = if (authentication.user != null) authentication.userEmail else "Or Create an account",
                     fontSize = 14.sp,
                     textAlign = TextAlign.Start,
                     fontWeight = FontWeight.Normal,
@@ -123,13 +109,13 @@ fun mainDrawer(
 
 
         Column(
-            modifier = Modifier.padding(start = 16.dp , top = 48.dp)
+            modifier = Modifier.padding(start = 16.dp, top = 48.dp)
         ) {
 
             DrawerRow(
-                title =  "Home",
+                title = "Home",
                 icon = Icons.Outlined.Home,
-                id =  "HOME",
+                id = "HOME",
                 scope = scope,
                 selectedScreen = selectedScreen,
                 scaffoldState = scaffoldState,
@@ -138,10 +124,11 @@ fun mainDrawer(
 
 
             Spacer(modifier = Modifier.padding(8.dp))
-            DrawerRow(
-                title =  "Cart",
+            BadgeDrawerRow(
+                title = "Cart",
                 icon = Icons.Outlined.ShoppingCart,
-                id =  "CART",
+                cartListSize = cartListSize,
+                id = "CART",
                 scope = scope,
                 selectedScreen = selectedScreen,
                 scaffoldState = scaffoldState,
@@ -151,9 +138,9 @@ fun mainDrawer(
 
             Spacer(modifier = Modifier.padding(8.dp))
             DrawerRow(
-                title =  "Favourite",
+                title = "Favourite",
                 icon = Icons.Outlined.FavoriteBorder,
-                id =  "FAVOURITE",
+                id = "FAVOURITE",
                 scope = scope,
                 selectedScreen = selectedScreen,
                 scaffoldState = scaffoldState,
@@ -161,27 +148,27 @@ fun mainDrawer(
 
             Spacer(modifier = Modifier.padding(8.dp))
             DrawerRow(
-                title =  "Orders",
+                title = "Orders",
                 icon = Icons.Outlined.LocalShipping,
-                id =  "ORDERS",
+                id = "ORDERS",
                 scope = scope,
                 selectedScreen = selectedScreen,
                 scaffoldState = scaffoldState,
             )
             Spacer(modifier = Modifier.padding(8.dp))
             DrawerRow(
-                title =  "Settings",
+                title = "Settings",
                 icon = Icons.Outlined.Settings,
-                id =  "SETTINGS",
+                id = "SETTINGS",
                 scope = scope,
                 selectedScreen = selectedScreen,
                 scaffoldState = scaffoldState,
             )
             Spacer(modifier = Modifier.padding(8.dp))
             DrawerRow(
-                title =  "About Us",
+                title = "About Us",
                 icon = Icons.Outlined.Info,
-                id =  "ABOUT",
+                id = "ABOUT",
                 scope = scope,
                 selectedScreen = selectedScreen,
                 scaffoldState = scaffoldState,
@@ -190,9 +177,9 @@ fun mainDrawer(
 
             Spacer(modifier = Modifier.padding(8.dp))
             DrawerRow(
-                title =  "Contact Us",
+                title = "Contact Us",
                 icon = Icons.Outlined.MailOutline,
-                id =  "CONTACT",
+                id = "CONTACT",
                 scope = scope,
                 selectedScreen = selectedScreen,
                 scaffoldState = scaffoldState,
@@ -200,7 +187,7 @@ fun mainDrawer(
 
             Spacer(modifier = Modifier.weight(1f))
 
-            if (authentification.user != null) {
+            if (isLogged.value) {
                 LogOutDrawerRow(
                     title = "Log Out",
                     icon = Icons.Outlined.DoorBack,
@@ -208,7 +195,8 @@ fun mainDrawer(
                     scope = scope,
                     selectedScreen = selectedScreen,
                     scaffoldState = scaffoldState,
-                    authentification = authentification
+                    authentication = authentication,
+                    isLogged = isLogged
                 )
                 Spacer(modifier = Modifier.padding(8.dp))
             }
@@ -230,7 +218,7 @@ fun DrawerRow(
     scope: CoroutineScope,
     selectedScreen: MutableState<String>,
     scaffoldState: ScaffoldState,
-){
+) {
     Row(modifier = Modifier
         .clickable {
             scope.launch {
@@ -243,24 +231,80 @@ fun DrawerRow(
         .padding(start = 16.dp),
         horizontalArrangement = Arrangement.spacedBy(32.dp)
     ) {
-        Icon(
-            icon,
-            contentDescription = title,
-            modifier = Modifier.size(36.dp),
-            tint =if (selectedScreen.value.equals(id.uppercase())) MaterialTheme.colors.primary  else MaterialTheme.colors.onBackground,
-        )
+
+
+            Icon(
+                icon,
+                contentDescription = title,
+                modifier = Modifier.size(36.dp),
+                tint = if (selectedScreen.value == id.uppercase()) MaterialTheme.colors.primary else MaterialTheme.colors.onBackground,
+            )
+
+
         Text(
             text = title,
             fontWeight = FontWeight.Normal,
             modifier = Modifier
                 .align(CenterVertically)
                 .fillMaxWidth(),
-            color =if (selectedScreen.value.equals(id.uppercase())) MaterialTheme.colors.primary else MaterialTheme.colors.onBackground,
+            color = if (selectedScreen.value == id.uppercase()) MaterialTheme.colors.primary else MaterialTheme.colors.onBackground,
 
             )
     }
 
 }
+
+
+
+@ExperimentalMaterialApi
+@OptIn(ExperimentalStdlibApi::class)
+@Composable
+fun BadgeDrawerRow(
+    title: String,
+    cartListSize : Int = 0,
+    icon: ImageVector,
+    id: String,
+    scope: CoroutineScope,
+    selectedScreen: MutableState<String>,
+    scaffoldState: ScaffoldState,
+) {
+    Row(modifier = Modifier
+        .clickable {
+            scope.launch {
+                scaffoldState.drawerState.close()
+                selectedScreen.value = id.uppercase()
+            }
+        }
+        .fillMaxWidth()
+        .padding(0.dp)
+        .padding(start = 16.dp),
+        horizontalArrangement = Arrangement.spacedBy(32.dp)
+    ) {
+
+        BadgedBox(badge = {
+            if (cartListSize > 0) Badge { Text(cartListSize.toString()) }
+        }) {
+            Icon(
+                icon,
+                contentDescription = title,
+                modifier = Modifier.size(36.dp),
+                tint = if (selectedScreen.value == id.uppercase()) MaterialTheme.colors.primary else MaterialTheme.colors.onBackground,
+            )
+        }
+
+
+        Text(
+            text = title,
+            fontWeight = FontWeight.Normal,
+            modifier = Modifier
+                .align(CenterVertically)
+                .fillMaxWidth(),
+            color = if (selectedScreen.value == id.uppercase()) MaterialTheme.colors.primary else MaterialTheme.colors.onBackground,
+
+            )
+    }
+}
+
 
 
 
@@ -274,13 +318,15 @@ fun LogOutDrawerRow(
     scope: CoroutineScope,
     selectedScreen: MutableState<String>,
     scaffoldState: ScaffoldState,
-    authentification: Authentifier,
-    ){
+    authentication: Authenticate,
+    isLogged: MutableState<Boolean>,
+    onClicked : () -> Unit = {}
+) {
     Row(modifier = Modifier
         .clickable {
             scope.launch {
                 scaffoldState.drawerState.close()
-                authentification.signOut()
+                authentication.signOut(isLogged)
             }
         }
         .fillMaxWidth()
@@ -292,7 +338,7 @@ fun LogOutDrawerRow(
             icon,
             contentDescription = title,
             modifier = Modifier.size(36.dp),
-            tint =if (selectedScreen.value.equals(id.uppercase())) MaterialTheme.colors.primary  else MaterialTheme.colors.onBackground,
+            tint = if (selectedScreen.value == id.uppercase()) MaterialTheme.colors.primary else MaterialTheme.colors.onBackground,
         )
         Text(
             text = title,
@@ -300,24 +346,21 @@ fun LogOutDrawerRow(
             modifier = Modifier
                 .align(CenterVertically)
                 .fillMaxWidth(),
-            color =if (selectedScreen.value.equals(id.uppercase())) MaterialTheme.colors.primary else MaterialTheme.colors.onBackground)
+            color = if (selectedScreen.value == id.uppercase()) MaterialTheme.colors.primary else MaterialTheme.colors.onBackground
+        )
     }
 
 }
 
 
-
-
-
-
 @OptIn(ExperimentalMaterialApi::class)
 @Preview
 @Composable
-fun drawerPreview() {
+fun DrawerPreview() {
 
     val navController = rememberNavController()
     val scaffoldState = rememberScaffoldState(
-        drawerState= rememberDrawerState(DrawerValue.Closed),
+        drawerState = rememberDrawerState(DrawerValue.Closed),
     )
 
     val selectedItem = remember { mutableStateOf("HOME") }
@@ -325,13 +368,20 @@ fun drawerPreview() {
     val activity = LocalContext.current as Activity
     val scope = rememberCoroutineScope()
 
+    val isLogged = remember {
+        mutableStateOf(false)
+    }
+
     PowerSHTheme {
-        mainDrawer(
+        MainDrawer(
             navController,
             scope = scope,
+            isLogged = isLogged,
             selectedScreen = selectedItem,
             scaffoldState = scaffoldState,
-            authentification = Authentifier(activity)
+            authentication = Authenticate(
+                activity
+            )
         )
     }
 }

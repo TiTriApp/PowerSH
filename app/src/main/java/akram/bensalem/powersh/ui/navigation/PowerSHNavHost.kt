@@ -3,35 +3,37 @@ package akram.bensalem.powersh.ui.navigation
 import akram.bensalem.powersh.data.model.CardItem
 import akram.bensalem.powersh.data.model.OrderItem
 import akram.bensalem.powersh.data.model.ShoeProduct
-import androidx.compose.animation.ExperimentalAnimationApi
-import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.ui.ExperimentalComposeUiApi
-import androidx.compose.ui.Modifier
-import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavHostController
-import androidx.navigation.NavType
-import androidx.navigation.compose.navArgument
-import com.google.accompanist.navigation.animation.AnimatedNavHost
-import com.google.accompanist.navigation.animation.composable
 import akram.bensalem.powersh.ui.main.screenStates.DetailsScreenState
 import akram.bensalem.powersh.ui.main.screenStates.MainListScreenState
 import akram.bensalem.powersh.ui.main.screenStates.SettingsScreenState
 import akram.bensalem.powersh.ui.main.screens.*
+import akram.bensalem.powersh.ui.main.screens.login.AuthenticationScreen
 import akram.bensalem.powersh.ui.main.viewModel.DetailsViewModel
 import akram.bensalem.powersh.ui.main.viewModel.ListViewModel
 import akram.bensalem.powersh.ui.main.viewModel.SettingsViewModel
-import akram.bensalem.powersh.utils.*
-import akram.bensalem.powersh.utils.authentification.Authentifier
-import android.app.Activity
+import akram.bensalem.powersh.utils.authentification.Authenticate
+import akram.bensalem.powersh.utils.scaleInEnterTransition
+import akram.bensalem.powersh.utils.scaleInPopEnterTransition
+import akram.bensalem.powersh.utils.scaleOutExitTransition
+import akram.bensalem.powersh.utils.scaleOutPopExitTransition
 import android.widget.Toast
 import androidx.activity.compose.BackHandler
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.material.DrawerValue
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.rememberDrawerState
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.*
+import androidx.compose.ui.ExperimentalComposeUiApi
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import com.akram.bensalem.powersh.ui.screens.login.authentificationScreen
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavHostController
+import androidx.navigation.NavType
+import androidx.navigation.compose.navArgument
 import com.akram.bensalem.powersh.ui.screens.onboarding.OnBoardingContent
+import com.google.accompanist.navigation.animation.AnimatedNavHost
+import com.google.accompanist.navigation.animation.composable
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import kotlinx.coroutines.launch
@@ -45,13 +47,14 @@ import kotlinx.coroutines.launch
 @Composable
 fun PowerSHNavHost(
     modifier: Modifier = Modifier,
-    startDestination : String = PowerSHScreens.OnBoardingScreen.name,
-    authentification : Authentifier = Authentifier(LocalContext.current as Activity),
+    startDestination: String = PowerSHScreens.OnBoardingScreen.name,
+    authentication: MutableState<Authenticate> = remember { mutableStateOf(Authenticate(null)) } ,
     cartProduct: MutableList<CardItem>,
-    orderList : MutableList<OrderItem>,
+    orderList: MutableList<OrderItem>,
     navController: NavHostController,
     pageState: MutableState<String>,
     favouriteProduct: MutableList<ShoeProduct>,
+    isLogged: MutableState<Boolean>,
 ) {
 
     AnimatedNavHost(
@@ -77,22 +80,18 @@ fun PowerSHNavHost(
             }
         ) {
 
-
-            BackHandler {
-                navController.navigate(PowerSHScreens.MainListScreen.name)
-            }
-
-
-            checkoutScreen(
-                navController,
+            CheckoutScreen(
                 cartProduct,
                 onConfirmClicked = {
                     orderList.add(
                         it
                     )
-                    pageState.value="HOME"
+                    pageState.value = "HOME"
                     navController.navigate(PowerSHScreens.MainListScreen.name)
                     cartProduct.clear()
+                },
+                onBackPressClicked = {
+                    navController.popBackStack()
                 }
             )
 
@@ -100,7 +99,7 @@ fun PowerSHNavHost(
         }
 
 
-        // First inetarction Screen
+        // First interaction Screen
         composable(
             route = PowerSHScreens.OnBoardingScreen.name,
             enterTransition = { _, _ ->
@@ -147,7 +146,7 @@ fun PowerSHNavHost(
             }
         ) {
 
-            var tabState = remember {
+            val tabState = remember {
                 mutableStateOf(0)
             }
 
@@ -159,23 +158,22 @@ fun PowerSHNavHost(
                 }
             }
 
-            authentificationScreen(
-                navController = navController,
-                authentification = authentification,
+            AuthenticationScreen(
+                authentication = authentication,
                 onBackButtonPressed = {
                     navController.popBackStack()
-                },
-                onLogged = {
-                    navController.navigate(PowerSHScreens.ProfileScreen.name) {
-                        popUpTo(PowerSHScreens.MainListScreen.name)
-                    }
                 }
-            )
+            ) {
+                navController.navigate(PowerSHScreens.ProfileScreen.name) {
+                    popUpTo(PowerSHScreens.MainListScreen.name)
+                }
+                isLogged.value = true
+            }
 
         }
 
 
-        val DetailsScreen = PowerSHScreens.DetailsScreen.name
+        val detailsScreen = PowerSHScreens.DetailsScreen.name
 
         // Main List Screen
         composable(
@@ -215,7 +213,7 @@ fun PowerSHNavHost(
             BackHandler {
 
 
-                if (pageState.value.equals("HOME")) {
+                if (pageState.value == "HOME") {
                     if (scaffoldState.drawerState.isOpen) {
                         scope.launch {
                             scaffoldState.drawerState.close()
@@ -235,18 +233,19 @@ fun PowerSHNavHost(
                 navController = navController,
                 shoeProductList = shoesListScreenData.shoeProductList,
                 cartProductList = cartProduct,
-                orderList =orderList,
+                orderList = orderList,
                 favouriteProduct = favouriteProduct,
                 networkLoading = shoesListScreenData.networkLoading,
                 pageState = pageState,
                 scaffoldState = scaffoldState,
+                isLogged = isLogged,
                 onSearch = { query ->
                     viewModel
                         .getNewShoesListFromDatabase(query, index = tabIndex.value)
                 },
-                onEntryClick = { thinkpad ->
+                onEntryClick = { shoe ->
                     navController.navigate(
-                        route = "$DetailsScreen/${thinkpad.title}"
+                        route = "$detailsScreen/${shoe.title}"
                     )
                 },
                 onTabClicked = { index ->
@@ -277,9 +276,9 @@ fun PowerSHNavHost(
 
         // Details Screen
         composable(
-            route = "$DetailsScreen/{thinkpad}",
+            route = "$detailsScreen/{shoe}",
             arguments = listOf(
-                navArgument(name = "thinkpad") {
+                navArgument(name = "shoe") {
                     type = NavType.StringType
                 }
             ),
@@ -317,7 +316,7 @@ fun PowerSHNavHost(
                     onBackButtonPressed = {
                         navController.popBackStack()
                     },
-                    onfavouriteClick = {
+                    onFavouriteClick = {
 
                         if (favourite.value) {
                             favouriteProduct.remove(shoe)
@@ -398,13 +397,13 @@ fun PowerSHNavHost(
             val context = LocalContext.current
 
             profileScreen(
-                authentification = authentification,
+                authentication = authentication,
                 onBackButtonPressed = {
                     navController.popBackStack()
                 },
                 onLogOutClick = {
-                    authentification.signOut()
-                    navController.navigate(PowerSHScreens.AuthentificationScree.name){
+                    authentication.value.signOut(isLogged)
+                    navController.navigate(PowerSHScreens.AuthentificationScree.name) {
                         popUpTo(PowerSHScreens.MainListScreen.name)
                     }
                 },
@@ -412,7 +411,7 @@ fun PowerSHNavHost(
                     val msg = if (it) {
                         "The notification have been activated"
                     } else {
-                        "The notification have been desactivated"
+                        "The notification have been deactivated"
                     }
 
                     Toast.makeText(

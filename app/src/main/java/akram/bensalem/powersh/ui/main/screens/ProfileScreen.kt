@@ -4,8 +4,7 @@ import akram.bensalem.powersh.R
 import akram.bensalem.powersh.ui.components.CollapsingToolbarBase
 import akram.bensalem.powersh.ui.theme.Dimens
 import akram.bensalem.powersh.ui.theme.PowerSHTheme
-import akram.bensalem.powersh.utils.authentification.Authentifier
-import android.app.Activity
+import akram.bensalem.powersh.utils.authentification.Authenticate
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.tween
@@ -21,8 +20,8 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.DoorBack
 import androidx.compose.material.icons.outlined.Edit
-import androidx.compose.material.icons.outlined.SecurityUpdate
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -33,7 +32,6 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -50,17 +48,16 @@ import com.google.accompanist.insets.navigationBarsPadding
 @Composable
 fun profileScreen(
     modifier: Modifier = Modifier,
-    authentification : Authentifier = Authentifier(LocalContext.current as Activity),
+    authentication: MutableState<Authenticate> = remember { mutableStateOf(Authenticate(null)) },
     listState: LazyListState = rememberLazyListState(),
-    onEditeClicked: () -> Unit = {},
+    onEditClicked: () -> Unit = {},
     onBackButtonPressed: () -> Unit = { },
-    onSwitchChange : (Boolean) -> Unit = {},
+    onSwitchChange: (Boolean) -> Unit = {},
     onLogOutClick: () -> Unit = { },
     onViewHistoryClicked: () -> Unit = { },
-    onInviteClicked : () -> Unit = { }
-){
+    onInviteClicked: () -> Unit = { },
+) {
 
-// CollapsingToolbar Implementation
     val toolbarHeight = 300.dp
     val toolbarHeightPx = with(LocalDensity.current) { toolbarHeight.roundToPx().toFloat() }
     val toolbarOffsetHeightPx = remember { mutableStateOf(0f) }
@@ -82,7 +79,8 @@ fun profileScreen(
 
     Scaffold(
         modifier = Modifier
-            .fillMaxSize().navigationBarsPadding(),
+            .fillMaxSize()
+            .navigationBarsPadding(),
         topBar = {
             CollapsingToolbarBase(
                 toolbarHeading = "Profile",
@@ -91,17 +89,19 @@ fun profileScreen(
                 onBackButtonPressed = onBackButtonPressed
             ) {
                 profileHeader(
-                userName= authentification.userName,
-                email= authentification.userEmail,
-                profileLogo = painterResource(id = R.drawable.ic_user),
-                    onEditeClicked = onEditeClicked
+                    userName = authentication.value.userName,
+                    email = authentication.value.userEmail,
+                    profileLogo = painterResource(id = R.drawable.ic_user),
+                    onEditeClicked = onEditClicked
                 )
             }
         },
         bottomBar = {
-            Column(modifier = Modifier
-                .fillMaxWidth()
-                .padding(Dimens.MediumPadding.size)) {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(Dimens.MediumPadding.size)
+            ) {
                 Button(
                     modifier = Modifier
                         .align(Alignment.CenterHorizontally)
@@ -143,8 +143,7 @@ fun profileScreen(
         LazyColumn(
             modifier = modifier
                 .nestedScroll(nestedScrollConnection)
-                .padding(bottom = Dimens.LargePadding.size)
-            ,
+                .padding(bottom = Dimens.LargePadding.size),
             state = listState
         ) {
             item {
@@ -157,13 +156,13 @@ fun profileScreen(
                     profileItem(
                         title = "Notification",
                         content = if (checkedState.value) "Deactivate the Notifications" else "Activate the Notifications",
-                    ){
+                    ) {
                         Switch(
                             checked = checkedState.value,
                             onCheckedChange = {
                                 checkedState.value = it
                                 onSwitchChange(it)
-                                              },
+                            },
                             modifier = it
                         )
                     }
@@ -171,7 +170,7 @@ fun profileScreen(
                     profileItem(
                         title = "History",
                         content = "View the history of your activity",
-                    ){
+                    ) {
                         Button(
                             modifier = Modifier
                                 .align(Alignment.CenterHorizontally),
@@ -205,7 +204,7 @@ fun profileScreen(
                     profileItem(
                         title = "Link of invitation",
                         content = "Invite your friend",
-                    ){
+                    ) {
                         Button(
                             modifier = Modifier
                                 .align(Alignment.CenterHorizontally),
@@ -249,16 +248,19 @@ fun profileScreen(
 @Composable
 fun profileItem(
     modifier: Modifier = Modifier,
-    title : String = "Notification",
-    content : String = "Activate notifications",
-    child : @Composable (Modifier) -> Unit = {}
-){
+    title: String = "Notification",
+    content: String = "Activate notifications",
+    child: @Composable (Modifier) -> Unit = {}
+) {
 
-   // val checkedState = remember { mutableStateOf(true) }
+    // val checkedState = remember { mutableStateOf(true) }
 
 
     Column(
-        modifier = modifier.padding(vertical = Dimens.SmallPadding.size, horizontal =Dimens.MediumPadding.size )
+        modifier = modifier.padding(
+            vertical = Dimens.SmallPadding.size,
+            horizontal = Dimens.MediumPadding.size
+        )
     ) {
         Text(
             text = title,
@@ -266,14 +268,14 @@ fun profileItem(
             color = MaterialTheme.colors.onPrimary,
             modifier = Modifier.padding(top = 4.dp, start = 2.dp, bottom = 8.dp)
         )
-        
+
         Card(
             modifier = Modifier
                 .fillMaxWidth(),
             backgroundColor = MaterialTheme.colors.primary,
             shape = RoundedCornerShape(14.dp)
         ) {
-            
+
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -287,7 +289,8 @@ fun profileItem(
                         .padding(
                             horizontal = Dimens.SmallPadding.size,
                             vertical = Dimens.SmallPadding.size
-                        ).align(Alignment.CenterVertically),
+                        )
+                        .align(Alignment.CenterVertically),
                     style = TextStyle(
                         fontWeight = FontWeight.Medium,
                         fontSize = 16.sp
@@ -299,24 +302,21 @@ fun profileItem(
                 )
 
 
-              /*  Switch(
-                    checked = checkedState.value,
-                    onCheckedChange = { checkedState.value = it },
-                    modifier = Modifier.align(Alignment.CenterVertically)
-                )*/
+                /*  Switch(
+                      checked = checkedState.value,
+                      onCheckedChange = { checkedState.value = it },
+                      modifier = Modifier.align(Alignment.CenterVertically)
+                  )*/
                 child(Modifier.align(Alignment.CenterVertically))
 
             }
-            
+
         }
-        
-    }
-
-
 
     }
 
 
+}
 
 
 @Composable
@@ -326,7 +326,7 @@ fun profileHeader(
     email: String,
     profileLogo: Painter,
     onEditeClicked: () -> Unit = { }
-){
+) {
 
     Column(
         modifier = modifier.animateContentSize(
@@ -367,7 +367,7 @@ fun profileHeader(
                 .padding(4.dp),
             onClick = onEditeClicked,
             shape = CircleShape,
-            border =  BorderStroke(1.dp, MaterialTheme.colors.primary),
+            border = BorderStroke(1.dp, MaterialTheme.colors.primary),
             elevation = ButtonDefaults
                 .elevation(1.dp)
         ) {
@@ -399,28 +399,25 @@ fun profileHeader(
 }
 
 
-
-
 @Preview
 @Composable
 private fun profileHeaderPreview() {
     PowerSHTheme {
         profileHeader(
             modifier = Modifier,
-        userName= "Akram Bensalem",
-        email= "ak.bensalem@esi-sba.dz",
-        profileLogo = painterResource(id = R.drawable.ic_user),
+            userName = "Akram Bensalem",
+            email = "ak.bensalem@esi-sba.dz",
+            profileLogo = painterResource(id = R.drawable.ic_user),
         )
 
     }
 }
 
 
-
 @Preview
 @Composable
-fun profileScreenPreview(){
-PowerSHTheme() {
-    profileScreen()
-}
+fun profileScreenPreview() {
+    PowerSHTheme {
+        profileScreen()
+    }
 }

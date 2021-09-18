@@ -1,5 +1,8 @@
 package akram.bensalem.powersh.ui.components
 
+import akram.bensalem.powersh.ui.theme.*
+import akram.bensalem.powersh.utils.Constants
+import akram.bensalem.powersh.utils.Sort
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.tween
@@ -21,9 +24,6 @@ import com.google.accompanist.insets.navigationBarsPadding
 import com.google.accompanist.insets.statusBarsPadding
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
-import akram.bensalem.powersh.ui.theme.*
-import akram.bensalem.powersh.utils.Constants
-import akram.bensalem.powersh.utils.Sort
 
 @ExperimentalMaterialApi
 @Composable

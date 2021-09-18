@@ -1,27 +1,26 @@
-package com.akram.bensalem.powersh.ui.screens.login
+package akram.bensalem.powersh.ui.main.screens.login
 
 import akram.bensalem.powersh.ui.components.checkYourConectivityAlertDialog
-import akram.bensalem.powersh.ui.components.customTextField
-import akram.bensalem.powersh.utils.authentification.Authentifier
+import akram.bensalem.powersh.ui.components.CustomTextField
+import akram.bensalem.powersh.utils.ErrorMessageOfPassword
+import akram.bensalem.powersh.utils.authentification.Authenticate
+import akram.bensalem.powersh.utils.isEmailValid
 import akram.bensalem.powersh.utils.isOnline
-import android.widget.Toast
+import akram.bensalem.powersh.utils.isValidPasswordFormat
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.ClickableText
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Email
 import androidx.compose.material.icons.outlined.Password
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.*
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.autofill.AutofillType
@@ -46,17 +45,17 @@ import kotlinx.coroutines.launch
 fun LoginScreen(
     modifier: Modifier,
     bottomSheetScaffoldState: ModalBottomSheetState,
-    fireBaseAuthentification: Authentifier,
-    onLoggin: () -> Unit
-){
+    authentication: MutableState<Authenticate>,
+    onLogin: () -> Unit
+) {
 
     val context = LocalContext.current
 
-    var emailState = remember {
+    val emailState = remember {
         mutableStateOf(TextFieldValue(""))
     }
 
-    var passwordState = remember {
+    val passwordState = remember {
         mutableStateOf(TextFieldValue(""))
     }
 
@@ -76,7 +75,7 @@ fun LoginScreen(
         mutableStateOf(false)
     }
 
-    val isLogged =remember {
+    val isLogged = remember {
         mutableStateOf(false)
     }
 
@@ -84,19 +83,33 @@ fun LoginScreen(
         mutableStateOf(true)
     }
 
+
+    LaunchedEffect(isForgetButtonPressed) {
+        if (isForgetButtonPressed) {
+            coroutineScope.launch {
+                if (!bottomSheetScaffoldState.isVisible) {
+                    bottomSheetScaffoldState.show()
+                } else {
+                    bottomSheetScaffoldState.hide()
+                }
+
+                isForgetButtonPressed = false
+            }
+        }
+    }
+
+
     ConstraintLayout(
         modifier = modifier
             .fillMaxSize()
-            .verticalScroll(state = rememberScrollState())
-            .background(Color.White)
-
+            .background(color = MaterialTheme.colors.background)
     ) {
 
         val (email, password, forget, button, progress) = createRefs()
 
 
-        customTextField(
-            modifier= Modifier
+        CustomTextField(
+            modifier = Modifier
                 .constrainAs(email) {
                     top.linkTo(parent.top, margin = 16.dp)
                     start.linkTo(parent.start, margin = 16.dp)
@@ -106,26 +119,31 @@ fun LoginScreen(
                 .fillMaxWidth()
                 .padding(start = 16.dp, end = 16.dp),
             textFieldModifier = Modifier
-                .border(1.dp, Color.Black, RoundedCornerShape(12.dp))
+                .border(1.dp, MaterialTheme.colors.onBackground, RoundedCornerShape(12.dp))
+                .background(color = MaterialTheme.colors.surface, RoundedCornerShape(12.dp))
                 .padding(12.dp),
-            title=  "Email Address",
-            fieldState =emailState,
-            icon =  Icons.Outlined.Email,
+            title = "Email Address",
+            fieldState = emailState,
+            icon = Icons.Outlined.Email,
+            insideTextColor = MaterialTheme.colors.onBackground,
+            iconTint = MaterialTheme.colors.onBackground,
             isPassword = false,
             focusRequester = mEmailRequester,
-            autofillType= AutofillType.EmailAddress,
-            keyboardType= KeyboardType.Email,
-            imeAction  = ImeAction.Next,
-            onNext = {
+            autofillType = AutofillType.EmailAddress,
+            keyboardType = KeyboardType.Email,
+            imeAction = ImeAction.Next,
+            isValid = isEmailValid(email = emailState.value.text),
+            errorMessage = "This Email is not valid",
+                    onNext = {
                 mPasswordFocusRequester.requestFocus()
             },
             onDone = {
                 view.clearFocus()
-            }
+            },
         )
 
-        customTextField(
-            modifier= Modifier
+        CustomTextField(
+            modifier = Modifier
                 .constrainAs(password) {
                     top.linkTo(email.bottom, margin = 16.dp)
                     start.linkTo(parent.start, margin = 16.dp)
@@ -135,16 +153,21 @@ fun LoginScreen(
                 .fillMaxWidth()
                 .padding(start = 16.dp, end = 16.dp),
             textFieldModifier = Modifier
-                .border(1.dp, Color.Black, RoundedCornerShape(12.dp))
+                .border(1.dp, MaterialTheme.colors.onBackground, RoundedCornerShape(12.dp))
+                .background(color = MaterialTheme.colors.surface, RoundedCornerShape(12.dp))
                 .padding(12.dp),
-            title=  "Password",
-            fieldState =passwordState,
-            icon =  Icons.Outlined.Password,
+            title = "Password",
+            fieldState = passwordState,
+            icon = Icons.Outlined.Password,
+            insideTextColor = MaterialTheme.colors.onBackground,
+            iconTint = MaterialTheme.colors.onBackground,
             isPassword = true,
             focusRequester = mPasswordFocusRequester,
-            autofillType= AutofillType.Password,
-            keyboardType= KeyboardType.Password,
-            imeAction  = ImeAction.Done,
+            autofillType = AutofillType.Password,
+            keyboardType = KeyboardType.Password,
+            imeAction = ImeAction.Done,
+            isValid = isValidPasswordFormat(password = passwordState.value.text),
+            errorMessage = ErrorMessageOfPassword(password = passwordState.value.text),
             onNext = {
                 view.clearFocus()
             },
@@ -170,27 +193,20 @@ fun LoginScreen(
                 isForgetButtonPressed = true
             },
             style = TextStyle(
-                color = if (isForgetButtonPressed) MaterialTheme.colors.primary else Color.LightGray,
+                color = if (isForgetButtonPressed) MaterialTheme.colors.primary else MaterialTheme.colors.onSurface,
 
                 ),
         )
 
 
-        if (isForgetButtonPressed) {
-            coroutineScope.launch {
-                if (!bottomSheetScaffoldState.isVisible) {
-                    bottomSheetScaffoldState.show()
-                } else {
-                    bottomSheetScaffoldState.hide()
-                }
-
-                isForgetButtonPressed = false
-            }
-
-        }
-
 
         Button(
+
+            enabled = isValid(
+                email = emailState.value.text,
+                password = passwordState.value.text,
+            ),
+
             colors = ButtonDefaults.buttonColors(
                 contentColor = Color.White,
                 backgroundColor = MaterialTheme.colors.primary,
@@ -207,21 +223,13 @@ fun LoginScreen(
             onClick = {
                 isOnline.value = isOnline(context = context)
 
-                if (isOnline.value && emailState.value.text.isNotEmpty() && passwordState.value.text.isNotEmpty()) {
-                    fireBaseAuthentification.signIn(
+                if (isOnline.value) {
+                    authentication.value.signIn(
                         emailState.value.text,
                         passwordState.value.text,
                         isOnProgress,
                         isLogged
                     )
-                } else if (isOnline.value){
-                    var msg = ""
-                    if (emailState.value.text.isEmpty() && passwordState.value.text.isEmpty())
-                        msg = "Your email and password are empty"
-                    else if(emailState.value.text.isEmpty()) msg = "Your email is empty"
-                    else msg = "Your password is empty"
-                    Toast.makeText(context, msg , Toast.LENGTH_SHORT).show()
-
                 }
 
 
@@ -229,7 +237,12 @@ fun LoginScreen(
             Text(
                 text = "Login",
                 textAlign = TextAlign.Center,
-                color = Color.White,
+                color = if(
+                    isValid(
+                        email = emailState.value.text,
+                        password = passwordState.value.text,
+                    )
+                ) Color.White else MaterialTheme.colors.onSurface,
                 modifier = Modifier.padding(
                     start = 24.dp,
                     end = 24.dp,
@@ -241,7 +254,7 @@ fun LoginScreen(
 
 
         if (isOnProgress.value) CircularProgressIndicator(
-            modifier = Modifier .constrainAs(progress) {
+            modifier = Modifier.constrainAs(progress) {
                 top.linkTo(parent.top, margin = 16.dp)
                 bottom.linkTo(parent.bottom, margin = 16.dp)
                 start.linkTo(parent.start, margin = 16.dp)
@@ -249,14 +262,26 @@ fun LoginScreen(
 
             })
 
-        if (isLogged.value){
-            onLoggin()
+        if (isLogged.value) {
+            onLogin()
         }
 
         checkYourConectivityAlertDialog(isOnline)
 
 
-
     }
 
+}
+
+
+
+private fun isValid(
+    email : String,
+    password :String,
+): Boolean{
+    return (
+            email.isNotEmpty()
+            && password.isNotEmpty()
+            && isEmailValid(email)
+            && isValidPasswordFormat(password))
 }

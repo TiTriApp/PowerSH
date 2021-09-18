@@ -17,15 +17,6 @@
         <!-- Customize your theme here. -->
     </style>
 
-    <style name="Theme.PowerSH.NoActionBar">
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
-    </style>
-
-    <style name="Theme.PowerSH.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
-
-    <style name="Theme.PowerSH.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
-
     <!-- Splash Screen Theme. -->
     <style name="Theme.AppSplash" parent="Theme.SplashScreen">
         <item name="windowSplashScreenBackground">@color/powerSH</item>

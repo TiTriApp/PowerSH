@@ -1,5 +1,11 @@
 package akram.bensalem.powersh.ui.components
 
+import akram.bensalem.powersh.R
+import akram.bensalem.powersh.data.model.ShoeProduct
+import akram.bensalem.powersh.ui.theme.Dimens
+import akram.bensalem.powersh.ui.theme.PowerSHTheme
+import akram.bensalem.powersh.ui.theme.Shapes
+import akram.bensalem.powersh.utils.Constants
 import android.content.res.Configuration
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.Animatable
@@ -24,13 +30,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import akram.bensalem.powersh.R
-import akram.bensalem.powersh.data.model.ShoeProduct
-import akram.bensalem.powersh.ui.theme.*
-import akram.bensalem.powersh.utils.Constants
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.material.ripple.rememberRipple
 
 @Composable
 fun ShoeDetails(
@@ -91,24 +90,17 @@ fun ShoeDetails(
             IconButton(
                 onClick = {
                     onfavouriteClick()
-                          },
+                },
                 modifier = Modifier
                     .padding(horizontal = Dimens.SmallPadding.size)
             ) {
-                Icon(imageVector = if (favourite.value) Icons.Outlined.Favorite else Icons.Outlined.FavoriteBorder,
+                Icon(
+                    imageVector = if (favourite.value) Icons.Outlined.Favorite else Icons.Outlined.FavoriteBorder,
                     contentDescription = "Heart",
                     tint = MaterialTheme.colors.primary.copy(alpha = 0.8f),
                     modifier = Modifier
                 )
             }
-
-
-
-
-
-
-
-
 
 
         }
@@ -194,7 +186,7 @@ fun ShoeDetails(
                 )
                 SubtitleTextWithIcon(
                     subtitleName = "Market Value",
-                    subtitleData =  "${shoeProduct.marketPriceStart} DA",
+                    subtitleData = "${shoeProduct.marketPriceStart} DA",
                     style = MaterialTheme.typography.body1,
                     icon = Icons.Outlined.Loyalty,
                     maxLines = maxLines

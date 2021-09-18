@@ -1,43 +1,38 @@
 package akram.bensalem.powersh.ui.components
 
-import android.content.res.Configuration
-import androidx.compose.animation.core.Animatable
-import androidx.compose.animation.core.FastOutSlowInEasing
-import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.animation.core.tween
-import androidx.compose.foundation.background
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.*
-import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.rotate
-import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.buildAnnotatedString
-import androidx.compose.ui.tooling.preview.Preview
-import akram.bensalem.powersh.R
 import akram.bensalem.powersh.data.model.CardItem
 import akram.bensalem.powersh.data.model.ShoeProduct
 import akram.bensalem.powersh.ui.theme.CardCoverPink
 import akram.bensalem.powersh.ui.theme.Dimens
-import akram.bensalem.powersh.ui.theme.Shapes
 import akram.bensalem.powersh.ui.theme.PowerSHTheme
+import akram.bensalem.powersh.ui.theme.Shapes
 import akram.bensalem.powersh.utils.Constants
+import android.content.res.Configuration
 import androidx.compose.animation.*
+import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.tween
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Add
+import androidx.compose.material.icons.outlined.Remove
+import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
@@ -51,7 +46,7 @@ fun ShoeFeatures(
     isSizeDialogVisible: MutableState<Boolean>,
     sizeSelected: MutableState<Int>,
     isAddedToCart: MutableState<Boolean>,
-    onNavigateToCartScreen : () -> Unit ,
+    onNavigateToCartScreen: () -> Unit,
 ) {
     //Scale animation
     val animatedProgress = remember {
@@ -123,7 +118,7 @@ fun ShoeFeatures(
                         initialAlpha = 0f
                     ),
                     exit = fadeOut(
-                        targetAlpha =0f
+                        targetAlpha = 0f
                     ),
                     modifier = Modifier
                         .padding(16.dp)
@@ -181,8 +176,6 @@ fun ShoeFeatures(
 }
 
 
-
-
 @Composable
 fun features(
     quantity: MutableState<Int>,
@@ -191,11 +184,12 @@ fun features(
     isSizeDialogVisible: MutableState<Boolean>,
     sizeSelected: MutableState<Int>,
     isAddedToCart: MutableState<Boolean>,
-){
+) {
 
-    Row(        modifier = Modifier
-        .fillMaxWidth()
-        .padding(start = 16.dp, end = 16.dp, top = 16.dp, bottom = 0.dp)
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(start = 16.dp, end = 16.dp, top = 16.dp, bottom = 0.dp)
     ) {
         //
         //   var modifier = Modifier.align(Alignment.CenterVertically)
@@ -204,9 +198,9 @@ fun features(
             modifier = Modifier.height(180.dp),
             verticalArrangement = Arrangement.SpaceEvenly
         ) {
-            itemsTitle(title = "Size", modifier =  modifier)
-            itemsTitle(title = "Color" , modifier =  modifier)
-            itemsTitle(title = "Quantity", modifier =  modifier)
+            itemsTitle(title = "Size", modifier = modifier)
+            itemsTitle(title = "Color", modifier = modifier)
+            itemsTitle(title = "Quantity", modifier = modifier)
         }
 
         Column(
@@ -216,19 +210,19 @@ fun features(
         ) {
             itemButton(
                 value = "  ${sizeSelected.value}  ",
-                modifier=  modifier,
+                modifier = modifier,
                 isColorDialogVisible = isSizeDialogVisible,
                 enabled = isAddedToCart,
             )
             itemButton(
                 value = colorSelected.value,
-                modifier=  modifier,
+                modifier = modifier,
                 isColorDialogVisible = isColorDialogVisible,
                 enabled = isAddedToCart
             )
             specialItemButton(
                 value = "${quantity.value}",
-                modifier =  Modifier,
+                modifier = Modifier,
                 enabled = isAddedToCart,
                 onAdd = {
                     quantity.value += 1
@@ -245,21 +239,19 @@ fun features(
 }
 
 
-
 @Composable
-fun itemsTitle(title: String, modifier: Modifier){
+fun itemsTitle(title: String, modifier: Modifier) {
     Text(
         text = "$title:",
         textAlign = TextAlign.Center,
         fontSize = 20.sp,
-        fontWeight = FontWeight.Bold ,
+        fontWeight = FontWeight.Bold,
         color = MaterialTheme.colors.onBackground,
         modifier = modifier
-            .padding(top = 8.dp, bottom= 8.dp)
+            .padding(top = 8.dp, bottom = 8.dp)
 
     )
 }
-
 
 
 @Composable
@@ -267,30 +259,30 @@ fun itemButton(
     value: String, modifier: Modifier,
     isColorDialogVisible: MutableState<Boolean>,
     enabled: MutableState<Boolean>,
-){
+) {
 
     OutlinedButton(
         enabled = !enabled.value,
         colors = ButtonDefaults.buttonColors(
             backgroundColor = CardCoverPink,
-            contentColor = Color.LightGray ,
+            contentColor = Color.LightGray,
         ),
         shape = CircleShape,
         modifier = modifier
             .padding(start = 48.dp, top = 8.dp, bottom = 8.dp)
             .width(160.dp),
         onClick = {
-            isColorDialogVisible.value =! isColorDialogVisible.value
+            isColorDialogVisible.value = !isColorDialogVisible.value
         }) {
         Text(
             text = value,
             fontSize = 16.sp,
-            fontWeight = FontWeight.Normal ,
+            fontWeight = FontWeight.Normal,
             textAlign = TextAlign.Center,
             color = MaterialTheme.colors.onBackground,
             modifier = Modifier.padding(
                 start = 36.dp,
-                end =36.dp,
+                end = 36.dp,
             )
         )
     }
@@ -304,23 +296,24 @@ fun specialItemButton(
     onAdd: () -> Unit = {},
     onSubstract: () -> Unit = {},
     enabled: MutableState<Boolean>
-){
+) {
 
     OutlinedButton(
         enabled = false,
         colors = ButtonDefaults.buttonColors(
             backgroundColor = CardCoverPink,
-            contentColor = Color.LightGray ,
-            disabledBackgroundColor =if (!enabled.value) CardCoverPink else MaterialTheme.colors.onSurface.copy(alpha = 0.12f),
-            disabledContentColor =if (!enabled.value) Color.LightGray else MaterialTheme.colors.onSurface.copy(alpha = 0.12f)  ,
+            contentColor = Color.LightGray,
+            disabledBackgroundColor = if (!enabled.value) CardCoverPink else MaterialTheme.colors.onSurface.copy(
+                alpha = 0.12f
+            ),
+            disabledContentColor = if (!enabled.value) Color.LightGray else MaterialTheme.colors.onSurface.copy(
+                alpha = 0.12f
+            ),
         ),
         shape = CircleShape,
         modifier = modifier
             .padding(start = 48.dp, top = 8.dp, bottom = 8.dp)
-            .width(160.dp)
-
-
-        ,
+            .width(160.dp),
         onClick = {
 
         }) {
@@ -330,7 +323,7 @@ fun specialItemButton(
             tint = if (value.toInt() >= 10 || enabled.value) Color.LightGray else Color.DarkGray,
             modifier = Modifier
                 .clickable(
-                    enabled = if (value.toInt() >= 10 || enabled.value ) false else true,
+                    enabled = !(value.toInt() >= 10 || enabled.value),
                 ) {
                     onAdd()
                 }
@@ -339,7 +332,7 @@ fun specialItemButton(
         ClickableText(
             text = AnnotatedString(""),
             onClick = {
-                if ( value.toInt() <= 10 || !enabled.value)
+                if (value.toInt() <= 10 || !enabled.value)
                     onAdd()
             },
             modifier = Modifier
@@ -360,7 +353,7 @@ fun specialItemButton(
         ClickableText(
             text = AnnotatedString(""),
             onClick = {
-                if ( value != "1" || !enabled.value)
+                if (value != "1" || !enabled.value)
                     onSubstract()
             },
             modifier = Modifier
@@ -372,7 +365,7 @@ fun specialItemButton(
             modifier = Modifier
 
                 .clickable(
-                    enabled = if (value.equals("1") || enabled.value ) false else true,
+                    enabled = !(value.equals("1") || enabled.value),
                 ) {
                     onSubstract()
                 }
@@ -384,9 +377,6 @@ fun specialItemButton(
 }
 
 
-
-
-
 @Composable
 fun payment(
     price: Int,
@@ -395,7 +385,7 @@ fun payment(
     onIncrementQuantity: () -> Unit,
     onDecrementQuantity: () -> Unit,
 
-    ){
+    ) {
 
     Row(
         modifier = Modifier
@@ -433,10 +423,7 @@ fun payment(
     }
 
 
-
-
 }
-
 
 
 @Preview(
@@ -487,14 +474,6 @@ private fun DetailsPreview() {
         )
     }
 }
-
-
-
-
-
-
-
-
 
 
 @Preview(

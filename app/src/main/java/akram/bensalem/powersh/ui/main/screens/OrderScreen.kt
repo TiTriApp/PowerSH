@@ -40,7 +40,7 @@ fun orderScreen(
     onEntryClick: (ShoeProduct) -> Unit = { },
     onInfo: () -> Unit
 
-){
+) {
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -50,7 +50,7 @@ fun orderScreen(
 
         if (
             orderList.size != 0
-        ){
+        ) {
 
             LazyColumn(
                 horizontalAlignment = Alignment.CenterHorizontally,
@@ -82,7 +82,7 @@ fun orderScreen(
                 .fillMaxWidth()
                 .align(Alignment.Center)
         ) {
-            Column() {
+            Column {
                 Image(
                     modifier = Modifier
                         .align(Alignment.CenterHorizontally)
@@ -91,12 +91,12 @@ fun orderScreen(
                     contentDescription = "Empty Orders List"
                 )
                 Text(
-                    color = Color.DarkGray,
+                    color = MaterialTheme.colors.onSurface,
                     fontStyle = FontStyle.Normal,
                     fontWeight = FontWeight.Bold,
                     fontSize = 18.sp,
                     textAlign = TextAlign.Center,
-                    text = "There are no orders",
+                    text = "There are no Orders!",
                     modifier = Modifier
                         .padding(top = 20.dp)
                         .align(Alignment.CenterHorizontally)
@@ -144,7 +144,7 @@ fun orderScreen(
                     enabled = orderList.size > 0,
                     shape = RoundedCornerShape(14.dp),
                     colors = ButtonDefaults.buttonColors(
-                        backgroundColor =if (orderList.size > 0) MaterialTheme.colors.primary else CardCoverPink,
+                        backgroundColor = if (orderList.size > 0) MaterialTheme.colors.primary else CardCoverPink,
                         disabledBackgroundColor = CardCoverPink,
                     ),
                     modifier = Modifier
@@ -154,8 +154,8 @@ fun orderScreen(
                         orderList.clear()
                     }) {
                     Text(
-                        text =if (orderList.size > 0) "Remove All" else "" ,
-                        color =if (orderList.size > 0) Color.White else Color.DarkGray ,
+                        text = if (orderList.size > 0) "Remove All" else "",
+                        color = if (orderList.size > 0) Color.White else Color.DarkGray,
                         style = TextStyle(
                             background = if (orderList.size > 0) MaterialTheme.colors.primary else CardCoverPink,
                         ),
@@ -168,7 +168,6 @@ fun orderScreen(
                         )
                     )
                 }
-
 
 
         }

@@ -3,13 +3,13 @@ package akram.bensalem.powersh.ui.components
 import akram.bensalem.powersh.ui.main.screenStates.*
 import akram.bensalem.powersh.ui.theme.CardCoverPink
 import akram.bensalem.powersh.ui.theme.MainCardList
-import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.*
+import androidx.compose.material.IconButton
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -21,13 +21,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 
-
 // Grid columns
 private const val cols = 4
 
 val mColorsIdsGridList = ColorIds.toGridList(cols)
 val mSizeIdGridList = SizeIds.toGridList(cols)
-
 
 
 @Composable
@@ -44,9 +42,8 @@ fun colorGridItem(
                     color = it,
                     shape = CircleShape
                 )
-                .size(size)
-            ,
-            onClick = {  id?.let(onSelected)  },
+                .size(size),
+            onClick = { id?.let(onSelected) },
         ) {
 
         }
@@ -54,7 +51,6 @@ fun colorGridItem(
     }
 
 }
-
 
 
 @Composable
@@ -72,21 +68,20 @@ fun sizeGridItem(
                     color = MainCardList,
                     shape = CircleShape
                 )
-                .border(width = 2.dp, color = CardCoverPink, shape  = CircleShape)
-                .size(size)
-            ,
-            onClick = {  onSelected(it)},
+                .border(width = 2.dp, color = CardCoverPink, shape = CircleShape)
+                .size(size),
+            onClick = { onSelected(it) },
         ) {
-          Text(
-              text = it.toString(),
-              color = Color.DarkGray,
-              fontStyle = FontStyle.Normal,
-              fontWeight = FontWeight.SemiBold,
-              fontSize = 14.sp,
-              textAlign = TextAlign.Center,
-              modifier = Modifier
-                  .padding(4.dp)
-          )
+            Text(
+                text = it.toString(),
+                color = Color.DarkGray,
+                fontStyle = FontStyle.Normal,
+                fontWeight = FontWeight.SemiBold,
+                fontSize = 14.sp,
+                textAlign = TextAlign.Center,
+                modifier = Modifier
+                    .padding(4.dp)
+            )
         }
 
     }

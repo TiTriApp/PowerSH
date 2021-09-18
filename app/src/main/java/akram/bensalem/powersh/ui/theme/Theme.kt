@@ -62,18 +62,14 @@ fun PowerSHTheme(
         shapes = Shapes
     ) {
         CompositionLocalProvider(
-            LocalRippleTheme provides ThinkRchiveRippleTheme,
+            LocalRippleTheme provides PowerSHRippleTheme,
             content = content
         )
     }
 }
 
-/**
- * Changing the ripple color for the whole app onClicks.
- * To be used as a value in CompositionalLocalProvider
- * as LocalRippleTheme provides ThinkRchiveRippleTheme
- * */
-private object ThinkRchiveRippleTheme: RippleTheme {
+
+private object PowerSHRippleTheme : RippleTheme {
     @Composable
     override fun defaultColor(): Color = MaterialTheme.colors.primary
 
@@ -85,7 +81,6 @@ private object ThinkRchiveRippleTheme: RippleTheme {
 
 }
 
-// To be used to set the preferred theme inside settings
 enum class Theme(
     val themeName: String,
     val icon: ImageVector,

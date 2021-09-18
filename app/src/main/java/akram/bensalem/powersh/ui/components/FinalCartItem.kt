@@ -154,9 +154,10 @@ fun finalCartItem(
             }
 
             ConstraintLayout(
-                Modifier.align(Alignment.CenterVertically)
+                Modifier
+                    .align(Alignment.CenterVertically)
                     .height(40.dp)
-            ){
+            ) {
                 val (image) = createRefs()
                 IconButton(
                     onClick = {
@@ -189,9 +190,7 @@ fun finalCartItem(
                 )
 
 
-
             }
-
 
 
         }

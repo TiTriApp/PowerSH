@@ -1,5 +1,8 @@
 package akram.bensalem.powersh.ui.components
 
+import akram.bensalem.powersh.ui.theme.Dimens
+import akram.bensalem.powersh.ui.theme.PowerSHTheme
+import akram.bensalem.powersh.ui.theme.Shapes
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.tween
@@ -22,9 +25,6 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import akram.bensalem.powersh.ui.theme.Dimens
-import akram.bensalem.powersh.ui.theme.Shapes
-import akram.bensalem.powersh.ui.theme.PowerSHTheme
 
 @Composable
 fun SettingsEntry(

@@ -3,7 +3,6 @@ package akram.bensalem.powersh.ui.main.screenStates
 import akram.bensalem.powersh.data.AutoCompleteEntity
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.getValue
@@ -32,7 +31,8 @@ interface AutoCompleteDesignScope {
     var boxShape: Shape
 }
 
-class AutoCompleteState<T : AutoCompleteEntity>(private val startItems: List<T>) : AutoCompleteScope<T> {
+class AutoCompleteState<T : AutoCompleteEntity>(private val startItems: List<T>) :
+    AutoCompleteScope<T> {
     private var onItemSelectedBlock: ItemSelected<T>? = null
 
     fun selectItem(item: T) {
@@ -44,7 +44,7 @@ class AutoCompleteState<T : AutoCompleteEntity>(private val startItems: List<T>)
     override var boxWidthPercentage by mutableStateOf(.9f)
     override var shouldWrapContentHeight by mutableStateOf(false)
     override var boxMaxHeight: Dp by mutableStateOf(TextFieldDefaults.MinHeight * 3)
-    override var boxBorderStroke by mutableStateOf(BorderStroke(2.dp,Color.White))
+    override var boxBorderStroke by mutableStateOf(BorderStroke(2.dp, Color.White))
     override var boxShape: Shape by mutableStateOf(RoundedCornerShape(8.dp))
 
     override fun filter(query: String) {

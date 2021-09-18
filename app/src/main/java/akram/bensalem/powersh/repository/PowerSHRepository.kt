@@ -10,6 +10,7 @@ import akram.bensalem.powersh.data.database.PowerSHDao
 import akram.bensalem.powersh.data.database.PowerSHDatabaseObject
 import akram.bensalem.powersh.data.responses.PowerSHShoesResponse
 import akram.bensalem.powersh.utils.Resource
+import com.google.firebase.firestore.FirebaseFirestore
 import javax.inject.Inject
 
 @ActivityScoped
@@ -17,6 +18,31 @@ class PowerSHRepository @Inject constructor(
     private val powerSHApi: PowerSHApi,
     private val powerSHDao: PowerSHDao
 ) {
+
+
+    private val firestore = FirebaseFirestore.getInstance()
+
+
+
+ /*   suspend fun getAllShoesFromNetwork2() : Resource<List<PowerSHShoesResponse>> {
+
+        val collection = firestore.collection("shoes")
+        val snapshotListener = collection.addSnapshotListener { value, error ->
+            val response = if (error == null) {
+                OnSuccess(value)
+            } else {
+                OnError(error)
+            }
+
+            offer(response)
+        }
+
+        awaitClose {
+            snapshotListener.remove()
+        }
+    }*/
+
+
 
     suspend fun getAllShoesFromNetwork(): Resource<List<PowerSHShoesResponse>> {
         val response = try {

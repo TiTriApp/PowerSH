@@ -3,22 +3,47 @@ package akram.bensalem.powersh.ui.main.screens
 import akram.bensalem.powersh.R
 import akram.bensalem.powersh.data.model.CardItem
 import akram.bensalem.powersh.data.model.OrderItem
+import akram.bensalem.powersh.data.model.ShoeProduct
+import akram.bensalem.powersh.ui.components.*
+import akram.bensalem.powersh.ui.main.screenStates.SettingsScreenState
+import akram.bensalem.powersh.ui.main.viewModel.SettingsViewModel
+import akram.bensalem.powersh.ui.theme.Dimens
+import akram.bensalem.powersh.ui.theme.PowerSHTheme
+import akram.bensalem.powersh.ui.theme.Theme
+import akram.bensalem.powersh.utils.Constants
+import akram.bensalem.powersh.utils.Sort
+import akram.bensalem.powersh.utils.authentification.Authenticate
+import android.app.Activity
 import android.content.res.Configuration
 import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.google.accompanist.insets.navigationBarsPadding
 import com.google.accompanist.insets.statusBarsPadding
@@ -29,25 +54,6 @@ import com.google.accompanist.swiperefresh.SwipeRefreshIndicator
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import kotlinx.coroutines.launch
 import timber.log.Timber
-import akram.bensalem.powersh.data.model.ShoeProduct
-import akram.bensalem.powersh.ui.components.*
-import akram.bensalem.powersh.ui.main.screenStates.SettingsScreenState
-import akram.bensalem.powersh.ui.main.viewModel.SettingsViewModel
-import akram.bensalem.powersh.ui.theme.Dimens
-import akram.bensalem.powersh.ui.theme.PowerSHTheme
-import akram.bensalem.powersh.utils.Constants
-import akram.bensalem.powersh.utils.authentification.Authentifier
-import android.app.Activity
-import androidx.compose.foundation.Image
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.unit.sp
-import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavController
 
 @OptIn(ExperimentalPagerApi::class)
 @ExperimentalMaterialApi
@@ -57,6 +63,7 @@ import androidx.navigation.NavController
 fun MainListScreen(
     modifier: Modifier = Modifier,
     navController: NavController,
+    authentication: Authenticate = Authenticate(LocalContext.current as Activity),
     listState: LazyListState = rememberLazyListState(),
     pageState: MutableState<String>,
     scaffoldState: ScaffoldState,
@@ -70,9 +77,12 @@ fun MainListScreen(
     currentSortOption: Int,
     shoeProductList: List<ShoeProduct>,
     cartProductList: MutableList<CardItem>,
-    orderList : MutableList<OrderItem>,
+    orderList: MutableList<OrderItem>,
     networkLoading: Boolean,
     networkError: String,
+    isLogged: MutableState<Boolean> = remember {
+        mutableStateOf(false)
+    },
     favouriteProduct: MutableList<ShoeProduct>
 ) {
 
@@ -86,12 +96,6 @@ fun MainListScreen(
     val sheetState = rememberModalBottomSheetState(
         initialValue = ModalBottomSheetValue.Hidden
     )
-
-
-    val activity = LocalContext.current as Activity
-
-    var authentification : Authentifier = Authentifier(activity)
-
 
 
     ModalBottomSheetLayout(
@@ -134,17 +138,18 @@ fun MainListScreen(
                 )
             },
             drawerContent = {
-                mainDrawer(
+                MainDrawer(
                     navController = navController,
                     scope = scope,
+                    cartListSize = cartProductList.size,
                     selectedScreen = pageState,
                     scaffoldState = scaffoldState,
-                    authentification = authentification
+                    authentication = authentication,
+                    isLogged = isLogged
                 )
 
             },
-        ){
-
+        ) {
 
 
             val swipeRefreshState = rememberSwipeRefreshState(networkLoading)
@@ -167,140 +172,133 @@ fun MainListScreen(
             ) {
 
 
-                if (
-                    pageState.value.equals("HOME")
-                ) {
-                    LazyColumn(
-                        state = listState,
-                        modifier = modifier,
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
-                        Timber.d("MainListScreen Contents called")
-                        item {
-                            CustomSearchBar(
-                                focusManager = focusManager,
-                                onSearch = {
-                                    onSearch(it)
-                                },
-                                onDismissSearchClicked = {
-                                    onSearch("")
-                                },
-                                onOptionsClicked = {
-                                    scope.launch {
-                                        sheetState.show()
-                                    }
-                                },
-                                modifier = Modifier.padding(
-                                    vertical = Dimens.SmallPadding.size,
-                                    horizontal = Dimens.SmallPadding.size
-                                )
-                            )
-
-                            TabsPanel(
-                                pagerState = pagerState
-                            ){
-                                onTabClicked(it)
-                                coroutineScope.launch {
-                                    pagerState.scrollToPage(it, 0f)
-                                }
-                            }
-
-
-                        }
-                        itemsIndexed(shoeProductList){ index, item ->
-                            if (index % 2 == 0 ) {
-                                Row(
-                                    horizontalArrangement = Arrangement.SpaceBetween,
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .padding(
-                                            horizontal = Dimens.UpperMediumPadding.size,
-                                            vertical = Dimens.SmallPadding.size,
-                                        )
-                                ) {
-
-                                    ProductShoesEntry(
-                                        shoeProduct = item,
-                                        onEntryClick = { onEntryClick(item) },
-                                        modifier = Modifier
-                                            .weight(1f)
-                                            .padding(
-                                                end = if (index + 1 < shoeProductList.size) Dimens.SmallPadding.size else 0.dp,
-                                            )
+                when (pageState.value) {
+                    "HOME" -> {
+                        LazyColumn(
+                            state = listState,
+                            modifier = modifier,
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            Timber.d("MainListScreen Contents called")
+                            item {
+                                CustomSearchBar(
+                                    focusManager = focusManager,
+                                    onSearch = {
+                                        onSearch(it)
+                                    },
+                                    onDismissSearchClicked = {
+                                        onSearch("")
+                                    },
+                                    onOptionsClicked = {
+                                        scope.launch {
+                                            sheetState.show()
+                                        }
+                                    },
+                                    modifier = Modifier.padding(
+                                        vertical = Dimens.SmallPadding.size,
+                                        horizontal = Dimens.SmallPadding.size
                                     )
-                                    if (index + 1 < shoeProductList.size) {
+                                )
+
+                                TabsPanel(
+                                    pagerState = pagerState
+                                ) {
+                                    onTabClicked(it)
+                                    coroutineScope.launch {
+                                        pagerState.scrollToPage(it, 0f)
+                                    }
+                                }
+
+
+                            }
+                            itemsIndexed(shoeProductList) { index, item ->
+                                if (index % 2 == 0) {
+                                    Row(
+                                        horizontalArrangement = Arrangement.SpaceBetween,
+                                        modifier = Modifier
+                                            .fillMaxWidth()
+                                            .padding(
+                                                horizontal = Dimens.UpperMediumPadding.size,
+                                                vertical = Dimens.SmallPadding.size,
+                                            )
+                                    ) {
+
                                         ProductShoesEntry(
-                                            shoeProduct = shoeProductList[index + 1],
-                                            onEntryClick = { onEntryClick(shoeProductList[index + 1]) },
+                                            shoeProduct = item,
+                                            onEntryClick = { onEntryClick(item) },
                                             modifier = Modifier
                                                 .weight(1f)
                                                 .padding(
-                                                    start = Dimens.SmallPadding.size,
+                                                    end = if (index + 1 < shoeProductList.size) Dimens.SmallPadding.size else 0.dp,
                                                 )
                                         )
+                                        if (index + 1 < shoeProductList.size) {
+                                            ProductShoesEntry(
+                                                shoeProduct = shoeProductList[index + 1],
+                                                onEntryClick = { onEntryClick(shoeProductList[index + 1]) },
+                                                modifier = Modifier
+                                                    .weight(1f)
+                                                    .padding(
+                                                        start = Dimens.SmallPadding.size,
+                                                    )
+                                            )
+                                        }
                                     }
-
-
                                 }
-
                             }
-                        }
 
-                        item {
-                            if (networkLoading) {
-                                CircularProgressIndicator()
+                            item {
+                                if (networkLoading) {
+                                    CircularProgressIndicator()
+                                }
                             }
-                        }
-                        item {
-                            if (networkError.isNotBlank()) {
-                                Text(
-                                    text = networkError,
-                                    color = MaterialTheme.colors.error,
-                                    textAlign = TextAlign.Center
-                                )
-                            }
-                        }
+                            //                        item {
+                            //                            if (networkError.isNotBlank()) {
+                            //                                Text(
+                            //                                    text = networkError,
+                            //                                    color = MaterialTheme.colors.error,
+                            //                                    textAlign = TextAlign.Center
+                            //                                )
+                            //                            }
+                            //                        }
 
-                        item {
-                            Spacer(modifier = Modifier.navigationBarsPadding())
+                            item {
+                                Spacer(modifier = Modifier.navigationBarsPadding())
+                            }
                         }
                     }
-                } else if (
-                    pageState.value.equals("CART")
-                ) {
-                    cartScreen(
-                        navController = navController,
-                        cartProduct= cartProductList,
-                    )
-                } else if (
-                    pageState.value.equals("FAVOURITE")
-                ){
-                   favouriteScreen(cartFavourite = favouriteProduct, onEntryClick = onEntryClick)
-                }else if (
-                    pageState.value.equals("CONTACT")
-                ){
-                    contactScreen()
-                } else if (
-                    pageState.value.equals("SETTINGS")
-                ){
-                    SettingsPage(pageState = pageState)
-                } else if (
-                    pageState.value.equals("ABOUT")
-                ){
-                    aboutScreen()
-                } else if (
-                    pageState.value.equals("ORDERS")
-                ){
-                    orderScreen(orderList = orderList, onInfo = {}, onEntryClick = onEntryClick)
-                } else {
-                    Text(
-                        text = pageState.value,
-                        color = Color.Black
-                    )
+                    "CART" -> {
+                        cartScreen(
+                            navController = navController,
+                            cartProduct = cartProductList,
+                        )
+                    }
+                    "FAVOURITE" -> {
+                        favouriteScreen(
+                            cartFavourite = favouriteProduct,
+                            onEntryClick = onEntryClick
+                        )
+                    }
+                    "CONTACT" -> {
+                        contactScreen()
+                    }
+                    "SETTINGS" -> {
+                        SettingsPage()
+                    }
+                    "ABOUT" -> {
+                        AboutScreen()
+                    }
+                    "ORDERS" -> {
+                        orderScreen(orderList = orderList, onInfo = {}, onEntryClick = onEntryClick)
+                    }
+                    else -> {
+                        Text(
+                            text = pageState.value,
+                            color = Color.Black
+                        )
 
+                    }
                 }
-
-
 
 
             }
@@ -316,9 +314,8 @@ fun MainListScreen(
 }
 
 
-
 @Composable
-fun aboutScreen(){
+fun AboutScreen() {
     Scaffold(
         modifier = Modifier
             .fillMaxSize(),
@@ -352,7 +349,12 @@ fun aboutScreen(){
             )
         }
     ) {
-        LazyColumn(modifier = Modifier.padding(vertical = Dimens.MediumPadding.size, horizontal = Dimens.SmallPadding.size)) {
+        LazyColumn(
+            modifier = Modifier.padding(
+                vertical = Dimens.MediumPadding.size,
+                horizontal = Dimens.SmallPadding.size
+            )
+        ) {
             item {
                 Image(
                     modifier = Modifier
@@ -392,29 +394,101 @@ fun aboutScreen(){
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun SettingsPage(
-    pageState: MutableState<String>,
-
-    ){
+fun SettingsPage() {
     val viewModel: SettingsViewModel = hiltViewModel()
     val settingsScreenState by viewModel.uiState.collectAsState()
     if (settingsScreenState is SettingsScreenState.Settings) {
         val settingsScreenData =
             settingsScreenState as SettingsScreenState.Settings
 
-        SettingsScreen(
-            currentTheme = settingsScreenData.themeOption,
-            currentSortOption = settingsScreenData.sortOption,
-            onThemeOptionClicked = {
-                viewModel.saveThemeSetting(it)
-            },
-            onSortOptionClicked = {
-                viewModel.saveSortOptionSetting(it)
-            },
-            onBackButtonPressed = {
-                pageState.value = "HOME"
-            }
+
+        val scope = rememberCoroutineScope()
+        val sheetState = rememberModalBottomSheetState(
+            initialValue = ModalBottomSheetValue.Hidden
         )
+        val settingsEntryName = rememberSaveable {
+            mutableStateOf("")
+        }
+
+        ModalBottomSheetLayout(
+            sheetContent = {
+                SettingEntrySheet(
+                    sheetState = sheetState,
+                    scope = scope,
+                    settingsEntryName = settingsEntryName.value,
+                    currentSortOption = settingsScreenData.sortOption,
+                    currentTheme = settingsScreenData.themeOption,
+                    onSortOptionClicked = {
+                        viewModel.saveSortOptionSetting(it)
+                    },
+                    onThemeOptionClicked = {
+                        viewModel.saveThemeSetting(it)
+                    }
+                )
+
+            },
+            sheetState = sheetState,
+            sheetElevation = 0.dp,
+            sheetBackgroundColor = Color.Transparent
+        ) {
+
+
+            LazyColumn(
+                modifier = Modifier,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                item {
+                    val theme = when (settingsScreenData.themeOption) {
+                        1 -> Theme.DARK_THEME
+                        2 -> Theme.LIGHT_THEME
+                        else -> Theme.FOLLOW_SYSTEM
+                    }
+                    SettingsEntry(
+                        modifier = Modifier.padding(
+                            vertical = Dimens.SmallPadding.size,
+                            horizontal = Dimens.MediumPadding.size
+                        ),
+                        settingsEntryName = Constants.THEME_OPTIONS,
+                        currentSettingValue = theme.themeName,
+                        currentSettingIcon = theme.icon,
+                        onSettingsEntryClick = {
+                            settingsEntryName.value = it
+                            scope.launch {
+                                sheetState.show()
+                            }
+                        }
+                    )
+                }
+                item {
+                    val sort = when (settingsScreenData.sortOption) {
+                        1 -> Sort.NEW_RELEASE_FIRST
+                        2 -> Sort.OLD_RELEASE_FIRST
+                        3 -> Sort.LOW_PRICE_FIRST
+                        4 -> Sort.HIGH_PRICE_FIRST
+                        else -> Sort.ALPHABETICAL_ASC
+                    }
+                    SettingsEntry(
+                        modifier = Modifier.padding(
+                            vertical = Dimens.SmallPadding.size,
+                            horizontal = Dimens.MediumPadding.size
+                        ),
+                        settingsEntryName = Constants.SORT_OPTIONS,
+                        currentSettingValue = sort.type,
+                        currentSettingIcon = sort.icon,
+                        onSettingsEntryClick = {
+                            settingsEntryName.value = it
+                            scope.launch {
+                                sheetState.show()
+                            }
+                        }
+                    )
+                }
+            }
+
+
+        }
+
+
     }
 }
 
@@ -429,7 +503,7 @@ fun SettingsPage(
 @Composable
 private fun ListScreenPreview() {
     val scaffoldState = rememberScaffoldState(
-        drawerState= rememberDrawerState(DrawerValue.Closed),
+        drawerState = rememberDrawerState(DrawerValue.Closed),
     )
     val pageState = remember { mutableStateOf("HOME") }
 
@@ -446,7 +520,7 @@ private fun ListScreenPreview() {
             onTabClicked = {},
             currentSortOption = 0,
             shoeProductList = Constants.ShoesListPreview,
-            cartProductList =cartProduct,
+            cartProductList = cartProduct,
             networkLoading = false,
             networkError = "",
             favouriteProduct = Constants.ShoesListPreview as MutableList<ShoeProduct>,

@@ -1,14 +1,14 @@
-package com.akram.bensalem.powersh.ui.screens.login
+package akram.bensalem.powersh.ui.main.screens.login
 
+import akram.bensalem.powersh.ui.components.CustomTextField
 import akram.bensalem.powersh.ui.components.EmailConfirmAlertDialog
 import akram.bensalem.powersh.ui.components.checkYourConectivityAlertDialog
-import akram.bensalem.powersh.ui.components.customTextField
 import akram.bensalem.powersh.ui.theme.PowerSHTheme
-import akram.bensalem.powersh.utils.authentification.Authentifier
-import akram.bensalem.powersh.utils.isOnline
-import android.widget.Toast
+import akram.bensalem.powersh.utils.*
+import akram.bensalem.powersh.utils.authentification.Authenticate
 import androidx.compose.animation.ExperimentalAnimationApi
-import androidx.compose.foundation.*
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -18,6 +18,7 @@ import androidx.compose.material.icons.outlined.AccountCircle
 import androidx.compose.material.icons.outlined.Email
 import androidx.compose.material.icons.outlined.Password
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -39,40 +40,38 @@ import androidx.compose.ui.unit.dp
 @ExperimentalAnimationApi
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
-fun signUpScreen(
-    scrollState : ScrollState = rememberScrollState(),
+fun SignUpScreen(
     modifier: Modifier = Modifier,
-    fireBaseAuthentification: Authentifier,
-    onBackToMainScreen : () -> Unit = {}
-){
+    authentication: MutableState<Authenticate> = remember { mutableStateOf(Authenticate(null)) } ,
+    onBackToMainScreen: () -> Unit = {}
+) {
 
 
-
-    var emailState = remember {
+    val emailState = remember {
         mutableStateOf(TextFieldValue(""))
     }
-    var passwordState = remember {
-        mutableStateOf(TextFieldValue(""))
-    }
-
-    var firstNameState = remember {
+    val passwordState = remember {
         mutableStateOf(TextFieldValue(""))
     }
 
-    var lastNameState = remember {
+    val firstNameState = remember {
         mutableStateOf(TextFieldValue(""))
     }
 
-    var repeatPasswordState = remember {
+    val lastNameState = remember {
+        mutableStateOf(TextFieldValue(""))
+    }
+
+    val repeatPasswordState = remember {
         mutableStateOf(TextFieldValue(""))
     }
 
 
-    val mlastNameRequester = remember { FocusRequester() }
+    val lastNameRequester = remember { FocusRequester() }
 
-    val mEmailRequester = remember { FocusRequester() }
+    val emailRequester = remember { FocusRequester() }
 
-    val mfirstNameRequester = remember { FocusRequester() }
+    val firstNameRequester = remember { FocusRequester() }
 
     val view = LocalView.current
     val context = LocalContext.current
@@ -91,229 +90,278 @@ fun signUpScreen(
         mutableStateOf(true)
     }
 
-Box(
-    modifier = modifier
-        .fillMaxSize()
-        .background(Color.White)
-) {
-    Column(
+    Box(
         modifier = modifier
             .fillMaxSize()
-            .verticalScroll(state = scrollState)
-            .background(Color.White)
-
     ) {
+        Column(
+            modifier = modifier
+                .fillMaxSize()
+        ) {
 
-        Row(modifier = Modifier) {
-            customTextField(
-                modifier = Modifier
-                    .padding(0.dp, 8.dp)
-                    .weight(1f)
-                    .padding(start = 16.dp, end = 16.dp),
-                textFieldModifier = Modifier
-                    .border(1.dp, Color.Black, RoundedCornerShape(12.dp))
-                    .padding(12.dp),
-                title = "First Name",
-                fieldState = firstNameState,
-                icon = Icons.Outlined.AccountCircle,
-                isPassword = false,
-                focusRequester = mfirstNameRequester,
-                autofillType = AutofillType.PersonFirstName,
-                keyboardType = KeyboardType.Text,
-                imeAction = ImeAction.Next,
-                onNext = {
-                    mlastNameRequester.requestFocus()
-                },
-                onDone = {
-                    view.clearFocus()
-                }
-            )
-
-            customTextField(
-                modifier = Modifier
-                    .padding(0.dp, 8.dp)
-                    .weight(1f)
-                    .padding(start = 16.dp, end = 16.dp),
-                textFieldModifier = Modifier
-                    .border(1.dp, Color.Black, RoundedCornerShape(12.dp))
-                    .padding(12.dp),
-                title = "Last Name",
-                fieldState = lastNameState,
-                icon = Icons.Outlined.AccountCircle,
-                isPassword = false,
-                focusRequester = mlastNameRequester,
-                autofillType = AutofillType.PersonLastName,
-                keyboardType = KeyboardType.Text,
-                imeAction = ImeAction.Next,
-                onNext = {
-                    mEmailRequester.requestFocus()
-                },
-                onDone = {
-                    view.clearFocus()
-                }
-            )
-        }
-
-
-
-
-        customTextField(
-            modifier = Modifier
-                .padding(0.dp, 8.dp)
-                .fillMaxWidth()
-                .padding(start = 16.dp, end = 16.dp),
-            textFieldModifier = Modifier
-                .border(1.dp, Color.Black, RoundedCornerShape(12.dp))
-                .padding(12.dp),
-            title = "Email Address",
-            fieldState = emailState,
-            icon = Icons.Outlined.Email,
-            isPassword = false,
-            focusRequester = mEmailRequester,
-            autofillType = AutofillType.EmailAddress,
-            keyboardType = KeyboardType.Email,
-            imeAction = ImeAction.Next,
-            onNext = {
-                mPasswordFocusRequester.requestFocus()
-            },
-            onDone = {
-                view.clearFocus()
-            }
-        )
-
-
-        customTextField(
-            modifier = Modifier
-                .padding(0.dp, 8.dp)
-                .fillMaxWidth()
-                .padding(start = 16.dp, end = 16.dp),
-            textFieldModifier = Modifier
-                .border(1.dp, Color.Black, RoundedCornerShape(12.dp))
-                .padding(12.dp),
-            title = "Password",
-            fieldState = passwordState,
-            icon = Icons.Outlined.Password,
-            isPassword = true,
-            focusRequester = mPasswordFocusRequester,
-            autofillType = AutofillType.Password,
-            keyboardType = KeyboardType.Password,
-            imeAction = ImeAction.Next,
-            onNext = {
-                mRepeatPasswordFocusRequester.requestFocus()
-            },
-            onDone = {
-                view.clearFocus()
-            }
-        )
-
-
-
-        customTextField(
-            modifier = Modifier
-                .padding(0.dp, 8.dp)
-                .fillMaxWidth()
-                .padding(start = 16.dp, end = 16.dp),
-            textFieldModifier = Modifier
-                .border(1.dp, Color.Black, RoundedCornerShape(12.dp))
-                .padding(12.dp),
-            title = "Repeat Password",
-            fieldState = repeatPasswordState,
-            icon = Icons.Outlined.Password,
-            isPassword = true,
-            focusRequester = mRepeatPasswordFocusRequester,
-            autofillType = AutofillType.Password,
-            keyboardType = KeyboardType.Password,
-            imeAction = ImeAction.Done,
-            onNext = {
-                view.clearFocus()
-            },
-            onDone = {
-                view.clearFocus()
-            }
-        )
-
-        Spacer(modifier = modifier
-            .fillMaxWidth()
-            .weight(1f))
-
-        Button(
-            colors = ButtonDefaults.buttonColors(
-                contentColor = Color.White,
-                backgroundColor = MaterialTheme.colors.primary,
-            ),
-            shape = RoundedCornerShape(12.dp),
-            modifier = Modifier
-                .padding(16.dp, 24.dp)
-                .align(Alignment.CenterHorizontally)
-                .background(color = MaterialTheme.colors.primary, shape = CircleShape),
-            onClick = {
-
-                isOnline.value = isOnline(context = context)
-
-                if (isOnline(context = context)) {
-                    var msg = ""
-                    if (emailState.value.text.isEmpty() || passwordState.value.text.isEmpty() || firstNameState.value.text.isEmpty() || lastNameState.value.text.isEmpty())
-                    {
-                        msg = "One of filed or many are empty"
-                        Toast.makeText(
-                            context,
-                            msg,
-                            Toast.LENGTH_SHORT
-                        ).show()
+            Row(modifier = Modifier) {
+                CustomTextField(
+                    modifier = Modifier
+                        .padding(0.dp, 8.dp)
+                        .weight(1f)
+                        .padding(start = 16.dp, end = 16.dp),
+                    textFieldModifier = Modifier
+                        .border(1.dp, MaterialTheme.colors.onBackground, RoundedCornerShape(12.dp))
+                        .background(
+                            color = MaterialTheme.colors.surface,
+                            RoundedCornerShape(12.dp)
+                        )
+                        .padding(12.dp),
+                    title = "First Name",
+                    fieldState = firstNameState,
+                    icon = Icons.Outlined.AccountCircle,
+                    insideTextColor = MaterialTheme.colors.onBackground,
+                    iconTint = MaterialTheme.colors.onBackground,
+                    isPassword = false,
+                    focusRequester = firstNameRequester,
+                    autofillType = AutofillType.PersonFirstName,
+                    keyboardType = KeyboardType.Text,
+                    imeAction = ImeAction.Next,
+                    isValid = isNameValid(name = firstNameState.value.text),
+                    errorMessage = "Too Short",
+                    onNext = {
+                        lastNameRequester.requestFocus()
+                    },
+                    onDone = {
+                        view.clearFocus()
                     }
-                    else {
-                        if (passwordState.value.text == repeatPasswordState.value.text) {
-                            fireBaseAuthentification.creatNewUser(
-                                emailState.value.text,
-                                passwordState.value.text,
-                                "${firstNameState.value.text} ${lastNameState.value.text}",
-                                isOnProgress,
-                                isConfirmationEmailSent
-                            )
-
-                        } else {
-                            Toast.makeText(
-                                context,
-                                "the passwords are not the same \n please verify your password",
-                                Toast.LENGTH_SHORT
-                            ).show()
-
-                        }
-
-                    }
-
-                }
-
-            })
-        {
-            Text(
-                text = "Sign Up",
-                textAlign = TextAlign.Center,
-                color = Color.White,
-                modifier = Modifier.padding(
-                    start = 24.dp,
-                    end = 24.dp,
-                    top = 4.dp,
-                    bottom = 4.dp
                 )
+
+                CustomTextField(
+                    modifier = Modifier
+                        .padding(0.dp, 8.dp)
+                        .weight(1f)
+                        .padding(start = 16.dp, end = 16.dp),
+                    textFieldModifier = Modifier
+                        .border(1.dp, MaterialTheme.colors.onBackground, RoundedCornerShape(12.dp))
+                        .background(
+                            color = MaterialTheme.colors.surface,
+                            RoundedCornerShape(12.dp)
+                        )
+                        .padding(12.dp),
+                    title = "Last Name",
+                    fieldState = lastNameState,
+                    icon = Icons.Outlined.AccountCircle,
+                    insideTextColor = MaterialTheme.colors.onBackground,
+                    iconTint = MaterialTheme.colors.onBackground,
+                    isPassword = false,
+                    focusRequester = lastNameRequester,
+                    autofillType = AutofillType.PersonLastName,
+                    keyboardType = KeyboardType.Text,
+                    imeAction = ImeAction.Next,
+                    isValid = isNameValid(name = lastNameState.value.text),
+                    errorMessage = "Too Short",
+                    onNext = {
+                        emailRequester.requestFocus()
+                    },
+                    onDone = {
+                        view.clearFocus()
+                    }
+                )
+            }
+
+
+
+
+            CustomTextField(
+                modifier = Modifier
+                    .padding(0.dp, 8.dp)
+                    .fillMaxWidth()
+                    .padding(start = 16.dp, end = 16.dp),
+                textFieldModifier = Modifier
+                    .border(1.dp, MaterialTheme.colors.onBackground, RoundedCornerShape(12.dp))
+                    .background(color = MaterialTheme.colors.surface, RoundedCornerShape(12.dp))
+                    .padding(12.dp),
+                title = "Email Address",
+                fieldState = emailState,
+                icon = Icons.Outlined.Email,
+                insideTextColor = MaterialTheme.colors.onBackground,
+                iconTint = MaterialTheme.colors.onBackground,
+                isPassword = false,
+                focusRequester = emailRequester,
+                autofillType = AutofillType.EmailAddress,
+                keyboardType = KeyboardType.Email,
+                imeAction = ImeAction.Next,
+                isValid = isEmailValid(email = emailState.value.text),
+                errorMessage = "This Email is not valid",
+                onNext = {
+                    mPasswordFocusRequester.requestFocus()
+                },
+                onDone = {
+                    view.clearFocus()
+                }
             )
+
+
+            CustomTextField(
+                modifier = Modifier
+                    .padding(0.dp, 8.dp)
+                    .fillMaxWidth()
+                    .padding(start = 16.dp, end = 16.dp),
+                textFieldModifier = Modifier
+                    .border(1.dp, MaterialTheme.colors.onBackground, RoundedCornerShape(12.dp))
+                    .background(color = MaterialTheme.colors.surface, RoundedCornerShape(12.dp))
+                    .padding(12.dp),
+                title = "Password",
+                fieldState = passwordState,
+                icon = Icons.Outlined.Password,
+                insideTextColor = MaterialTheme.colors.onBackground,
+                iconTint = MaterialTheme.colors.onBackground,
+                isPassword = true,
+                focusRequester = mPasswordFocusRequester,
+                autofillType = AutofillType.Password,
+                keyboardType = KeyboardType.Password,
+                imeAction = ImeAction.Next,
+                isValid = isValidPasswordFormat(password = passwordState.value.text),
+                errorMessage = ErrorMessageOfPassword(password = passwordState.value.text),
+                onNext = {
+                    mRepeatPasswordFocusRequester.requestFocus()
+                },
+                onDone = {
+                    view.clearFocus()
+                }
+            )
+
+
+
+            CustomTextField(
+                modifier = Modifier
+                    .padding(0.dp, 8.dp)
+                    .fillMaxWidth()
+                    .padding(start = 16.dp, end = 16.dp),
+                textFieldModifier = Modifier
+                    .border(1.dp, MaterialTheme.colors.onBackground, RoundedCornerShape(12.dp))
+                    .background(color = MaterialTheme.colors.surface, RoundedCornerShape(12.dp))
+                    .padding(12.dp),
+                title = "Repeat Password",
+                fieldState = repeatPasswordState,
+                icon = Icons.Outlined.Password,
+                insideTextColor = MaterialTheme.colors.onBackground,
+                iconTint = MaterialTheme.colors.onBackground,
+                isPassword = true,
+                focusRequester = mRepeatPasswordFocusRequester,
+                autofillType = AutofillType.Password,
+                keyboardType = KeyboardType.Password,
+                imeAction = ImeAction.Done,
+                isValid = isRepeatPasswordValid(
+                    password = passwordState.value.text,
+                    repeatPassword = repeatPasswordState.value.text
+                ),
+                errorMessage = "The Repeat password doesn't match your password!",
+                onNext = {
+                    view.clearFocus()
+                },
+                onDone = {
+                    view.clearFocus()
+                }
+            )
+
+            Spacer(
+                modifier = modifier
+                    .fillMaxWidth()
+                    .weight(1f)
+            )
+
+            Button(
+                colors = ButtonDefaults.buttonColors(
+                    contentColor = Color.White,
+                    backgroundColor = MaterialTheme.colors.primary,
+                ),
+                shape = RoundedCornerShape(12.dp),
+                modifier = Modifier
+                    .padding(16.dp, 24.dp)
+                    .align(Alignment.CenterHorizontally)
+                    .background(color = MaterialTheme.colors.primary, shape = CircleShape),
+
+                enabled = (isValid(
+                            email = emailState.value.text,
+                            password = passwordState.value.text,
+                            firstName = firstNameState.value.text,
+                            lastName = lastNameState.value.text,
+                            repeatPassword = repeatPasswordState.value.text
+                        )),
+                onClick = {
+
+                    isOnline.value = isOnline(context = context)
+
+                    if (isOnline(context = context)) {
+                        authentication.value.creatNewUser(
+                            emailState.value.text,
+                            passwordState.value.text,
+                            "${firstNameState.value.text} ${lastNameState.value.text}",
+                            isOnProgress,
+                            isConfirmationEmailSent
+                        )
+                    }
+
+                })
+            {
+                Text(
+                    text = "Sign Up",
+                    textAlign = TextAlign.Center,
+                    color =if ( isValid(
+                        email = emailState.value.text,
+                        password = passwordState.value.text,
+                        firstName = firstNameState.value.text,
+                        lastName = lastNameState.value.text,
+                        repeatPassword = repeatPasswordState.value.text
+                    ) ) Color.White else  MaterialTheme.colors.onSurface,
+                    modifier = Modifier.padding(
+                        start = 24.dp,
+                        end = 24.dp,
+                        top = 4.dp,
+                        bottom = 4.dp
+                    )
+                )
+            }
+
+            Spacer(
+                modifier = modifier
+                    .fillMaxWidth()
+                    .weight(1f)
+            )
+
         }
+        if (isOnProgress.value) CircularProgressIndicator(
+            modifier = Modifier.align(Alignment.Center)
+        )
 
-        Spacer(modifier = modifier
-            .fillMaxWidth()
-            .weight(1f))
-
+        EmailConfirmAlertDialog(
+            openDialog = isConfirmationEmailSent,
+            onClicked = onBackToMainScreen
+        )
+        checkYourConectivityAlertDialog(isOnline)
     }
-if (isOnProgress.value) CircularProgressIndicator(
-    modifier = Modifier.align(Alignment.Center)
-)
-
-    EmailConfirmAlertDialog(openDialog = isConfirmationEmailSent, onClicked = onBackToMainScreen)
-    checkYourConectivityAlertDialog(isOnline)
-}
 
 
 }
+
+
+private fun isValid(email : String,
+                    password :String,
+                    firstName : String,
+                    lastName : String,
+                    repeatPassword: String ):Boolean {
+    return (
+            email.isNotEmpty()
+        && password.isNotEmpty()
+        && firstName.isNotEmpty()
+        && lastName.isNotEmpty()
+        && isEmailValid(email)
+        && isRepeatPasswordValid(
+            password = password,
+            repeatPassword = repeatPassword
+        )
+        && isNameValid(firstName)
+        && isNameValid(lastName)
+    )
+}
+
 
 
 
@@ -321,13 +369,11 @@ if (isOnProgress.value) CircularProgressIndicator(
 @OptIn(ExperimentalAnimationApi::class)
 @Preview
 @Composable
-fun signUpScreenPreview(){
-    var authentification : Authentifier = Authentifier(null)
+fun SignUpScreenPreview() {
 
-    PowerSHTheme() {
-       signUpScreen(
-           modifier = Modifier.fillMaxSize(),
-           fireBaseAuthentification = authentification
-       )
-   }
+    PowerSHTheme {
+        SignUpScreen(
+            modifier = Modifier.fillMaxSize(),
+        )
+    }
 }

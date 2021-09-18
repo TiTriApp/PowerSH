@@ -1,5 +1,16 @@
 package akram.bensalem.powersh.ui.main.screens
 
+import akram.bensalem.powersh.R
+import akram.bensalem.powersh.ui.components.AboutTopSection
+import akram.bensalem.powersh.ui.components.CollapsingToolbarBase
+import akram.bensalem.powersh.ui.theme.Dimens
+import akram.bensalem.powersh.ui.theme.PowerSHTheme
+import android.content.res.Configuration
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -25,14 +36,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.google.accompanist.insets.navigationBarsPadding
-import akram.bensalem.powersh.BuildConfig
-import akram.bensalem.powersh.R
-import akram.bensalem.powersh.ui.components.AboutTopSection
-import akram.bensalem.powersh.ui.components.CollapsingToolbarBase
-import akram.bensalem.powersh.ui.theme.Dimens
-import akram.bensalem.powersh.ui.theme.PowerSHTheme
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.*
 
 @Composable
 fun AboutScreen(
@@ -123,7 +126,7 @@ fun AboutScreen(
                         "- Akram Bensalem \n- Arbaoui Slimane\n- BELMILOUD ILIES DHIAEDDINE\n- Abdelkader YAHIAOUI\n- HADJ SADOK MOHAMMED NAZIM\n- ABDELLATIF ABDERAOUF\n- Merouan Boughedda",
                         color = MaterialTheme.colors.onSurface,
                         style = MaterialTheme.typography.body1,
-                        )
+                    )
                 }
 
             }
@@ -140,3 +143,16 @@ private fun AboutScreenPrev() {
         AboutScreen()
     }
 }
+
+
+@Preview(
+    showBackground = true,
+    uiMode = Configuration.UI_MODE_NIGHT_YES
+)
+@Composable
+private fun AboutScreenNightPreview() {
+    PowerSHTheme {
+        AboutScreen()
+    }
+}
+

@@ -13,8 +13,6 @@ const val White1 = "White"
 const val BROWN = "Brown"
 
 
-
-
 const val SIZE_37 = "37"
 const val SIZE_38 = "38"
 const val SIZE_39 = "39"
@@ -33,19 +31,18 @@ const val NICE = "nice"
 const val SAD = "sad"
 
 
-
 val ColorIds = listOf(
     Black1, Blue, RED, BROWN
 )
 
 
 val SizeIds = listOf(
-    SIZE_37, SIZE_38, SIZE_39, SIZE_40,SIZE_41, SIZE_42, SIZE_43, SIZE_44
+    SIZE_37, SIZE_38, SIZE_39, SIZE_40, SIZE_41, SIZE_42, SIZE_43, SIZE_44
 )
 
 
 fun resIdFor(colorId: String?): Color? {
-    return when(colorId) {
+    return when (colorId) {
         RED -> PowerSHRed
         Black1 -> PowerSHBlack
         Blue -> PowerSHBlue
@@ -56,7 +53,7 @@ fun resIdFor(colorId: String?): Color? {
 
 
 fun sizeIdFor(sizeId: String?): Int? {
-    return when(sizeId) {
+    return when (sizeId) {
         SIZE_37 -> 37
         SIZE_38 -> 38
         SIZE_39 -> 39
@@ -68,7 +65,6 @@ fun sizeIdFor(sizeId: String?): Int? {
         else -> null
     }
 }
-
 
 
 fun <T> List<T>.toGridList(cols: Int): List<List<T?>> =

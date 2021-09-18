@@ -1,13 +1,13 @@
 package akram.bensalem.powersh.ui.main.viewModel
 
+import akram.bensalem.powersh.repository.DataStoreRepository
+import akram.bensalem.powersh.ui.main.screenStates.SettingsScreenState
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import timber.log.Timber
-import akram.bensalem.powersh.repository.DataStoreRepository
-import akram.bensalem.powersh.ui.main.screenStates.SettingsScreenState
 import javax.inject.Inject
 
 @HiltViewModel

@@ -1,5 +1,8 @@
 package akram.bensalem.powersh.ui.components
 
+import akram.bensalem.powersh.R
+import akram.bensalem.powersh.ui.theme.Dimens
+import akram.bensalem.powersh.ui.theme.PowerSHTheme
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.tween
@@ -12,6 +15,7 @@ import androidx.compose.material.icons.outlined.SecurityUpdate
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -22,10 +26,6 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import akram.bensalem.powersh.R
-import akram.bensalem.powersh.ui.theme.Dimens
-import akram.bensalem.powersh.ui.theme.PowerSHTheme
-import androidx.compose.ui.graphics.Color
 
 @Composable
 fun AboutTopSection(
@@ -66,7 +66,12 @@ fun AboutTopSection(
             color = MaterialTheme.colors.onSurface,
             style = MaterialTheme.typography.subtitle2,
             modifier = Modifier
-                .padding(top = Dimens.MiniSmallPadding.size, end =Dimens.MiniSmallPadding.size, start = Dimens.MiniSmallPadding.size, bottom = Dimens.SmallPadding.size)
+                .padding(
+                    top = Dimens.MiniSmallPadding.size,
+                    end = Dimens.MiniSmallPadding.size,
+                    start = Dimens.MiniSmallPadding.size,
+                    bottom = Dimens.SmallPadding.size
+                )
         )
 
         Button(
@@ -110,7 +115,7 @@ fun AboutTopSection(
 private fun AboutTopSectionPrev() {
     PowerSHTheme {
         AboutTopSection(
-                appName = "PowerSH",
+            appName = "PowerSH",
             version = "1.0.0",
             appLogo = painterResource(id = R.drawable.big_circle_powersh)
         )

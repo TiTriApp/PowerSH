@@ -1,6 +1,12 @@
 package akram.bensalem.powersh.ui.main.screens
 
 import akram.bensalem.powersh.data.model.CardItem
+import akram.bensalem.powersh.data.model.ShoeProduct
+import akram.bensalem.powersh.ui.components.CollapsingToolbarBase
+import akram.bensalem.powersh.ui.components.DetailsCards
+import akram.bensalem.powersh.ui.components.ToolbarImage
+import akram.bensalem.powersh.ui.theme.PowerSHTheme
+import akram.bensalem.powersh.utils.Constants
 import android.content.res.Configuration
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.layout.Spacer
@@ -10,6 +16,7 @@ import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -23,13 +30,6 @@ import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.google.accompanist.insets.navigationBarsPadding
-import akram.bensalem.powersh.data.model.ShoeProduct
-import akram.bensalem.powersh.ui.components.CollapsingToolbarBase
-import akram.bensalem.powersh.ui.components.DetailsCards
-import akram.bensalem.powersh.ui.components.ToolbarImage
-import akram.bensalem.powersh.ui.theme.PowerSHTheme
-import akram.bensalem.powersh.utils.Constants
-import androidx.compose.runtime.MutableState
 
 @ExperimentalAnimationApi
 @Composable
@@ -37,11 +37,11 @@ fun DetailsScreen(
     modifier: Modifier = Modifier,
     shoeProduct: ShoeProduct,
     cartProduct: MutableList<CardItem>,
-    onBackButtonPressed: () -> Unit = { },
-    onfavouriteClick: () -> Unit = { },
     listState: LazyListState = rememberLazyListState(),
     favourite: MutableState<Boolean>,
     onNavigateToCartScreen: () -> Unit,
+    onBackButtonPressed: () -> Unit = { },
+    onFavouriteClick: () -> Unit = { },
 ) {
     val toolbarHeight = 250.dp
     val toolbarHeightPx = with(LocalDensity.current) { toolbarHeight.roundToPx().toFloat() }
@@ -86,7 +86,7 @@ fun DetailsScreen(
                 DetailsCards(
                     shoeProduct = shoeProduct,
                     cartProduct = cartProduct,
-                    onfavouriteClick = onfavouriteClick,
+                    onFavouriteClick = onFavouriteClick,
                     favourite = favourite,
                     onNavigateToCartScreen = onNavigateToCartScreen
                 )
@@ -96,6 +96,8 @@ fun DetailsScreen(
             item { Spacer(modifier = Modifier.navigationBarsPadding()) }
         }
     }
+
+
 }
 
 
@@ -116,7 +118,7 @@ private fun DetailsScreenPreview() {
     PowerSHTheme {
         DetailsScreen(shoeProduct = Constants.ShoesListPreview[0],
             cartProduct = cartProduct,
-            favourite = favourite, onNavigateToCartScreen =  {}
+            favourite = favourite, onNavigateToCartScreen = {}
         )
     }
 }

@@ -1,5 +1,13 @@
 package akram.bensalem.powersh.ui.main.screens
 
+import akram.bensalem.powersh.ui.components.CollapsingToolbarBase
+import akram.bensalem.powersh.ui.components.SettingEntrySheet
+import akram.bensalem.powersh.ui.components.SettingsEntry
+import akram.bensalem.powersh.ui.theme.Dimens
+import akram.bensalem.powersh.ui.theme.PowerSHTheme
+import akram.bensalem.powersh.ui.theme.Theme
+import akram.bensalem.powersh.utils.Constants
+import akram.bensalem.powersh.utils.Sort
 import android.content.res.Configuration
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.LinearOutSlowInEasing
@@ -27,14 +35,6 @@ import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.launch
-import akram.bensalem.powersh.ui.components.CollapsingToolbarBase
-import akram.bensalem.powersh.ui.components.SettingEntrySheet
-import akram.bensalem.powersh.ui.components.SettingsEntry
-import akram.bensalem.powersh.ui.theme.Dimens
-import akram.bensalem.powersh.ui.theme.Theme
-import akram.bensalem.powersh.ui.theme.PowerSHTheme
-import akram.bensalem.powersh.utils.Constants
-import akram.bensalem.powersh.utils.Sort
 
 @ExperimentalMaterialApi
 @Composable
@@ -183,7 +183,7 @@ fun SettingsScreen(
     device = Devices.PIXEL_4
 )
 @Composable
-private fun ThinkpadSettingsScreenPrev() {
+private fun SettingsScreenPrev() {
     PowerSHTheme {
         SettingsScreen(currentTheme = 2, currentSortOption = 1)
     }

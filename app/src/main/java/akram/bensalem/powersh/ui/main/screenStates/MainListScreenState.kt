@@ -7,9 +7,10 @@ sealed class MainListScreenState {
         val shoeProductList: List<ShoeProduct> = listOf(),
         val networkLoading: Boolean = false,
         val networkError: String = "",
-        val thinkpadSeriesList: List<String> = listOf(),
+        val seriesList: List<String> = listOf(),
         var sortOption: Int = 0
     ) : MainListScreenState()
+
     companion object {
         val Empty = MainListScreen()
     }

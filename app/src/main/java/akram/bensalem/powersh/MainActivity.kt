@@ -19,7 +19,7 @@ import kotlinx.coroutines.flow.collect
 import timber.log.Timber
 import akram.bensalem.powersh.repository.DataStoreRepository
 import akram.bensalem.powersh.ui.navigation.PowerSHApp
-import akram.bensalem.powersh.utils.authentification.Authentifier
+import akram.bensalem.powersh.utils.authentification.Authenticate
 import androidx.compose.runtime.mutableStateListOf
 import javax.inject.Inject
 
@@ -29,7 +29,8 @@ class MainActivity : AppCompatActivity() {
     @Inject
     lateinit var dataStoreRepository: DataStoreRepository
 
-     var authentifier : Authentifier = Authentifier(this)
+     var authenticate : Authenticate =
+         Authenticate(this)
 
 
     @ExperimentalMaterialApi

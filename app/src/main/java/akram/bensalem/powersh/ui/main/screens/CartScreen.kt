@@ -3,14 +3,13 @@ package akram.bensalem.powersh.ui.main.screens
 import akram.bensalem.powersh.R
 import akram.bensalem.powersh.data.model.CardItem
 import akram.bensalem.powersh.ui.components.cartListProducts
-import akram.bensalem.powersh.ui.theme.CardCoverPink
 import akram.bensalem.powersh.ui.theme.PowerSHTheme
 import akram.bensalem.powersh.utils.Constants
 import android.content.res.Configuration
 import androidx.compose.animation.*
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.core.updateTransition
-import androidx.compose.foundation.*
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
@@ -22,7 +21,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -43,8 +41,7 @@ private enum class CartModeState { FILL, EMPTY }
 fun cartScreen(
     navController: NavController,
     cartProduct: MutableList<CardItem>,
-){
-
+) {
 
 
     val totalPrice = remember {
@@ -60,7 +57,7 @@ fun cartScreen(
 
 
     val transition = updateTransition(
-        if (totalPrice.value > 0 ) CartModeState.FILL else  CartModeState.EMPTY,
+        if (totalPrice.value > 0) CartModeState.FILL else CartModeState.EMPTY,
         label = ""
     )
 
@@ -90,123 +87,121 @@ fun cartScreen(
 
         if (
             cartProduct.size != 0
-        ){
+        ) {
             cartListProducts(
                 cartProduct = cartProduct
             ) {
                 cartProduct.removeAt(it)
             }
-        }else {
+        } else {
             Spacer(modifier = Modifier.weight(1f))
         }
 
 
 
         AnimatedVisibility(
-                visible = cartProduct.size == 0,
-                enter = fadeIn(initialAlpha = 0f, tween(200)),
-                exit = fadeOut(targetAlpha = 0f, tween(200)),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .weight(1f)
-                    .align(Alignment.CenterHorizontally)
-            ) {
-             Column() {
-                 Image(
-                     modifier = Modifier
-                         .align(Alignment.CenterHorizontally)
-                         .padding(start = 32.dp, end = 32.dp),
-                     painter = painterResource(id = R.drawable.ic_empty_cart),
-                     contentDescription = "Add To Cart"
-                 )
-                 Text(
-                     color = Color.DarkGray,
-                     fontStyle = FontStyle.Normal,
-                     fontWeight = FontWeight.Bold,
-                     fontSize = 18.sp,
-                     textAlign = TextAlign.Center,
-                     text = "Cart is empty",
-                     modifier = Modifier
-                         .padding(top = 20.dp)
-                         .align(Alignment.CenterHorizontally)
-                 )
-             }
-
-
+            visible = cartProduct.size == 0,
+            enter = fadeIn(initialAlpha = 0f, tween(200)),
+            exit = fadeOut(targetAlpha = 0f, tween(200)),
+            modifier = Modifier
+                .fillMaxWidth()
+                .weight(1f)
+                .align(Alignment.CenterHorizontally)
+        ) {
+            Column {
+                Image(
+                    modifier = Modifier
+                        .align(Alignment.CenterHorizontally)
+                        .padding(start = 32.dp, end = 32.dp),
+                    painter = painterResource(id = R.drawable.ic_empty_cart),
+                    contentDescription = "Add To Cart"
+                )
+                Text(
+                    color = MaterialTheme.colors.onSurface,
+                    fontStyle = FontStyle.Normal,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 18.sp,
+                    textAlign = TextAlign.Center,
+                    text = "Cart is empty",
+                    modifier = Modifier
+                        .padding(top = 20.dp)
+                        .align(Alignment.CenterHorizontally)
+                )
             }
+
+
+        }
 
 
         Spacer(modifier = Modifier.weight(1f))
 
 
-       Row(
-           modifier = Modifier
-               .fillMaxWidth()
-               .padding(start = 16.dp, end = 0.dp, bottom = 8.dp, top = 16.dp)
-       ) {
-           Column(
-               modifier = Modifier
-           ) {
-               Text(
-                   color = MaterialTheme.colors.onBackground,
-                   fontStyle = FontStyle.Normal,
-                   fontWeight = FontWeight.SemiBold,
-                   fontSize = 16.sp,
-                   textAlign = TextAlign.Start,
-                   text = "Total Price",
-                   modifier = Modifier
-                       .align(Alignment.Start)
-               )
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(start = 16.dp, end = 0.dp, bottom = 8.dp, top = 16.dp)
+        ) {
+            Column(
+                modifier = Modifier
+            ) {
+                Text(
+                    color = MaterialTheme.colors.onBackground,
+                    fontStyle = FontStyle.Normal,
+                    fontWeight = FontWeight.SemiBold,
+                    fontSize = 16.sp,
+                    textAlign = TextAlign.Start,
+                    text = "Total Price",
+                    modifier = Modifier
+                        .align(Alignment.Start)
+                )
 
-               Text(
-                   color = MaterialTheme.colors.primary,
-                   fontStyle = FontStyle.Normal,
-                   fontWeight = FontWeight.Bold,
-                   textAlign = TextAlign.Start,
-                   fontSize = 18.sp,
-                   text = "${totalPrice.value} DA",
-                   modifier = Modifier
-                       .align(Alignment.Start)
-               )
+                Text(
+                    color = MaterialTheme.colors.primary,
+                    fontStyle = FontStyle.Normal,
+                    fontWeight = FontWeight.Bold,
+                    textAlign = TextAlign.Start,
+                    fontSize = 18.sp,
+                    text = "${totalPrice.value} DA",
+                    modifier = Modifier
+                        .align(Alignment.Start)
+                )
 
-           }
-           Spacer(modifier = Modifier.weight(1f))
-           Button(
-               enabled = totalPrice.value > 0,
-               shape = RoundedCornerShape(14.dp),
-               colors = ButtonDefaults.buttonColors(
-                   backgroundColor = backgroundColor,
-                   contentColor = contentColor,
-                   disabledBackgroundColor = backgroundColor,
-                   disabledContentColor= contentColor
+            }
+            Spacer(modifier = Modifier.weight(1f))
+            Button(
+                enabled = totalPrice.value > 0,
+                shape = RoundedCornerShape(14.dp),
+                colors = ButtonDefaults.buttonColors(
+                    backgroundColor = backgroundColor,
+                    contentColor = contentColor,
+                    disabledBackgroundColor = backgroundColor,
+                    disabledContentColor = contentColor
 
-               ),
-               modifier = Modifier
-                   .align(Alignment.CenterVertically),
-               onClick = {
-                navController.navigate(PowerSHScreens.CheckoutScreen.name)
-               }) {
-               Text(
-                   text =if (totalPrice.value > 0) "CHECKOUT" else "Empty Cart" ,
-                   color = if (totalPrice.value > 0) Color.White else  MaterialTheme.colors.onSurface,
-                   textAlign = TextAlign.Center,
-                   modifier = Modifier.padding(
-                       start = 24.dp,
-                       end = 24.dp,
-                       top = 6.dp,
-                       bottom = 6.dp
-                   )
-               )
-           }
+                ),
+                modifier = Modifier
+                    .align(Alignment.CenterVertically),
+                onClick = {
+                    navController.navigate(PowerSHScreens.CheckoutScreen.name)
+                }) {
+                Text(
+                    text = if (totalPrice.value > 0) "CHECKOUT" else "Empty Cart",
+                    color = if (totalPrice.value > 0) Color.White else MaterialTheme.colors.onSurface,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier.padding(
+                        start = 24.dp,
+                        end = 24.dp,
+                        top = 6.dp,
+                        bottom = 6.dp
+                    )
+                )
+            }
 
 
-
-       }
+        }
 
     }
 
 }
-
 
 
 @OptIn(ExperimentalMaterialApi::class)
@@ -218,7 +213,7 @@ fun emptyCartPreview() {
     val cartProduct = remember { Constants.cartListEmpty }
     PowerSHTheme {
         cartScreen(
-            navController =navController,
+            navController = navController,
             cartProduct = cartProduct,
         )
     }
@@ -234,26 +229,26 @@ fun fullCartPreview() {
     val cartProduct = remember { Constants.cartList }
     PowerSHTheme {
         cartScreen(
-            navController =navController,
+            navController = navController,
             cartProduct = cartProduct,
         )
     }
 }
 
 
-
 @OptIn(ExperimentalMaterialApi::class)
 @Preview(
     showBackground = true,
     uiMode = Configuration.UI_MODE_NIGHT_YES
-)@Composable
+)
+@Composable
 fun fullCartNightPreview() {
 
     val navController = rememberNavController()
     val cartProduct = remember { Constants.cartList }
     PowerSHTheme {
         cartScreen(
-            navController =navController,
+            navController = navController,
             cartProduct = cartProduct,
         )
     }
@@ -264,14 +259,15 @@ fun fullCartNightPreview() {
 @Preview(
     showBackground = true,
     uiMode = Configuration.UI_MODE_NIGHT_YES
-)@Composable
+)
+@Composable
 fun emptyCartNightPreview() {
 
     val navController = rememberNavController()
     val cartProduct = remember { Constants.cartListEmpty }
     PowerSHTheme {
         cartScreen(
-            navController =navController,
+            navController = navController,
             cartProduct = cartProduct,
         )
     }

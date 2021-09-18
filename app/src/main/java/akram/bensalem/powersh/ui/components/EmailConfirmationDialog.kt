@@ -36,24 +36,34 @@ fun EmailConfirmAlertDialog(openDialog: MutableState<Boolean>, onClicked: () -> 
                     fontSize = 18.sp,
                     fontWeight = FontWeight.Bold,
                     textAlign = TextAlign.Start,
-                    modifier = Modifier.padding(start = 16.dp, end = 8.dp, top = 16.dp, bottom = 4.dp)
+                    modifier = Modifier.padding(
+                        start = 16.dp,
+                        end = 8.dp,
+                        top = 16.dp,
+                        bottom = 4.dp
+                    )
                 )
             },
             text = {
 
-                Column() {
+                Column {
                     Text(
                         text = "You have to confirm your email, Please!",
                         color = MaterialTheme.colors.onSurface,
                         fontSize = 14.sp,
                         fontWeight = FontWeight.Medium,
                         textAlign = TextAlign.Start,
-                        modifier = Modifier.padding(start = 16.dp, end = 8.dp, top = 16.dp, bottom = 4.dp)
+                        modifier = Modifier.padding(
+                            start = 16.dp,
+                            end = 8.dp,
+                            top = 16.dp,
+                            bottom = 4.dp
+                        )
                     )
 
                     Image(
                         painter = painterResource(id = R.drawable.ic_mail),
-                        contentDescription ="confirm",
+                        contentDescription = "confirm",
                         modifier = Modifier
                             .padding(48.dp, 32.dp)
                     )

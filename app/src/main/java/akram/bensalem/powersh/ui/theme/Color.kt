@@ -21,18 +21,11 @@ val LightGrayTextDark = Color(0xFFCACACA)
 val BlueLinkColor = Color(0xFF0545AD)
 
 
-
-
-
-
-
-
-
-
-
 val PowerSHRed = Color(0xffcf4a4b)
-val PowerSHLight= Color(0xFF7B77)
-val PowerSHDark= Color(0x981123)
+val PowerSHLight = Color(0xFF7B77)
+val PowerSHDark = Color(0x981123)
+
+val PowerSHGreen = Color(0xFF4ACF76)
 
 val PowerSHLightRed = Color(0x5CF4A4B)
 
@@ -49,11 +42,9 @@ val CardCover = Color(0x19F7EDED)
 val CardCoverPink = Color(0x5CDAF0FC)
 
 
-
 val PowerSHBlue = Color(0xFF4A70CF)
 val PowerSHBrown = Color(0xFFCF844A)
 val PowerSHBlack = Color(0xFF473D3D)
-
 
 
 val OrangeOnboarding = Color(0xFFEFD3B6)

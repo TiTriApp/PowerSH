@@ -41,24 +41,34 @@ fun confirmMessageSentAlertDialog(
                     fontSize = 18.sp,
                     fontWeight = FontWeight.Bold,
                     textAlign = TextAlign.Start,
-                    modifier = Modifier.padding(start = 16.dp, end = 8.dp, top = 16.dp, bottom = 4.dp)
+                    modifier = Modifier.padding(
+                        start = 16.dp,
+                        end = 8.dp,
+                        top = 16.dp,
+                        bottom = 4.dp
+                    )
                 )
             },
             text = {
 
-                Column() {
+                Column {
                     Text(
                         text = "Your message have been sent \nWe will reply soon as possible",
                         color = MaterialTheme.colors.onSurface,
                         fontSize = 14.sp,
                         fontWeight = FontWeight.Medium,
                         textAlign = TextAlign.Start,
-                        modifier = Modifier.padding(start = 16.dp, end = 8.dp, top = 16.dp, bottom = 4.dp)
+                        modifier = Modifier.padding(
+                            start = 16.dp,
+                            end = 8.dp,
+                            top = 16.dp,
+                            bottom = 4.dp
+                        )
                     )
 
                     Image(
                         painter = painterResource(id = R.drawable.ic_mail),
-                        contentDescription ="confirm",
+                        contentDescription = "confirm",
                         modifier = Modifier
                             .padding(48.dp, 32.dp)
                     )
@@ -78,8 +88,8 @@ fun confirmMessageSentAlertDialog(
                         .background(color = CardCoverPink, shape = RoundedCornerShape(14.dp)),
                     onClick = {
                         nameState.value = TextFieldValue("")
-                        emailState.value =TextFieldValue("")
-                        messageState.value =TextFieldValue("")
+                        emailState.value = TextFieldValue("")
+                        messageState.value = TextFieldValue("")
                         openDialog.value = false
                     }) {
                     Text(
@@ -97,9 +107,6 @@ fun confirmMessageSentAlertDialog(
                         )
                     )
                 }
-
-
-
 
 
             },

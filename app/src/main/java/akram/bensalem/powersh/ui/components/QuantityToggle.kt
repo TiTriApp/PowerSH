@@ -75,10 +75,7 @@ fun QuantityToggle(
         ),
         shape = RoundedCornerShape(14.dp),
         modifier = modifier
-            .padding(end = 8.dp)
-
-
-        ,
+            .padding(end = 8.dp),
         onClick = {
             isAddedToCart.value = !isAddedToCart.value
             if (isAddedToCart.value) {
@@ -119,7 +116,7 @@ fun QuantityToggle(
                 textAlign = TextAlign.Center,
                 color = if (!isAddedToCart.value) Color.White else MaterialTheme.colors.primary,
                 fontStyle = FontStyle.Normal,
-                fontWeight =if (!isAddedToCart.value) FontWeight.Normal else FontWeight.Medium,
+                fontWeight = if (!isAddedToCart.value) FontWeight.Normal else FontWeight.Medium,
                 fontSize = 16.sp,
                 modifier = Modifier
                     .animateContentSize()
@@ -133,7 +130,6 @@ fun QuantityToggle(
         }
     }
 }
-
 
 
 @Composable
@@ -220,7 +216,7 @@ fun UploadImageToggle(
                 textAlign = TextAlign.Center,
                 color = if (!isImageSelected) Color.White else MaterialTheme.colors.primary,
                 fontStyle = FontStyle.Normal,
-                fontWeight =if (!isImageSelected) FontWeight.Normal else FontWeight.Medium,
+                fontWeight = if (!isImageSelected) FontWeight.Normal else FontWeight.Medium,
                 fontSize = 11.sp,
                 modifier = Modifier
                     .animateContentSize()
@@ -234,11 +230,6 @@ fun UploadImageToggle(
         }
     }
 }
-
-
-
-
-
 
 
 @OptIn(ExperimentalAnimationApi::class, ExperimentalMaterialApi::class)
@@ -278,14 +269,9 @@ fun ColorContentDialog(
         }
 
 
-
     }
 
 }
-
-
-
-
 
 
 @OptIn(ExperimentalAnimationApi::class, ExperimentalMaterialApi::class)
@@ -327,15 +313,9 @@ fun sizeContentDialog(
         }
 
 
-
     }
 
 }
-
-
-
-
-
 
 
 @Composable
@@ -360,10 +340,6 @@ fun <T> Grid(
         }
     }
 }
-
-
-
-
 
 
 @OptIn(ExperimentalAnimationApi::class)
@@ -393,7 +369,7 @@ fun ContentDialog(
                 ) {
                     Text(
                         text = title,
-                        style = MaterialTheme.typography.h6.copy(fontSize = 18.sp) ,
+                        style = MaterialTheme.typography.h6.copy(fontSize = 18.sp),
                         textAlign = TextAlign.Center,
                         color = Color.DarkGray,
                         fontStyle = FontStyle.Normal,
