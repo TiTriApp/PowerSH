@@ -199,7 +199,7 @@ data class Strings(
     val sendTotalAmountPlease:String,
     val ourCCPAccountIs:String,
 
-    val totalAmountValue: (total : Int) -> String ,
+    val totalAmountValue: (total : Int) -> String,
     val sendProof :String,
     val dearCustomerNotify : String,
     val cashDeliveryWillArriveWithin : String,
@@ -211,5 +211,20 @@ data class Strings(
 
     val back : String,
     val next :String,
+
+    val dearCustomerFillTheForm :String,
+    val phoneNumberIsNotValid : String,
+    val languageOption : String,
+    val themeOptions : String,
+    val lightTheme : String,
+    val darkTheme : String,
+    val followSystemMode : String,
+
+    val alphabeticASC : String,
+    val heightPrice : String,
+    val lowPrice : String,
+    val firstRelease : String,
+    val lastRelease : String,
+
 
     )

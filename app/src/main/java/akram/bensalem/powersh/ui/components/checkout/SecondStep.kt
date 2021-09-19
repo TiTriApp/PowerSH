@@ -1,5 +1,6 @@
 package akram.bensalem.powersh.ui.components.checkout
 
+import akram.bensalem.powersh.LocalStrings
 import akram.bensalem.powersh.ui.components.CustomTextField
 import akram.bensalem.powersh.ui.theme.CardCoverPink
 import akram.bensalem.powersh.ui.theme.Dimens
@@ -126,7 +127,7 @@ fun SecondStep(
                 ) {
 
                     Text(
-                        text = "Dear customer, make sure to confirm your delivery information by filling this form:",
+                        text = LocalStrings.current.dearCustomerFillTheForm,
                         color = MaterialTheme.colors.onBackground,
                         fontSize = 14.sp,
                         fontWeight = FontWeight.Medium,
@@ -161,7 +162,7 @@ fun SecondStep(
                                     RoundedCornerShape(12.dp)
                                 )
                                 .padding(8.dp),
-                            title = "First Name",
+                            title = LocalStrings.current.firstName,
                             fieldState = firstNameState,
                             icon = Icons.Outlined.AccountCircle,
                             insideTextColor = MaterialTheme.colors.onBackground,
@@ -172,7 +173,7 @@ fun SecondStep(
                             keyboardType = KeyboardType.Text,
                             imeAction = ImeAction.Next,
                             isValid = isNameValid(name = firstNameState.value.text),
-                            errorMessage = "Too Short",
+                            errorMessage =LocalStrings.current.tooShort,
                             onNext = {
                                 lastNameRequester.requestFocus()
                             },
@@ -197,7 +198,7 @@ fun SecondStep(
                                     RoundedCornerShape(12.dp)
                                 )
                                 .padding(8.dp),
-                            title = "Last Name",
+                            title = LocalStrings.current.lastName,
                             fieldState = lastNameState,
                             icon = Icons.Outlined.AccountCircle,
                             insideTextColor = MaterialTheme.colors.onBackground,
@@ -208,7 +209,7 @@ fun SecondStep(
                             keyboardType = KeyboardType.Text,
                             imeAction = ImeAction.Next,
                             isValid = isNameValid(name = lastNameState.value.text),
-                            errorMessage = "Too Short",
+                            errorMessage = LocalStrings.current.tooShort,
                             onNext = {
                                 emailRequester.requestFocus()
                             },
@@ -235,7 +236,7 @@ fun SecondStep(
                                 RoundedCornerShape(12.dp)
                             )
                             .padding(8.dp),
-                        title = "Email Address",
+                        title = LocalStrings.current.email,
                         fieldState = emailState,
                         icon = Icons.Outlined.Email,
                         insideTextColor = MaterialTheme.colors.onBackground,
@@ -246,7 +247,7 @@ fun SecondStep(
                         keyboardType = KeyboardType.Email,
                         imeAction = ImeAction.Next,
                         isValid = isEmailValid(email = emailState.value.text),
-                        errorMessage = "This Email is not valid",
+                        errorMessage = LocalStrings.current.emailIsNotValid,
                         onNext = {
                             phoneRequester.requestFocus()
                         },
@@ -274,7 +275,7 @@ fun SecondStep(
                                 RoundedCornerShape(12.dp)
                             )
                             .padding(8.dp),
-                        title = "Phone Number",
+                        title = LocalStrings.current.phoneNumber,
                         fieldState = phoneState,
                         focusRequester = phoneRequester,
                         icon = Icons.Outlined.PhoneAndroid,
@@ -285,7 +286,7 @@ fun SecondStep(
                         keyboardType = KeyboardType.Phone,
                         imeAction = ImeAction.Done,
                         isValid = isPhoneValid(phone = phoneState.value.text),
-                        errorMessage = "This Phone number is not valid",
+                        errorMessage = LocalStrings.current.phoneNumberIsNotValid,
                         onNext = {
                             mFullAddressRequester.requestFocus()
                         },
@@ -345,7 +346,7 @@ fun SecondStep(
                         keyboardType = KeyboardType.Text,
                         imeAction = ImeAction.Done,
                         isValid = isNameValid(name = fullAddressState.value.text),
-                        errorMessage = "Too Short",
+                        errorMessage = LocalStrings.current.tooShort,
                         onNext = {
                             view.clearFocus()
                         },

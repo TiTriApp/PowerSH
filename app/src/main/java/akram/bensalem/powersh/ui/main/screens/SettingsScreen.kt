@@ -51,7 +51,6 @@ fun SettingsScreen(
     currentSortOption: Int,
     currentLanguageOption : Int,
 ) {
-    // CollapsingToolbar Implementation
     val toolbarHeight = 250.dp
     val toolbarHeightPx = with(LocalDensity.current) { toolbarHeight.roundToPx().toFloat() }
     val toolbarOffsetHeightPx = remember { mutableStateOf(0f) }
@@ -61,7 +60,6 @@ fun SettingsScreen(
                 val delta = available.y
                 val newOffset = toolbarOffsetHeightPx.value + delta
                 toolbarOffsetHeightPx.value = newOffset.coerceIn(-toolbarHeightPx, 0f)
-                // Returning Zero so we just observe the scroll but don't execute it
                 return Offset.Zero
             }
         }
@@ -145,8 +143,8 @@ fun SettingsScreen(
                             vertical = Dimens.SmallPadding.size,
                             horizontal = Dimens.MediumPadding.size
                         ),
-                        settingsEntryName = Constants.LANGUAGE_OPTIONS,
-                        currentSettingValue = language.languageName,
+                        settingsEntryName = LocalStrings.current.languageOption,
+                        currentSettingValue =if (language.languageName != Language.FOLLOW_SYSTEM.languageName) language.languageName else LocalStrings.current.followSystemMode,
                         currentSettingIcon = language.icon,
                         onSettingsEntryClick = {
                             settingsEntryName.value = it
@@ -167,8 +165,12 @@ fun SettingsScreen(
                             vertical = Dimens.SmallPadding.size,
                             horizontal = Dimens.MediumPadding.size
                         ),
-                        settingsEntryName = Constants.THEME_OPTIONS,
-                        currentSettingValue = theme.themeName,
+                        settingsEntryName = LocalStrings.current.themeOptions,
+                        currentSettingValue = when(theme.themeName){
+                            Theme.LIGHT_THEME.themeName -> LocalStrings.current.lightTheme
+                            Theme.DARK_THEME.themeName -> LocalStrings.current.darkTheme
+                            else -> LocalStrings.current.followSystemMode
+                                },
                         currentSettingIcon = theme.icon,
                         onSettingsEntryClick = {
                             settingsEntryName.value = it
@@ -193,7 +195,14 @@ fun SettingsScreen(
                             horizontal = Dimens.MediumPadding.size
                         ),
                         settingsEntryName = Constants.SORT_OPTIONS,
-                        currentSettingValue = sort.type,
+                        currentSettingValue = when(sort.type){
+                            Sort.ALPHABETICAL_ASC.type -> LocalStrings.current.alphabeticASC
+                            Sort.HIGH_PRICE_FIRST.type -> LocalStrings.current.heightPrice
+                            Sort.LOW_PRICE_FIRST.type -> LocalStrings.current.lowPrice
+                            Sort.NEW_RELEASE_FIRST.type -> LocalStrings.current.firstRelease
+                            Sort.OLD_RELEASE_FIRST.type -> LocalStrings.current.lastRelease
+                            else -> LocalStrings.current.alphabeticASC
+                             },
                         currentSettingIcon = sort.icon,
                         onSettingsEntryClick = {
                             settingsEntryName.value = it

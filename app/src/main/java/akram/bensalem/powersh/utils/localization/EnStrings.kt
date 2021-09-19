@@ -2,6 +2,9 @@ package akram.bensalem.powersh.utils.localization
 
 
 import akram.bensalem.powersh.data.model.OrderStatus
+import akram.bensalem.powersh.ui.theme.Theme
+import akram.bensalem.powersh.utils.Constants
+import akram.bensalem.powersh.utils.Sort
 import cafe.adriel.lyricist.processor.Strings
 
 @Strings(languageTag = Locales.EN, default = true)
@@ -224,5 +227,19 @@ val EnStrings = Strings(
     callUs = "CALL US",
     dearCustomerVerifyYourInfo = "Dear customer, make sure to fill your information carefully and you will be receive a call from our customer service to confirm your order",
     back = "Back",
-    next = "Next"
+    next = "Next",
+
+
+    dearCustomerFillTheForm = "Dear customer, make sure to confirm your delivery information by filling this form:",
+    phoneNumberIsNotValid = "This Phone number is not valid",
+    languageOption = Constants.LANGUAGE_OPTIONS,
+    themeOptions = Constants.THEME_OPTIONS,
+    lightTheme = Theme.LIGHT_THEME.themeName,
+    darkTheme = Theme.DARK_THEME.themeName,
+    followSystemMode = "Follow System Settings",
+    alphabeticASC = Sort.ALPHABETICAL_ASC.type,
+    heightPrice = Sort.HIGH_PRICE_FIRST.type,
+    lowPrice = Sort.LOW_PRICE_FIRST.type,
+    lastRelease = Sort.NEW_RELEASE_FIRST.type,
+    firstRelease = Sort.NEW_RELEASE_FIRST.type
 )
