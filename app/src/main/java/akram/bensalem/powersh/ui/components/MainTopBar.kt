@@ -1,6 +1,8 @@
 package akram.bensalem.powersh.ui.components
 
+import akram.bensalem.powersh.LocalStrings
 import akram.bensalem.powersh.ui.theme.PowerSHTheme
+import akram.bensalem.powersh.utils.localization.Strings
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -15,18 +17,21 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
+
 @Composable
 fun mainTopBar(
     pageState: MutableState<String> = remember {
-        mutableStateOf("PowerSH")
+        mutableStateOf( "PowerSH")
     },
     onOpenMenu: () -> Unit = {},
 ) {
+
+
     TopAppBar(
         title = {
             Text(
                 color = MaterialTheme.colors.onBackground,
-                text = getScreenTitle(state = pageState.value)
+               text = getScreenTitle(state = pageState.value, localString = LocalStrings.current)
             )
         },
         modifier = Modifier.fillMaxWidth(),
@@ -38,7 +43,7 @@ fun mainTopBar(
                 Icon(
                     tint = MaterialTheme.colors.onBackground,
                     imageVector = Icons.Filled.Menu,
-                    contentDescription = "Open Menu"
+                    contentDescription = LocalStrings.current.openMenu
                 )
             }
         },
@@ -48,28 +53,28 @@ fun mainTopBar(
 }
 
 
-fun getScreenTitle(state: String): String {
+fun getScreenTitle(state: String, localString: Strings): String {
     return when (state) {
         "HOME" -> {
-            "PowerSH"
+            localString.title
         }
         "CART" -> {
-            "Cart"
+            localString.cart
         }
         "FAVOURITE" -> {
-            "Favourites"
+            localString.favourite
         }
         "CONTACT" -> {
-            "Contact Us"
+            localString.contactUs
         }
         "SETTINGS" -> {
-            "Settings"
+            localString.settings
         }
         "ABOUT" -> {
-            "About Us"
+            localString.aboutUs
         }
         "ORDERS" -> {
-            "Orders"
+            localString.orders
         }
         else -> {
             "PowerSH"

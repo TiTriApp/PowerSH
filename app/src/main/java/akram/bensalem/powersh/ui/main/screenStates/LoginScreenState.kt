@@ -1,6 +1,7 @@
 package akram.bensalem.powersh.ui.main.screenStates
 
 import akram.bensalem.powersh.utils.authentification.Authenticate
+import akram.bensalem.powersh.utils.localization.Strings
 import androidx.compose.runtime.*
 import androidx.compose.ui.text.input.TextFieldValue
 
@@ -28,6 +29,7 @@ interface ILoginScreenScope {
 
 }
 
+/*
 
 class LoginScreenScope(
     private val state: LoginScreenState,
@@ -42,8 +44,8 @@ class LoginScreenScope(
         )
     }
 
-    override fun resetPassword() {
-        authentication.reinstalisationDeMotDePass(state.email.text)
+    override fun resetPassword(localStrings : Strings) {
+        authentication.reinstalisationDeMotDePass(state.email.text, )
     }
 
     override var email: TextFieldValue
@@ -73,4 +75,4 @@ class LoginScreenScope(
         set(value) {
             state.isLogged = value
         }
-}
+}*/

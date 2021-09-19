@@ -1,5 +1,6 @@
 package akram.bensalem.powersh.ui.components
 
+import akram.bensalem.powersh.LocalStrings
 import akram.bensalem.powersh.ui.theme.Dimens
 import akram.bensalem.powersh.ui.theme.PowerSHTheme
 import androidx.compose.animation.AnimatedVisibility
@@ -65,12 +66,12 @@ fun ScrollToTopButton(
                 ) {
                     Icon(
                         imageVector = Icons.Rounded.ArrowUpward,
-                        contentDescription = "Scroll Up button",
+                        contentDescription = LocalStrings.current.scrollUp,
                         tint = MaterialTheme.colors.onBackground,
                     )
                     Spacer(modifier = Modifier.width(Dimens.SmallPadding.size))
                     Text(
-                        text = "Scroll Up",
+                        text = LocalStrings.current.scrollUp,
                         color = MaterialTheme.colors.onBackground,
                         style = MaterialTheme.typography.button
                     )

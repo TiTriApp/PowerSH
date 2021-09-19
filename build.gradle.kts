@@ -14,6 +14,8 @@ buildscript {
         classpath(BuildPlugins.daggerHilt)
         classpath("com.google.gms:google-services:4.3.10")
         classpath ("com.github.ben-manes:gradle-versions-plugin:0.38.0")
+        classpath (BuildPlugins.ksp)
+
 
     }
 }

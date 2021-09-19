@@ -1,5 +1,6 @@
 package akram.bensalem.powersh.ui.main.screens
 
+import akram.bensalem.powersh.LocalStrings
 import akram.bensalem.powersh.R
 import akram.bensalem.powersh.data.model.ShoeProduct
 import akram.bensalem.powersh.ui.components.ProductShoesEntry
@@ -33,7 +34,7 @@ import com.google.accompanist.insets.navigationBarsPadding
 @OptIn(ExperimentalAnimationApi::class)
 @ExperimentalMaterialApi
 @Composable
-fun favouriteScreen(
+fun FavouriteScreen(
     cartFavourite: MutableList<ShoeProduct>,
     onEntryClick: (ShoeProduct) -> Unit = { },
 ) {
@@ -110,7 +111,7 @@ fun favouriteScreen(
                         .align(Alignment.CenterHorizontally)
                         .padding(start = 32.dp, end = 32.dp),
                     painter = painterResource(id = R.drawable.ic_favourite),
-                    contentDescription = "Add To Cart"
+                    contentDescription = LocalStrings.current.addToFavourite
                 )
                 Text(
                     color = MaterialTheme.colors.onSurface,
@@ -118,7 +119,7 @@ fun favouriteScreen(
                     fontWeight = FontWeight.Bold,
                     fontSize = 18.sp,
                     textAlign = TextAlign.Center,
-                    text = "You don't have favourites yet!",
+                    text = LocalStrings.current.favouriteListEmpty,
                     modifier = Modifier
                         .padding(top = 20.dp)
                         .align(Alignment.CenterHorizontally)
@@ -143,7 +144,7 @@ fun favouriteScreen(
                     fontWeight = FontWeight.SemiBold,
                     fontSize = 16.sp,
                     textAlign = TextAlign.Start,
-                    text = "Total of Shoes",
+                    text = LocalStrings.current.totalShoes,
                     modifier = Modifier
                         .align(Alignment.Start)
                 )
@@ -154,7 +155,7 @@ fun favouriteScreen(
                     fontWeight = FontWeight.Bold,
                     textAlign = TextAlign.Start,
                     fontSize = 18.sp,
-                    text = "${cartFavourite.size} items",
+                    text = LocalStrings.current.totalShoesValue(cartFavourite.size),
                     modifier = Modifier
                         .align(Alignment.Start)
                 )
@@ -167,9 +168,7 @@ fun favouriteScreen(
                     shape = RoundedCornerShape(14.dp),
                     colors = ButtonDefaults.buttonColors(
                         backgroundColor = if (cartFavourite.size > 0) MaterialTheme.colors.primary else CardCoverPink,
-                        //    contentColor = if (totalPrice.value > 0) Color.White else CardCoverPink,
                         disabledBackgroundColor = CardCoverPink,
-                        //    disabledContentColor = CardCoverPink,
                     ),
                     modifier = Modifier
                         .background(color = CardCoverPink, shape = RoundedCornerShape(14.dp))
@@ -178,7 +177,7 @@ fun favouriteScreen(
                         cartFavourite.clear()
                     }) {
                     Text(
-                        text = if (cartFavourite.size > 0) "Remove All" else "",
+                        text = if (cartFavourite.size > 0) LocalStrings.current.removeAll else "",
                         color = if (cartFavourite.size > 0) Color.White else Color.DarkGray,
                         style = TextStyle(
                             background = if (cartFavourite.size > 0) MaterialTheme.colors.primary else CardCoverPink,

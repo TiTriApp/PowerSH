@@ -1,5 +1,6 @@
 package akram.bensalem.powersh.ui.components
 
+import akram.bensalem.powersh.LocalStrings
 import akram.bensalem.powersh.R
 import akram.bensalem.powersh.ui.theme.CardCoverPink
 import akram.bensalem.powersh.ui.theme.YellowOnboarding
@@ -36,7 +37,7 @@ fun confirmMessageSentAlertDialog(
             },
             title = {
                 Text(
-                    text = "Confirmation",
+                    text = LocalStrings.current.confirmation,
                     color = MaterialTheme.colors.onBackground,
                     fontSize = 18.sp,
                     fontWeight = FontWeight.Bold,
@@ -53,7 +54,7 @@ fun confirmMessageSentAlertDialog(
 
                 Column {
                     Text(
-                        text = "Your message have been sent \nWe will reply soon as possible",
+                        text = LocalStrings.current.messageConfirmation,
                         color = MaterialTheme.colors.onSurface,
                         fontSize = 14.sp,
                         fontWeight = FontWeight.Medium,
@@ -68,7 +69,7 @@ fun confirmMessageSentAlertDialog(
 
                     Image(
                         painter = painterResource(id = R.drawable.ic_mail),
-                        contentDescription = "confirm",
+                        contentDescription = LocalStrings.current.confirmation,
                         modifier = Modifier
                             .padding(48.dp, 32.dp)
                     )
@@ -93,7 +94,7 @@ fun confirmMessageSentAlertDialog(
                         openDialog.value = false
                     }) {
                     Text(
-                        text = "OK",
+                        text = LocalStrings.current.ok,
                         color = YellowOnboarding,
                         style = TextStyle(
                             background = MaterialTheme.colors.primary,

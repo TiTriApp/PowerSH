@@ -51,7 +51,9 @@ fun PowerSHApp(
 
     ProvideWindowInsets {
         PowerSHTheme(theme = themeValue) {
+
             val navController = rememberAnimatedNavController()
+
             PowerSHNavHost(
                 modifier = Modifier,
                 startDestination = PowerSHScreens.MainListScreen.name,

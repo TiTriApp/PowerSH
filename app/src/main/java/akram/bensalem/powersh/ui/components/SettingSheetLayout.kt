@@ -2,6 +2,7 @@ package akram.bensalem.powersh.ui.components
 
 import akram.bensalem.powersh.ui.theme.*
 import akram.bensalem.powersh.utils.Constants
+import akram.bensalem.powersh.utils.Language
 import akram.bensalem.powersh.utils.Sort
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.LinearOutSlowInEasing
@@ -73,7 +74,9 @@ fun SettingEntrySheet(
     currentSortOption: Int,
     onSortOptionClicked: (Int) -> Unit = { },
     currentTheme: Int,
-    onThemeOptionClicked: (Int) -> Unit = { }
+    currentLanguageOption: Int,
+    onThemeOptionClicked: (Int) -> Unit = { },
+    onLanguageOptionClicked: (Int) -> Unit = {}
 ) {
 
     SettingSheetLayout(
@@ -157,6 +160,44 @@ fun SettingEntrySheet(
                         contentColor = contentColor
                     )
                 }
+            } else if (settingsEntryName == Constants.LANGUAGE_OPTIONS) {
+                items(Language.values()){item ->
+                    val selectedColor by animateColorAsState(
+                        targetValue = if (currentLanguageOption == item.languageValue) {
+                            MaterialTheme.colors.primary
+                                .copy(alpha = .6f)
+                        } else Color.Transparent,
+                        animationSpec = tween(
+                            durationMillis = 500,
+                            easing = LinearOutSlowInEasing
+                        )
+                    )
+                    val contentColor by animateColorAsState(
+                        targetValue = if (currentLanguageOption == item.languageValue) {
+                            LightDark
+                                .copy(alpha = .9f)
+                        } else MaterialTheme.colors.onBackground,
+                        animationSpec = tween(
+                            durationMillis = 500,
+                            easing = LinearOutSlowInEasing
+                        )
+                    )
+
+                    SheetOption(
+                        modifier = Modifier
+                            .fillMaxWidth(),
+                        sortOptionName = item.languageName,
+                        icon = item.icon,
+                        onOptionClicked = {
+                            onLanguageOptionClicked(item.languageValue)
+                        },
+                        selectedSortColor = selectedColor,
+                        contentColor = contentColor
+                    )
+                }
+
+
+
             }
         }
     }
@@ -172,9 +213,10 @@ private fun SettingsEntrySheetPrev() {
                 initialValue = ModalBottomSheetValue.HalfExpanded
             ),
             scope = rememberCoroutineScope(),
-            settingsEntryName = Constants.SORT_OPTIONS,
+            settingsEntryName = Constants.LANGUAGE_OPTIONS,
             currentSortOption = 3,
-            currentTheme = 1
+            currentTheme = 1,
+            currentLanguageOption = 2
         )
     }
 }

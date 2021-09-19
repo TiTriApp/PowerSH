@@ -93,4 +93,9 @@ object Deps {
     val android_activation by lazy { "com.sun.mail:android-activation:${Versions.emailVesrion}"}
 
 
+    // Lyricist
+    val lyricist by lazy {"cafe.adriel.lyricist:lyricist:${Versions.lyricistVersion}"}
+
+
+
 }

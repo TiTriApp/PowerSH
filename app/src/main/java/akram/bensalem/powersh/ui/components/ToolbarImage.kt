@@ -1,5 +1,6 @@
 package akram.bensalem.powersh.ui.components
 
+import akram.bensalem.powersh.LocalStrings
 import akram.bensalem.powersh.R
 import akram.bensalem.powersh.ui.theme.Dimens
 import akram.bensalem.powersh.ui.theme.PowerSHTheme
@@ -42,7 +43,7 @@ fun ToolbarImage(
 
     Image(
         painter = coilPainter,
-        contentDescription = stringResource(id = R.string.image),
+        contentDescription = LocalStrings.current.imageOfPowerSHShoes,
         modifier = modifier
             .padding(Dimens.MediumPadding.size)
             .animateContentSize(

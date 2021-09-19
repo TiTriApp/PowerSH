@@ -1,6 +1,7 @@
 package akram.bensalem.powersh.ui.components
 
 
+import akram.bensalem.powersh.LocalStrings
 import akram.bensalem.powersh.ui.theme.Dimens
 import android.util.Log
 import androidx.compose.animation.*
@@ -97,7 +98,7 @@ fun QuantityToggle(
 
                 Icon(
                     Icons.Rounded.Done,
-                    contentDescription = "ADDED TO CART",
+                    contentDescription = LocalStrings.current.addedToCart,
                     tint = if (!isAddedToCart.value) Color.White else MaterialTheme.colors.primary,
                     modifier = Modifier
                         .padding(
@@ -111,7 +112,7 @@ fun QuantityToggle(
                 )
             }
             Text(
-                text = if (!isAddedToCart.value) "ADD TO CART" else "ADDED",
+                text = if (!isAddedToCart.value) LocalStrings.current.addedToCart else LocalStrings.current.added,
                 style = MaterialTheme.typography.button,
                 textAlign = TextAlign.Center,
                 color = if (!isAddedToCart.value) Color.White else MaterialTheme.colors.primary,
@@ -211,7 +212,7 @@ fun UploadImageToggle(
                 )
             }
             Text(
-                text = if (!isImageSelected) "UPLOAD" else "UPLOADED",
+                text = if (!isImageSelected)  LocalStrings.current.upload else LocalStrings.current.uploaded,
                 style = MaterialTheme.typography.button,
                 textAlign = TextAlign.Center,
                 color = if (!isImageSelected) Color.White else MaterialTheme.colors.primary,
@@ -247,7 +248,7 @@ fun ColorContentDialog(
 
         if (visible.value) {
             ContentDialog(
-                title = "Select your favourite color",
+                title = LocalStrings.current.selectFavouriteColor,
                 onDismissRequest = { visible.value = false },
             ) {
                 Grid(
@@ -289,7 +290,7 @@ fun sizeContentDialog(
 
         if (visible.value) {
             ContentDialog(
-                title = "Select your shoes size",
+                title = LocalStrings.current.selectFavouriteSize,
                 onDismissRequest = { visible.value = false },
             ) {
                 Grid(
@@ -303,7 +304,6 @@ fun sizeContentDialog(
                         id = id,
                         onSelected = {
                             onSizeSelected(it)
-                            Log.d("AkramTag2", "isode size size id = $it")
                             visible.value = false
                         }
                     )

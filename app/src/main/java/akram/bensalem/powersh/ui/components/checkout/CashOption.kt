@@ -1,5 +1,6 @@
 package akram.bensalem.powersh.ui.components.checkout
 
+import akram.bensalem.powersh.LocalStrings
 import akram.bensalem.powersh.R
 import akram.bensalem.powersh.ui.theme.CardCoverPink
 import androidx.compose.animation.*
@@ -63,7 +64,7 @@ fun CashOption(
 
                     Image(
                         painter = painterResource(id = R.drawable.ic_wallet),
-                        contentDescription = "Cash on delivery",
+                        contentDescription = LocalStrings.current.cashOnDelivery,
                         modifier = Modifier
                             .padding(8.dp)
                             .size(120.dp)
@@ -71,7 +72,7 @@ fun CashOption(
                     )
 
                     Text(
-                        text = "Cash on delivery",
+                        text = LocalStrings.current.cashOnDelivery,
                         color = MaterialTheme.colors.onBackground,
                         fontSize = 14.sp,
                         fontWeight = FontWeight.SemiBold,
@@ -86,7 +87,7 @@ fun CashOption(
                             .weight(1f)
                     )
                     Text(
-                        text = "In the Cash on delivery payment system, you have to fill the form and we will send you your purchases within 2 days",
+                        text = LocalStrings.current.cashDeliveryWillArriveWithin,
                         color = MaterialTheme.colors.onBackground,
                         fontSize = 14.sp,
                         fontWeight = FontWeight.Normal,
@@ -103,7 +104,7 @@ fun CashOption(
                     )
 
                     Text(
-                        text = "The total amount you will pay is : ${price}DA",
+                        text = LocalStrings.current.totalAmountYouWillPay(price) ,
                         color = MaterialTheme.colors.onBackground,
                         fontSize = 11.sp,
                         fontWeight = FontWeight.Normal,
@@ -134,7 +135,7 @@ fun CashOption(
                             onCallUsClicked()
                         }) {
                         Text(
-                            text = "CALL US",
+                            text = LocalStrings.current.callUs,
                             fontSize = 11.sp,
                             color = Color.White,
                             style = TextStyle(
@@ -158,7 +159,7 @@ fun CashOption(
                     )
 
                     Text(
-                        text = "Dear customer, make sure to fill your information carefully and you will be receive a call from our customer service to confirm your order",
+                        text = LocalStrings.current.dearCustomerVerifyYourInfo,
                         color = MaterialTheme.colors.onBackground,
                         fontSize = 10.sp,
                         fontWeight = FontWeight.Light,

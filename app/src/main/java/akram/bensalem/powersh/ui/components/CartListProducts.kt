@@ -1,5 +1,6 @@
 package akram.bensalem.powersh.ui.components
 
+import akram.bensalem.powersh.LocalStrings
 import akram.bensalem.powersh.data.model.CardItem
 import akram.bensalem.powersh.ui.theme.CardCoverPink
 import akram.bensalem.powersh.ui.theme.Dimens
@@ -167,15 +168,15 @@ fun cardItemEntry(
                     overflow = TextOverflow.Ellipsis
                 )
                 SubtitleText(
-                    subtitleName = "Color",
+                    subtitleName = LocalStrings.current.color,
                     subtitleData = product.color
                 )
                 SubtitleText(
-                    subtitleName = "Size",
+                    subtitleName = LocalStrings.current.size,
                     subtitleData = product.size.toString()
                 )
                 SubtitleText(
-                    subtitleName = "Market Value",
+                    subtitleName = LocalStrings.current.marketValue,
                     subtitleData = product.price.toString()
                 )
 
@@ -192,7 +193,7 @@ fun cardItemEntry(
             ) {
                 Icon(
                     imageVector = Icons.Outlined.DeleteForever,
-                    contentDescription = "Remove item",
+                    contentDescription = LocalStrings.current.removeAll,
                     tint = Color.LightGray,
                     modifier = Modifier
                         .size(24.dp)

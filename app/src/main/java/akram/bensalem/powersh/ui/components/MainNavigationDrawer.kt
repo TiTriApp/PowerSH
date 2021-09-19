@@ -1,6 +1,7 @@
 package akram.bensalem.powersh.ui.components
 
 
+import akram.bensalem.powersh.LocalStrings
 import akram.bensalem.powersh.R
 import akram.bensalem.powersh.ui.main.screens.PowerSHScreens
 import akram.bensalem.powersh.ui.theme.Dimens
@@ -82,7 +83,7 @@ fun MainDrawer(
 
             ) {
                 Text(
-                    text = if (authentication.user != null) authentication.userName else "Sign In",
+                    text = if (authentication.user != null) authentication.userName(LocalStrings.current) else LocalStrings.current.signIn,
                     fontSize = 18.sp,
                     textAlign = TextAlign.Start,
                     fontWeight = FontWeight.SemiBold,
@@ -92,7 +93,7 @@ fun MainDrawer(
 
                     )
                 Text(
-                    text = if (authentication.user != null) authentication.userEmail else "Or Create an account",
+                    text = if (authentication.user != null) authentication.userEmail(LocalStrings.current) else LocalStrings.current.creatAccount,
                     fontSize = 14.sp,
                     textAlign = TextAlign.Start,
                     fontWeight = FontWeight.Normal,
@@ -113,7 +114,7 @@ fun MainDrawer(
         ) {
 
             DrawerRow(
-                title = "Home",
+                title = LocalStrings.current.home,
                 icon = Icons.Outlined.Home,
                 id = "HOME",
                 scope = scope,
@@ -125,7 +126,7 @@ fun MainDrawer(
 
             Spacer(modifier = Modifier.padding(8.dp))
             BadgeDrawerRow(
-                title = "Cart",
+                title = LocalStrings.current.cart,
                 icon = Icons.Outlined.ShoppingCart,
                 cartListSize = cartListSize,
                 id = "CART",
@@ -138,7 +139,7 @@ fun MainDrawer(
 
             Spacer(modifier = Modifier.padding(8.dp))
             DrawerRow(
-                title = "Favourite",
+                title = LocalStrings.current.favourite,
                 icon = Icons.Outlined.FavoriteBorder,
                 id = "FAVOURITE",
                 scope = scope,
@@ -148,7 +149,7 @@ fun MainDrawer(
 
             Spacer(modifier = Modifier.padding(8.dp))
             DrawerRow(
-                title = "Orders",
+                title = LocalStrings.current.orders,
                 icon = Icons.Outlined.LocalShipping,
                 id = "ORDERS",
                 scope = scope,
@@ -157,7 +158,7 @@ fun MainDrawer(
             )
             Spacer(modifier = Modifier.padding(8.dp))
             DrawerRow(
-                title = "Settings",
+                title = LocalStrings.current.settings,
                 icon = Icons.Outlined.Settings,
                 id = "SETTINGS",
                 scope = scope,
@@ -166,7 +167,7 @@ fun MainDrawer(
             )
             Spacer(modifier = Modifier.padding(8.dp))
             DrawerRow(
-                title = "About Us",
+                title = LocalStrings.current.aboutUs,
                 icon = Icons.Outlined.Info,
                 id = "ABOUT",
                 scope = scope,
@@ -177,7 +178,7 @@ fun MainDrawer(
 
             Spacer(modifier = Modifier.padding(8.dp))
             DrawerRow(
-                title = "Contact Us",
+                title =LocalStrings.current.contactUs,
                 icon = Icons.Outlined.MailOutline,
                 id = "CONTACT",
                 scope = scope,
@@ -189,7 +190,7 @@ fun MainDrawer(
 
             if (isLogged.value) {
                 LogOutDrawerRow(
-                    title = "Log Out",
+                    title =LocalStrings.current.logOut,
                     icon = Icons.Outlined.DoorBack,
                     id = "LOG OUT",
                     scope = scope,

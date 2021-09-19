@@ -1,5 +1,6 @@
 package akram.bensalem.powersh.ui.main.screens
 
+import akram.bensalem.powersh.LocalStrings
 import akram.bensalem.powersh.R
 import akram.bensalem.powersh.ui.components.CollapsingToolbarBase
 import akram.bensalem.powersh.ui.theme.Dimens
@@ -67,7 +68,6 @@ fun profileScreen(
                 val delta = available.y
                 val newOffset = toolbarOffsetHeightPx.value + delta
                 toolbarOffsetHeightPx.value = newOffset.coerceIn(-toolbarHeightPx, 0f)
-                // Returning Zero so we just observe the scroll but don't execute it
                 return Offset.Zero
             }
         }
@@ -83,14 +83,14 @@ fun profileScreen(
             .navigationBarsPadding(),
         topBar = {
             CollapsingToolbarBase(
-                toolbarHeading = "Profile",
+                toolbarHeading = LocalStrings.current.profile,
                 toolbarHeight = toolbarHeight,
                 toolbarOffset = toolbarOffsetHeightPx.value,
                 onBackButtonPressed = onBackButtonPressed
             ) {
                 profileHeader(
-                    userName = authentication.value.userName,
-                    email = authentication.value.userEmail,
+                    userName = authentication.value.userName(LocalStrings.current),
+                    email = authentication.value.userEmail(LocalStrings.current),
                     profileLogo = painterResource(id = R.drawable.ic_user),
                     onEditeClicked = onEditClicked
                 )
@@ -119,7 +119,7 @@ fun profileScreen(
                     )
                     Spacer(modifier = Modifier.width(4.dp))
                     Text(
-                        text = "Log Out",
+                        text = LocalStrings.current.logOut,
                         color = Color.White,
                         modifier = Modifier
                             .padding(
@@ -154,8 +154,8 @@ fun profileScreen(
                 ) {
 
                     profileItem(
-                        title = "Notification",
-                        content = if (checkedState.value) "Deactivate the Notifications" else "Activate the Notifications",
+                        title = LocalStrings.current.notification,
+                        content = if (checkedState.value) LocalStrings.current.inactiveNotification else LocalStrings.current.activeNotification,
                     ) {
                         Switch(
                             checked = checkedState.value,
@@ -168,8 +168,8 @@ fun profileScreen(
                     }
 
                     profileItem(
-                        title = "History",
-                        content = "View the history of your activity",
+                        title = LocalStrings.current.history,
+                        content = LocalStrings.current.viewHistory,
                     ) {
                         Button(
                             modifier = Modifier
@@ -182,7 +182,7 @@ fun profileScreen(
                             ),
                         ) {
                             Text(
-                                text = "View",
+                                text = LocalStrings.current.view,
                                 color = Color.White,
                                 modifier = Modifier
                                     .padding(
@@ -202,8 +202,8 @@ fun profileScreen(
 
 
                     profileItem(
-                        title = "Link of invitation",
-                        content = "Invite your friend",
+                        title = LocalStrings.current.linkToInvitation,
+                        content = LocalStrings.current.inviteYourFriend,
                     ) {
                         Button(
                             modifier = Modifier
@@ -216,7 +216,7 @@ fun profileScreen(
                             ),
                         ) {
                             Text(
-                                text = "Invite",
+                                text = LocalStrings.current.invite,
                                 color = Color.White,
                                 modifier = Modifier
                                     .padding(
@@ -248,14 +248,10 @@ fun profileScreen(
 @Composable
 fun profileItem(
     modifier: Modifier = Modifier,
-    title: String = "Notification",
-    content: String = "Activate notifications",
+    title: String,
+    content: String ,
     child: @Composable (Modifier) -> Unit = {}
 ) {
-
-    // val checkedState = remember { mutableStateOf(true) }
-
-
     Column(
         modifier = modifier.padding(
             vertical = Dimens.SmallPadding.size,
@@ -301,12 +297,6 @@ fun profileItem(
 
                 )
 
-
-                /*  Switch(
-                      checked = checkedState.value,
-                      onCheckedChange = { checkedState.value = it },
-                      modifier = Modifier.align(Alignment.CenterVertically)
-                  )*/
                 child(Modifier.align(Alignment.CenterVertically))
 
             }
@@ -343,7 +333,7 @@ fun profileHeader(
                 .padding(vertical = 8.dp, horizontal = 4.dp)
                 .align(Alignment.CenterHorizontally),
             painter = profileLogo,
-            contentDescription = stringResource(id = R.string.app_logo)
+            contentDescription = LocalStrings.current.appLogo
         )
         Text(
             text = userName,
@@ -378,7 +368,7 @@ fun profileHeader(
             )
             Spacer(modifier = Modifier.width(4.dp))
             Text(
-                text = "Edite Profile",
+                text = LocalStrings.current.editProfil,
                 modifier = Modifier
                     .padding(
                         horizontal = 3.dp,

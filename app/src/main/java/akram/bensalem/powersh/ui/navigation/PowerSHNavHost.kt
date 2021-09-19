@@ -3,6 +3,7 @@ package akram.bensalem.powersh.ui.navigation
 import akram.bensalem.powersh.data.model.CardItem
 import akram.bensalem.powersh.data.model.OrderItem
 import akram.bensalem.powersh.data.model.ShoeProduct
+import akram.bensalem.powersh.lyricist
 import akram.bensalem.powersh.ui.main.screenStates.DetailsScreenState
 import akram.bensalem.powersh.ui.main.screenStates.MainListScreenState
 import akram.bensalem.powersh.ui.main.screenStates.SettingsScreenState
@@ -12,6 +13,7 @@ import akram.bensalem.powersh.ui.main.viewModel.DetailsViewModel
 import akram.bensalem.powersh.ui.main.viewModel.ListViewModel
 import akram.bensalem.powersh.ui.main.viewModel.SettingsViewModel
 import akram.bensalem.powersh.utils.authentification.Authenticate
+import akram.bensalem.powersh.utils.localization.Locales
 import akram.bensalem.powersh.utils.scaleInEnterTransition
 import akram.bensalem.powersh.utils.scaleInPopEnterTransition
 import akram.bensalem.powersh.utils.scaleOutExitTransition
@@ -360,6 +362,7 @@ fun PowerSHNavHost(
                 SettingsScreen(
                     currentTheme = settingsScreenData.themeOption,
                     currentSortOption = settingsScreenData.sortOption,
+                    currentLanguageOption =  settingsScreenData.languageOption,
                     onThemeOptionClicked = {
                         viewModel.saveThemeSetting(it)
                     },
@@ -368,6 +371,21 @@ fun PowerSHNavHost(
                     },
                     onBackButtonPressed = {
                         navController.popBackStack()
+                    },
+                    onLanguageOptionClicked = {
+                        viewModel.saveLanguageSetting(it)
+
+                        when(it) {
+                            1 -> lyricist.languageTag = Locales.AR
+                            2 -> lyricist.languageTag = Locales.FR
+                            3 -> lyricist.languageTag = Locales.EN
+                            else -> {
+                            //
+                             }
+                        }
+
+
+
                     }
                 )
             }

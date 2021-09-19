@@ -1,5 +1,6 @@
 package akram.bensalem.powersh.ui.components
 
+import akram.bensalem.powersh.LocalStrings
 import akram.bensalem.powersh.R
 import akram.bensalem.powersh.ui.theme.*
 import akram.bensalem.powersh.utils.Sort
@@ -64,7 +65,7 @@ fun ModalBottomSheet(
             TopSheetSection(
                 modifier = Modifier
                     .padding(Dimens.SmallPadding.size),
-                sheetTitle = "Sort By",
+                sheetTitle = LocalStrings.current.sortBy,
                 onCloseClicked = {
                     scope.launch {
                         sheetState.hide()
@@ -174,7 +175,7 @@ fun TopSheetSection(
             IconButton(onClick = onCloseClicked) {
                 Icon(
                     imageVector = Icons.Outlined.Close,
-                    contentDescription = stringResource(id = R.string.close_icon),
+                    contentDescription = LocalStrings.current.close,
                     tint = MaterialTheme.colors.onBackground
                 )
             }
@@ -195,7 +196,7 @@ fun TopSheetSection(
                 if (settingsButtonVisible) {
                     Icon(
                         imageVector = Icons.Outlined.Settings,
-                        contentDescription = stringResource(id = R.string.settings_icon),
+                        contentDescription = LocalStrings.current.settings,
                         tint = MaterialTheme.colors.onBackground
                     )
                 }

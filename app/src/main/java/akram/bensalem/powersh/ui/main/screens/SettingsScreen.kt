@@ -1,5 +1,6 @@
 package akram.bensalem.powersh.ui.main.screens
 
+import akram.bensalem.powersh.LocalStrings
 import akram.bensalem.powersh.ui.components.CollapsingToolbarBase
 import akram.bensalem.powersh.ui.components.SettingEntrySheet
 import akram.bensalem.powersh.ui.components.SettingsEntry
@@ -7,6 +8,7 @@ import akram.bensalem.powersh.ui.theme.Dimens
 import akram.bensalem.powersh.ui.theme.PowerSHTheme
 import akram.bensalem.powersh.ui.theme.Theme
 import akram.bensalem.powersh.utils.Constants
+import akram.bensalem.powersh.utils.Language
 import akram.bensalem.powersh.utils.Sort
 import android.content.res.Configuration
 import androidx.compose.animation.animateContentSize
@@ -41,11 +43,13 @@ import kotlinx.coroutines.launch
 fun SettingsScreen(
     modifier: Modifier = Modifier,
     listState: LazyListState = rememberLazyListState(),
+    onLanguageOptionClicked: (Int) -> Unit = { },
     onThemeOptionClicked: (Int) -> Unit = { },
     onSortOptionClicked: (Int) -> Unit = { },
     onBackButtonPressed: () -> Unit = { },
     currentTheme: Int,
-    currentSortOption: Int
+    currentSortOption: Int,
+    currentLanguageOption : Int,
 ) {
     // CollapsingToolbar Implementation
     val toolbarHeight = 250.dp
@@ -79,11 +83,15 @@ fun SettingsScreen(
                 settingsEntryName = settingsEntryName.value,
                 currentSortOption = currentSortOption,
                 currentTheme = currentTheme,
+                currentLanguageOption = currentLanguageOption,
                 onSortOptionClicked = {
                     onSortOptionClicked(it)
                 },
                 onThemeOptionClicked = {
                     onThemeOptionClicked(it)
+                },
+                onLanguageOptionClicked = {
+                    onLanguageOptionClicked(it)
                 }
             )
 
@@ -97,13 +105,13 @@ fun SettingsScreen(
                 .fillMaxSize(),
             topBar = {
                 CollapsingToolbarBase(
-                    toolbarHeading = "Settings",
+                    toolbarHeading = LocalStrings.current.settings,
                     onBackButtonPressed = onBackButtonPressed,
                     toolbarHeight = 250.dp,
                     toolbarOffset = toolbarOffsetHeightPx.value,
                     content = {
                         Text(
-                            text = "Settings",
+                            text = LocalStrings.current.settings,
                             color = MaterialTheme.colors.onSurface,
                             style = MaterialTheme.typography.h3,
                             modifier = Modifier
@@ -126,6 +134,29 @@ fun SettingsScreen(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 item {
+                    val language = when (currentLanguageOption) {
+                        1 -> Language.ARABIC
+                        2 -> Language.FRENCH
+                        3 -> Language.ENGLISH
+                        else -> Language.FOLLOW_SYSTEM
+                    }
+                    SettingsEntry(
+                        modifier = Modifier.padding(
+                            vertical = Dimens.SmallPadding.size,
+                            horizontal = Dimens.MediumPadding.size
+                        ),
+                        settingsEntryName = Constants.LANGUAGE_OPTIONS,
+                        currentSettingValue = language.languageName,
+                        currentSettingIcon = language.icon,
+                        onSettingsEntryClick = {
+                            settingsEntryName.value = it
+                            scope.launch {
+                                sheetState.show()
+                            }
+                        }
+                    )
+                }
+                item {
                     val theme = when (currentTheme) {
                         1 -> Theme.DARK_THEME
                         2 -> Theme.LIGHT_THEME
@@ -147,6 +178,7 @@ fun SettingsScreen(
                         }
                     )
                 }
+
                 item {
                     val sort = when (currentSortOption) {
                         1 -> Sort.NEW_RELEASE_FIRST
@@ -171,6 +203,10 @@ fun SettingsScreen(
                         }
                     )
                 }
+
+
+
+
             }
         }
 
@@ -185,6 +221,6 @@ fun SettingsScreen(
 @Composable
 private fun SettingsScreenPrev() {
     PowerSHTheme {
-        SettingsScreen(currentTheme = 2, currentSortOption = 1)
+        SettingsScreen(currentTheme = 2, currentSortOption = 1, currentLanguageOption = 1)
     }
 }

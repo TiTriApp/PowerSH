@@ -1,5 +1,6 @@
 package akram.bensalem.powersh.ui.components
 
+import akram.bensalem.powersh.LocalStrings
 import akram.bensalem.powersh.ui.theme.Amber500
 import akram.bensalem.powersh.ui.theme.PowerSHTheme
 import androidx.compose.foundation.clickable
@@ -45,10 +46,7 @@ fun CartButton(
             Column {
                 Text(
                     text =
-                    if (quantity == 1)
-                        "$quantity Shoes"
-                    else
-                        "$quantity Shoes",
+                        LocalStrings.current.totalShoesValue(quantity),
                     color = Color.DarkGray,
                     fontStyle = FontStyle.Normal,
                     fontWeight = FontWeight.Normal,
@@ -69,7 +67,7 @@ fun CartButton(
             }
             Spacer(modifier = Modifier.weight(1f))
             Text(
-                text = "VIEW CART",
+                text = LocalStrings.current.viewCart,
                 color = Color.DarkGray,
                 fontStyle = FontStyle.Normal,
                 fontWeight = FontWeight.SemiBold,

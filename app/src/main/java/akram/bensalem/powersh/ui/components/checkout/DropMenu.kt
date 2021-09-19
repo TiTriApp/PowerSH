@@ -1,5 +1,6 @@
 package akram.bensalem.powersh.ui.components.checkout
 
+import akram.bensalem.powersh.LocalStrings
 import akram.bensalem.powersh.ui.theme.Dimens
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -41,7 +42,7 @@ fun wilayaDropDownMenu(
 
     ) {
         Text(
-            text = if (wilayaSelectedIndex.value != 0) "${f.format(wilayaSelectedIndex.value)}- ${items[wilayaSelectedIndex.value]}" else "Wilaya",
+            text = if (wilayaSelectedIndex.value != 0) "${f.format(wilayaSelectedIndex.value)}- ${items[wilayaSelectedIndex.value]}" else LocalStrings.current.wilaya,
             color = if (wilayaSelectedIndex.value != 0) MaterialTheme.colors.onBackground else MaterialTheme.colors.onSurface ,maxLines = 1,
             overflow = TextOverflow.Ellipsis,
             modifier =
@@ -117,7 +118,7 @@ fun diaraDropDownMenu(
 
 
         Text(
-            text = if (selectedIndex.value != 0) items[selectedIndex.value] else "Daira",
+            text = if (selectedIndex.value != 0) items[selectedIndex.value] else LocalStrings.current.daira,
             color = if (selectedIndex.value != 0) MaterialTheme.colors.onBackground else MaterialTheme.colors.onSurface ,maxLines = 1,
             overflow = TextOverflow.Ellipsis,
             modifier =
@@ -156,7 +157,7 @@ fun diaraDropDownMenu(
                         verticalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
                         Text(
-                            text = if (index != 0) s else "Daira",
+                            text = if (index != 0) s else LocalStrings.current.daira,
                             style = MaterialTheme.typography.subtitle2,
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis,
@@ -188,7 +189,7 @@ fun communeDropDownMenu(
 
     ) {
         Text(
-            text = if (selectedIndex.value != 0) items[selectedIndex.value] else "Commune",
+            text = if (selectedIndex.value != 0) items[selectedIndex.value] else LocalStrings.current.commune,
             color = if (selectedIndex.value != 0) MaterialTheme.colors.onBackground else MaterialTheme.colors.onSurface ,maxLines = 1,
             overflow = TextOverflow.Ellipsis,
             modifier =
@@ -226,7 +227,7 @@ fun communeDropDownMenu(
                         verticalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
                         Text(
-                            text = if (index != 0) s else "Commune",
+                            text = if (index != 0) s else LocalStrings.current.commune,
                             style = MaterialTheme.typography.subtitle2,
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis,

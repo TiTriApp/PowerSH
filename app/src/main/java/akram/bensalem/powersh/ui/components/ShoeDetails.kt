@@ -1,5 +1,6 @@
 package akram.bensalem.powersh.ui.components
 
+import akram.bensalem.powersh.LocalStrings
 import akram.bensalem.powersh.R
 import akram.bensalem.powersh.data.model.ShoeProduct
 import akram.bensalem.powersh.ui.theme.Dimens
@@ -96,7 +97,7 @@ fun ShoeDetails(
             ) {
                 Icon(
                     imageVector = if (favourite.value) Icons.Outlined.Favorite else Icons.Outlined.FavoriteBorder,
-                    contentDescription = "Heart",
+                    contentDescription = LocalStrings.current.addToFavourite,
                     tint = MaterialTheme.colors.primary.copy(alpha = 0.8f),
                     modifier = Modifier
                 )
@@ -125,7 +126,7 @@ fun ShoeDetails(
                     .padding(Dimens.MediumPadding.size)
             ) {
                 SubtitleTextWithIcon(
-                    subtitleName = "Reference",
+                    subtitleName = LocalStrings.current.reference,
                     subtitleData = "2887670 / GJN068",
                     style = MaterialTheme.typography.body1,
                     icon = Icons.Outlined.Pin,
@@ -133,60 +134,31 @@ fun ShoeDetails(
                 )
 
                 SubtitleTextWithIcon(
-                    subtitleName = "Description",
-                    subtitleData = "Pas de béton ? Pas de problème. Cette chaussure pour homme plaira aux runners qui n'ont pas peur de sortir des sentiers battus. La semelle extérieure en caoutchouc texturée assure une adhérence optimale sur les surfaces glissantes ou accidentées. La semelle intermédiaire allie douceur et réactivité pour t'offrir un confort supérieur.\n" +
-                            "- tige textile.\n" +
-                            "- parfaite pour la course à pied.\n" +
-                            "- matière douce et respirante.\n" +
-                            "- semelle intermédiaire fuelfoam pour un juste équilibre entre amorti et réactivité.\n" +
-                            "- semelle extérieure en caoutchouc texturée pour plus d'adhérence et de résistance.",
+                    subtitleName = LocalStrings.current.description,
+                    subtitleData =LocalStrings.current.descriptionValue ,
                     style = MaterialTheme.typography.body1,
                     icon = Icons.Outlined.Description,
                     maxLines = maxLines
                 )
 
-
-
                 SubtitleTextWithIcon(
-                    subtitleName = "Type of Use",
-                    subtitleData = "sport (Running)",
+                    subtitleName =  LocalStrings.current.typeOfUse,
+                    subtitleData = LocalStrings.current.running,
                     style = MaterialTheme.typography.body1,
                     icon = Icons.Outlined.Category,
                     maxLines = maxLines
                 )
-                SubtitleTextWithIcon(
-                    subtitleName = "Heel Type",
-                    subtitleData = "Plat",
-                    style = MaterialTheme.typography.body1,
-                    icon = Icons.Outlined.IceSkating,
-                    maxLines = maxLines
-                )
-                SubtitleTextWithIcon(
-                    subtitleName = "Shoe Closure",
-                    subtitleData = "A lacets",
-                    style = MaterialTheme.typography.body1,
-                    icon = Icons.Outlined.Inventory2,
-                    maxLines = maxLines
-                )
 
                 SubtitleTextWithIcon(
-                    subtitleName = "Top/Stem",
-                    subtitleData = "100% polyester",
-                    style = MaterialTheme.typography.body1,
-                    icon = Icons.Outlined.Checkroom,
-                    maxLines = maxLines
-                )
-
-                SubtitleTextWithIcon(
-                    subtitleName = "Release Date",
+                    subtitleName = LocalStrings.current.releaseDate,
                     subtitleData = shoeProduct.releaseDate,
                     style = MaterialTheme.typography.body1,
                     icon = Icons.Outlined.Today,
                     maxLines = maxLines
                 )
                 SubtitleTextWithIcon(
-                    subtitleName = "Market Value",
-                    subtitleData = "${shoeProduct.marketPriceStart} DA",
+                    subtitleName = LocalStrings.current.marketValue,
+                    subtitleData = LocalStrings.current.detailQuantityValue(shoeProduct.marketPriceStart),
                     style = MaterialTheme.typography.body1,
                     icon = Icons.Outlined.Loyalty,
                     maxLines = maxLines
@@ -214,7 +186,7 @@ fun ShoeDetails(
             ) {
                 Icon(
                     imageVector = Icons.Outlined.ExpandMore,
-                    contentDescription = stringResource(id = R.string.expand_icon),
+                    contentDescription = LocalStrings.current.showMoreOrLess,
                     tint = MaterialTheme.colors.onSurface,
                     modifier = Modifier.rotate(angle)
                 )

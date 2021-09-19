@@ -1,5 +1,6 @@
 package akram.bensalem.powersh.ui.main.screens.login
 
+import akram.bensalem.powersh.LocalStrings
 import akram.bensalem.powersh.ui.components.checkYourConectivityAlertDialog
 import akram.bensalem.powersh.ui.components.CustomTextField
 import akram.bensalem.powersh.utils.ErrorMessageOfPassword
@@ -83,6 +84,8 @@ fun LoginScreen(
         mutableStateOf(true)
     }
 
+    val localString = LocalStrings.current
+
 
     LaunchedEffect(isForgetButtonPressed) {
         if (isForgetButtonPressed) {
@@ -122,7 +125,7 @@ fun LoginScreen(
                 .border(1.dp, MaterialTheme.colors.onBackground, RoundedCornerShape(12.dp))
                 .background(color = MaterialTheme.colors.surface, RoundedCornerShape(12.dp))
                 .padding(12.dp),
-            title = "Email Address",
+            title = LocalStrings.current.email,
             fieldState = emailState,
             icon = Icons.Outlined.Email,
             insideTextColor = MaterialTheme.colors.onBackground,
@@ -133,7 +136,7 @@ fun LoginScreen(
             keyboardType = KeyboardType.Email,
             imeAction = ImeAction.Next,
             isValid = isEmailValid(email = emailState.value.text),
-            errorMessage = "This Email is not valid",
+            errorMessage = LocalStrings.current.emailIsNotValid,
                     onNext = {
                 mPasswordFocusRequester.requestFocus()
             },
@@ -156,7 +159,7 @@ fun LoginScreen(
                 .border(1.dp, MaterialTheme.colors.onBackground, RoundedCornerShape(12.dp))
                 .background(color = MaterialTheme.colors.surface, RoundedCornerShape(12.dp))
                 .padding(12.dp),
-            title = "Password",
+            title = LocalStrings.current.password,
             fieldState = passwordState,
             icon = Icons.Outlined.Password,
             insideTextColor = MaterialTheme.colors.onBackground,
@@ -167,7 +170,10 @@ fun LoginScreen(
             keyboardType = KeyboardType.Password,
             imeAction = ImeAction.Done,
             isValid = isValidPasswordFormat(password = passwordState.value.text),
-            errorMessage = ErrorMessageOfPassword(password = passwordState.value.text),
+            errorMessage = ErrorMessageOfPassword(
+                password = passwordState.value.text,
+                localString = LocalStrings.current
+            ),
             onNext = {
                 view.clearFocus()
             },
@@ -188,7 +194,7 @@ fun LoginScreen(
                 .padding(top = 48.dp, bottom = 8.dp)
 
                 .padding(4.dp),
-            text = AnnotatedString("Forget Password?"),
+            text = AnnotatedString(LocalStrings.current.forgetPassword),
             onClick = {
                 isForgetButtonPressed = true
             },
@@ -228,14 +234,15 @@ fun LoginScreen(
                         emailState.value.text,
                         passwordState.value.text,
                         isOnProgress,
-                        isLogged
+                        isLogged,
+                        localString
                     )
                 }
 
 
             }) {
             Text(
-                text = "Login",
+                text = LocalStrings.current.login,
                 textAlign = TextAlign.Center,
                 color = if(
                     isValid(

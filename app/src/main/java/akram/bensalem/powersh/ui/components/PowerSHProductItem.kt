@@ -39,9 +39,6 @@ fun ProductShoesEntry(
     shoeProduct: ShoeProduct
 ) {
 
-    val context = LocalContext.current
-    val lifecycleOwner = LocalLifecycleOwner.current
-
     val animatedProgress = remember {
         Animatable(initialValue = 1.15f)
     }

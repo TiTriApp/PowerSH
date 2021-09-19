@@ -3,6 +3,7 @@ package akram.bensalem.powersh.ui.components.checkout
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -18,8 +19,8 @@ import androidx.compose.ui.unit.sp
 fun factureText(
     title: String,
     detail: String,
-    titleColor: Color = Color.Black,
-    detailColor: Color = Color.Black,
+    titleColor: Color =  MaterialTheme.colors.onBackground,
+    detailColor: Color = MaterialTheme.colors.onSurface,
 ) {
 
     Row(

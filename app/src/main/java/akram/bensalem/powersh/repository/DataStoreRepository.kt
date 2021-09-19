@@ -22,6 +22,7 @@ class DataStoreRepository(
     private object PreferenceKeys {
         val themeOption = intPreferencesKey(name = "theme_option")
         val sortOption = intPreferencesKey(name = "sort_option")
+        val languageOption = intPreferencesKey(name = "language_option")
         val startMainPage = booleanPreferencesKey(name = "start_main_page")
     }
 
@@ -32,6 +33,13 @@ class DataStoreRepository(
     suspend fun saveThemeSetting(value: Int) {
         context.dataStore.edit { settings ->
             settings[PreferenceKeys.themeOption] = value
+        }
+    }
+
+
+    suspend fun saveLanguageSetting(value: Int) {
+        context.dataStore.edit { settings ->
+            settings[PreferenceKeys.languageOption] = value
         }
     }
 
@@ -65,6 +73,21 @@ class DataStoreRepository(
         }.map { settings ->
             settings[PreferenceKeys.themeOption] ?: -1
         }
+
+
+
+    val readLanguageSetting: Flow<Int> = context.dataStore.data
+        .catch { exception ->
+            if (exception is IOException) {
+                Timber.d(exception.message.toString())
+            } else {
+                throw exception
+            }
+        }.map { settings ->
+            settings[PreferenceKeys.languageOption] ?: -1
+        }
+
+
 
     suspend fun saveSortOptionSetting(value: Int) {
         context.dataStore.edit { settings ->

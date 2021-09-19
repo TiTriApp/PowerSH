@@ -1,5 +1,6 @@
 package akram.bensalem.powersh.ui.components
 
+import akram.bensalem.powersh.LocalStrings
 import akram.bensalem.powersh.R
 import akram.bensalem.powersh.ui.theme.CardCoverPink
 import akram.bensalem.powersh.ui.theme.YellowOnboarding
@@ -31,7 +32,7 @@ fun checkYourConectivityAlertDialog(openDialog: MutableState<Boolean>) {
             },
             title = {
                 Text(
-                    text = "Check Your Connectivity",
+                    text = LocalStrings.current.checkYourConnectivity,
                     color = MaterialTheme.colors.onBackground,
                     fontSize = 18.sp,
                     fontWeight = FontWeight.Bold,
@@ -48,7 +49,7 @@ fun checkYourConectivityAlertDialog(openDialog: MutableState<Boolean>) {
 
                 Column {
                     Text(
-                        text = "There is a problem with your internet! \n Check it again, please",
+                        text = LocalStrings.current.problemWithInternetCheckItPlease,
                         color = MaterialTheme.colors.onSurface,
                         fontSize = 14.sp,
                         fontWeight = FontWeight.Medium,
@@ -63,7 +64,7 @@ fun checkYourConectivityAlertDialog(openDialog: MutableState<Boolean>) {
 
                     Image(
                         painter = painterResource(id = R.drawable.ic_order_confirm),
-                        contentDescription = "confirm",
+                        contentDescription = LocalStrings.current.confirmation,
                         modifier = Modifier
                             .padding(32.dp, 32.dp)
                     )
@@ -85,7 +86,7 @@ fun checkYourConectivityAlertDialog(openDialog: MutableState<Boolean>) {
                         openDialog.value = true
                     }) {
                     Text(
-                        text = "Ok",
+                        text = LocalStrings.current.ok,
                         color = YellowOnboarding,
                         style = TextStyle(
                             background = MaterialTheme.colors.primary,

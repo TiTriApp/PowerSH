@@ -1,6 +1,8 @@
 package akram.bensalem.powersh.ui.components
 
+import akram.bensalem.powersh.LocalStrings
 import akram.bensalem.powersh.ui.theme.CardCoverPink
+import akram.bensalem.powersh.utils.localization.Strings
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -9,10 +11,12 @@ import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.PagerState
 import com.google.accompanist.pager.pagerTabIndicatorOffset
 
-data class LoginState(var state: Screen = Screen.LOGIN) {
+data class LoginState(
+    var state: Screen = Screen.LOGIN,
+                      ) {
 
     enum class Screen(
-        val title: String = "Tab"
+        val title: String = "Tab",
     ) {
         LOGIN(title = "Login"),
         SIGN_UP(title = "Sign Up"),
@@ -49,7 +53,7 @@ fun loginTabs(
                 Tab(
                     text = {
                         Text(
-                            text = tab.title,
+                            text = if (tab.title ==LoginState.Screen.LOGIN.title) LocalStrings.current.login else LocalStrings.current.signUp,
                             color = if (pagerState.currentPage == index) Color.White else CardCoverPink,
                         )
                     },

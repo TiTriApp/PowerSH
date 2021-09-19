@@ -1,5 +1,6 @@
 package akram.bensalem.powersh.ui.components.checkout
 
+import akram.bensalem.powersh.LocalStrings
 import akram.bensalem.powersh.R
 import akram.bensalem.powersh.ui.components.UploadImageToggle
 import akram.bensalem.powersh.ui.theme.CardCoverPink
@@ -72,7 +73,7 @@ fun ccpOption(
 
                 Image(
                     painter = painterResource(id = R.drawable.ic_credit_card),
-                    contentDescription = "Cash on delivery",
+                    contentDescription = LocalStrings.current.payUsingCCP,
                     modifier = Modifier
                         .padding(16.dp)
                         .size(120.dp)
@@ -80,7 +81,7 @@ fun ccpOption(
                 )
 
                 Text(
-                    text = "Pay via CCP or BaridiMob",
+                    text = LocalStrings.current.payViaCCPorBaridiMob,
                     color = MaterialTheme.colors.onBackground,
                     fontSize = 14.sp,
                     fontWeight = FontWeight.SemiBold,
@@ -90,7 +91,7 @@ fun ccpOption(
                         .padding(8.dp)
                 )
                 Text(
-                    text = "Please send the total amount that you will pay to this CCP account:",
+                    text = LocalStrings.current.sendTotalAmountPlease,
                     color = MaterialTheme.colors.onBackground,
                     fontSize = 14.sp,
                     fontWeight = FontWeight.Normal,
@@ -101,7 +102,7 @@ fun ccpOption(
                 )
 
                 Text(
-                    text = "Our CCP account: xxxxxxxxxx xx",
+                    text = LocalStrings.current.ourCCPAccountIs,
                     color = MaterialTheme.colors.onBackground,
                     fontSize = 12.sp,
                     fontWeight = FontWeight.Light,
@@ -111,7 +112,7 @@ fun ccpOption(
                         .padding(start = 16.dp, end = 8.dp, top = 8.dp, bottom = 8.dp)
                 )
                 Text(
-                    text = "The total amount: $price DA",
+                    text = LocalStrings.current.totalAmountValue(price),
                     color = MaterialTheme.colors.onBackground,
                     fontSize = 12.sp,
                     fontWeight = FontWeight.Light,
@@ -122,7 +123,7 @@ fun ccpOption(
                 )
 
                 Text(
-                    text = "Then send a proof by uploading an image of the transcription here",
+                    text = LocalStrings.current.sendProof,
                     color = MaterialTheme.colors.onBackground,
                     fontSize = 10.sp,
                     fontWeight = FontWeight.Light,
@@ -157,7 +158,7 @@ fun ccpOption(
                 )
 
                 Text(
-                    text = "Dear customer, make sure to keep the proof of payment as you will receive a call from our customer service to confirm your order",
+                    text = LocalStrings.current.dearCustomerNotify,
                     color = MaterialTheme.colors.onBackground,
                     fontSize = 10.sp,
                     fontWeight = FontWeight.Light,

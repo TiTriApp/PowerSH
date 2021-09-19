@@ -1,5 +1,6 @@
 package akram.bensalem.powersh.ui.components.authentication
 
+import akram.bensalem.powersh.LocalStrings
 import akram.bensalem.powersh.R
 import akram.bensalem.powersh.ui.components.loginTabs
 import akram.bensalem.powersh.ui.theme.Dimens
@@ -119,7 +120,7 @@ fun MainCard(
             ) {
                 Icon(
                     imageVector = Icons.Rounded.ArrowBack,
-                    contentDescription = stringResource(id = R.string.back_icon),
+                    contentDescription = LocalStrings.current.goBack,
                     tint = Color.White,
                 )
             }
@@ -134,7 +135,7 @@ fun MainCard(
                         animationSpec = tween(500, easing = LinearOutSlowInEasing)
                     ),
                 painter = painterResource(id = R.drawable.powersh_without_background),
-                contentDescription = "PowerSH icon",
+                contentDescription = LocalStrings.current.appLogo,
                 contentScale = ContentScale.Crop,
             )
 

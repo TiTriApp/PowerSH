@@ -1,5 +1,6 @@
 package akram.bensalem.powersh.ui.components
 
+import akram.bensalem.powersh.LocalStrings
 import akram.bensalem.powersh.R
 import akram.bensalem.powersh.data.model.OrderItem
 import akram.bensalem.powersh.ui.theme.CardCoverPink
@@ -37,7 +38,7 @@ fun ConfirmAlertDialog(
             },
             title = {
                 Text(
-                    text = "Confirmation",
+                    text = LocalStrings.current.confirmation,
                     color = MaterialTheme.colors.onBackground,
                     fontSize = 18.sp,
                     fontWeight = FontWeight.Bold,
@@ -54,7 +55,7 @@ fun ConfirmAlertDialog(
 
                 Column {
                     Text(
-                        text = "By clicking the button, you confirm your order!",
+                        text = LocalStrings.current.confirmOrderByClicking,
                         color = MaterialTheme.colors.onSurface,
                         fontSize = 14.sp,
                         fontWeight = FontWeight.Medium,
@@ -69,7 +70,7 @@ fun ConfirmAlertDialog(
 
                     Image(
                         painter = painterResource(id = R.drawable.ic_order_confirm),
-                        contentDescription = "confirm",
+                        contentDescription = LocalStrings.current.confirmation,
                         modifier = Modifier
                             .padding(48.dp, 32.dp)
                     )
@@ -92,7 +93,7 @@ fun ConfirmAlertDialog(
                         onConfirmClicked(orderItem)
                     }) {
                     Text(
-                        text = "Confirm",
+                        text = LocalStrings.current.confirm,
                         color = YellowOnboarding,
                         style = TextStyle(
                             background = MaterialTheme.colors.primary,
@@ -119,7 +120,7 @@ fun ConfirmAlertDialog(
                         openDialog.value = false
                     }) {
                     Text(
-                        text = "Cancel",
+                        text = LocalStrings.current.cancel,
                         color = MaterialTheme.colors.primary,
                         style = TextStyle(
                             background = Color.White,

@@ -1,5 +1,6 @@
 package akram.bensalem.powersh.ui.main.screens
 
+import akram.bensalem.powersh.LocalStrings
 import akram.bensalem.powersh.ui.components.confirmMessageSentAlertDialog
 import akram.bensalem.powersh.ui.theme.Dimens
 import akram.bensalem.powersh.ui.theme.PowerSHLightRed
@@ -48,17 +49,17 @@ import com.google.accompanist.insets.statusBarsPadding
 fun contactScreen() {
 
 
-    var emailState = remember {
+    val emailState = remember {
         mutableStateOf(TextFieldValue(""))
     }
 
 
-    var nameState = remember {
+    val nameState = remember {
         mutableStateOf(TextFieldValue(""))
     }
 
 
-    var messageState = remember {
+    val messageState = remember {
         mutableStateOf(TextFieldValue(""))
     }
 
@@ -83,6 +84,9 @@ fun contactScreen() {
     val isOnline = remember {
         mutableStateOf(true)
     }
+
+
+    val localStrings = LocalStrings.current
 
     Box(
         modifier = Modifier
@@ -115,7 +119,7 @@ fun contactScreen() {
 
 
                 Text(
-                    text = "Contact Us",
+                    text = LocalStrings.current.contactUs,
                     fontWeight = FontWeight.Bold,
                     fontSize = 21.sp,
                     color = MaterialTheme.colors.primary,
@@ -136,7 +140,7 @@ fun contactScreen() {
                         .border(1.dp, MaterialTheme.colors.primary, RoundedCornerShape(12.dp))
                         .background(color = PowerSHLightRed, RoundedCornerShape(12.dp))
                         .padding(12.dp),
-                    title = "Your Full Name",
+                    title = LocalStrings.current.yourFullName ,
                     insideTextColor = MaterialTheme.colors.onBackground,
                     fieldState = nameState,
                     icon = Icons.Outlined.AccountCircle,
@@ -164,7 +168,7 @@ fun contactScreen() {
                         .border(1.dp, MaterialTheme.colors.primary, RoundedCornerShape(12.dp))
                         .background(color = PowerSHLightRed, RoundedCornerShape(12.dp))
                         .padding(12.dp),
-                    title = "Your Email",
+                    title = LocalStrings.current.yourEmail,
                     insideTextColor = MaterialTheme.colors.onBackground,
                     fieldState = emailState,
                     icon = Icons.Outlined.Email,
@@ -191,7 +195,7 @@ fun contactScreen() {
                         .border(1.dp, MaterialTheme.colors.primary, RoundedCornerShape(12.dp))
                         .background(color = PowerSHLightRed, RoundedCornerShape(12.dp))
                         .padding(96.dp),
-                    title = "Your Message",
+                    title = LocalStrings.current.yourMessage,
                     insideTextColor = MaterialTheme.colors.onBackground,
                     fieldState = messageState,
                     icon = null,
@@ -246,14 +250,14 @@ fun contactScreen() {
 
 
                 } else if (isOnline.value) {
-                    Toast.makeText(context, "One of filed or many are empty", Toast.LENGTH_SHORT)
+                    Toast.makeText(context, localStrings.oneFieldOrManyEmpty, Toast.LENGTH_SHORT)
                         .show()
                 }
 
 
             }) {
             Text(
-                text = "Send",
+                text = LocalStrings.current.send,
                 textAlign = TextAlign.Center,
                 color = Color.White,
                 modifier = Modifier.padding(

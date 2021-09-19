@@ -13,6 +13,7 @@ object Constants {
     const val PREFERENCE_NAME = "settings_preference"
     const val THEME_OPTIONS = "Theme Options"
     const val SORT_OPTIONS = "Default Sort Option"
+    const val LANGUAGE_OPTIONS = "Default Language Option"
 
     val ShoesListPreview = listOf(
         ShoeProduct(

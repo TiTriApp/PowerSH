@@ -23,6 +23,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import akram.bensalem.powersh.data.model.FireBaseUser;
+import akram.bensalem.powersh.utils.localization.Strings;
 import timber.log.Timber;
 
 
@@ -62,28 +63,15 @@ public class Authenticate {
         return utilisateur;
     }
 
-    public String getUserName() {
-        if (this.getFireBaseUser() == null) {
-            return "Sign In";
-        } else {
-            return this.getFireBaseUser().getName();
-        }
-    }
-
-    public String getUserEmail() {
-        if (this.getFireBaseUser() == null) {
-            return "or Creat an Account";
-        } else {
-            return this.getFireBaseUser().getEmail();
-        }
-    }
 
     public void creatNewUser(
             @Nullable String email,
             @Nullable String password,
             @Nullable String Name,
             @NotNull MutableState<Boolean> isOnProgress,
-            @NotNull MutableState<Boolean> isConfirmationEmailSent) {
+            @NotNull MutableState<Boolean> isConfirmationEmailSent,
+            Strings localStrings
+    ) {
         Context context = this.activity.getBaseContext();
 
         isOnProgress.setValue(true);
@@ -135,7 +123,7 @@ public class Authenticate {
                             // If sign in fails, display a message to the user.
                             isOnProgress.setValue(false);
                             Timber.i( "createUserWithEmail:failure%s", task.getException());
-                            Toast.makeText(context, "Authentication failed. \n " + task.getException(), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(context, localStrings.getAuthenticationFailed() + "\n" + task.getException(), Toast.LENGTH_SHORT).show();
 
 
                         }
@@ -148,7 +136,9 @@ public class Authenticate {
             @Nullable String email,
             @Nullable String password,
             @NotNull MutableState<Boolean> isOnProgress,
-            @NotNull MutableState<Boolean> isLogged) {
+            @NotNull MutableState<Boolean> isLogged,
+            Strings localStrings
+    ) {
 
 
         Context context = this.activity.getBaseContext();
@@ -159,18 +149,14 @@ public class Authenticate {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
                             Timber.i( "signInWithEmail:success");
-                            //  FirebaseUser user = mAuth.getCurrentUser();
-
                             isOnProgress.setValue(false);
                             isLogged.setValue(true);
-
                         } else {
                             // If sign in fails, display a message to the user.
                             Timber.i(  "signInWithEmail:failure%s", task.getException());
                             isOnProgress.setValue(false);
-                            Toast.makeText(context, "Authentication failed." + task.getException(),
+                            Toast.makeText(context, localStrings.getAuthenticationFailed() + task.getException(),
                                     Toast.LENGTH_SHORT).show();
                         }
                     }
@@ -213,7 +199,7 @@ public class Authenticate {
     }
 
 
-    public void reinstalisationDeMotDePass(String email) {
+    public void reinstalisationDeMotDePass(String email, Strings localStrings ) {
 
         Context context = this.activity.getBaseContext();
         this.mAuth.sendPasswordResetEmail(email)
@@ -222,13 +208,29 @@ public class Authenticate {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()) {
-                            Toast.makeText(context, "We have sent you instructions to reset your password!", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(context, localStrings.getSentInstructionOfPasswordReset(), Toast.LENGTH_SHORT).show();
                         } else {
-                            Toast.makeText(context, "Failed to send reset email!", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(context, localStrings.getFailedToResetPassword(), Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
     }
 
+    @NotNull
+    public String userName(@NotNull Strings current) {
+        if (this.getFireBaseUser() == null) {
+            return current.getSignIn();
+        } else {
+            return this.getFireBaseUser().getName();
+        }
+    }
 
+    @NotNull
+    public String userEmail(@NotNull Strings current) {
+        if (this.getFireBaseUser() == null) {
+            return current.getCreatAccount();
+        } else {
+            return this.getFireBaseUser().getEmail();
+        }
+    }
 }

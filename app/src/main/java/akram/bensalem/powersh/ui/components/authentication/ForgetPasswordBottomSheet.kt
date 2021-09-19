@@ -1,7 +1,9 @@
 package akram.bensalem.powersh.ui.components.authentication
 
+import akram.bensalem.powersh.LocalStrings
 import akram.bensalem.powersh.ui.components.CustomTextField
 import akram.bensalem.powersh.utils.authentification.Authenticate
+import akram.bensalem.powersh.utils.isEmailValid
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Column
@@ -45,18 +47,23 @@ fun ForgetPasswordBottomSheet(
 
     val view = LocalView.current
 
+    val localStrings = LocalStrings.current
+
     Column(
         modifier = Modifier.background(MaterialTheme.colors.surface)
     ) {
 
 
         Text(
-            text = "Reset Password",
+            text = LocalStrings.current.resetPassword,
             fontWeight = FontWeight.Bold,
             fontSize = 20.sp,
             color = MaterialTheme.colors.onBackground,
             modifier = Modifier.padding(start = 16.dp, top = 36.dp, bottom = 16.dp)
         )
+
+
+
 
 
         CustomTextField(
@@ -68,7 +75,7 @@ fun ForgetPasswordBottomSheet(
                 .border(1.dp, MaterialTheme.colors.onBackground, RoundedCornerShape(12.dp))
                 .background(color = MaterialTheme.colors.surface, RoundedCornerShape(12.dp))
                 .padding(12.dp),
-            title = "Email Address",
+            title = LocalStrings.current.email,
             fieldState = emailState,
             icon = Icons.Outlined.Email,
             insideTextColor = MaterialTheme.colors.onBackground,
@@ -77,14 +84,15 @@ fun ForgetPasswordBottomSheet(
             focusRequester = mEmailRequester,
             autofillType = AutofillType.EmailAddress,
             keyboardType = KeyboardType.Email,
-            imeAction = ImeAction.Done,
+            imeAction = ImeAction.Next,
+            isValid = isEmailValid(email = emailState.value.text),
+            errorMessage = LocalStrings.current.emailIsNotValid,
             onNext = {
-            },
+                view.clearFocus()            },
             onDone = {
                 view.clearFocus()
-            }
+            },
         )
-
 
         Button(
             colors = ButtonDefaults.buttonColors(
@@ -101,10 +109,10 @@ fun ForgetPasswordBottomSheet(
                     shape = RoundedCornerShape(18.dp)
                 ),
             onClick = {
-                authentication.value.reinstalisationDeMotDePass(emailState.value.text)
+                authentication.value.reinstalisationDeMotDePass(emailState.value.text, localStrings)
             }) {
             Text(
-                text = "Reset",
+                text = LocalStrings.current.reset,
                 textAlign = TextAlign.Center,
                 color = Color.White,
                 modifier = Modifier.padding(

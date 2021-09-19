@@ -1,5 +1,6 @@
 package akram.bensalem.powersh.ui.main.screens
 
+import akram.bensalem.powersh.LocalStrings
 import akram.bensalem.powersh.R
 import akram.bensalem.powersh.data.model.OrderItem
 import akram.bensalem.powersh.data.model.ShoeProduct
@@ -88,7 +89,7 @@ fun orderScreen(
                         .align(Alignment.CenterHorizontally)
                         .padding(start = 32.dp, end = 32.dp),
                     painter = painterResource(id = R.drawable.ic_orders),
-                    contentDescription = "Empty Orders List"
+                    contentDescription = LocalStrings.current.emptyOrderList
                 )
                 Text(
                     color = MaterialTheme.colors.onSurface,
@@ -96,7 +97,7 @@ fun orderScreen(
                     fontWeight = FontWeight.Bold,
                     fontSize = 18.sp,
                     textAlign = TextAlign.Center,
-                    text = "There are no Orders!",
+                    text = LocalStrings.current.noOrders,
                     modifier = Modifier
                         .padding(top = 20.dp)
                         .align(Alignment.CenterHorizontally)
@@ -121,7 +122,7 @@ fun orderScreen(
                     fontWeight = FontWeight.SemiBold,
                     fontSize = 16.sp,
                     textAlign = TextAlign.Start,
-                    text = "Total of Orders",
+                    text = LocalStrings.current.totalOrders,
                     modifier = Modifier
                         .align(Alignment.Start)
                 )
@@ -132,7 +133,7 @@ fun orderScreen(
                     fontWeight = FontWeight.Bold,
                     textAlign = TextAlign.Start,
                     fontSize = 18.sp,
-                    text = "${orderList.size} orders",
+                    text = LocalStrings.current.totalOrdersValue(orderList.size),
                     modifier = Modifier
                         .align(Alignment.Start)
                 )
@@ -154,7 +155,7 @@ fun orderScreen(
                         orderList.clear()
                     }) {
                     Text(
-                        text = if (orderList.size > 0) "Remove All" else "",
+                        text = if (orderList.size > 0) LocalStrings.current.removeAll else "",
                         color = if (orderList.size > 0) Color.White else Color.DarkGray,
                         style = TextStyle(
                             background = if (orderList.size > 0) MaterialTheme.colors.primary else CardCoverPink,

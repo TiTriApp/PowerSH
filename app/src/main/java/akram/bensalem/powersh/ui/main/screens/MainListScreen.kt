@@ -1,9 +1,11 @@
 package akram.bensalem.powersh.ui.main.screens
 
+import akram.bensalem.powersh.LocalStrings
 import akram.bensalem.powersh.R
 import akram.bensalem.powersh.data.model.CardItem
 import akram.bensalem.powersh.data.model.OrderItem
 import akram.bensalem.powersh.data.model.ShoeProduct
+import akram.bensalem.powersh.lyricist
 import akram.bensalem.powersh.ui.components.*
 import akram.bensalem.powersh.ui.main.screenStates.SettingsScreenState
 import akram.bensalem.powersh.ui.main.viewModel.SettingsViewModel
@@ -11,8 +13,10 @@ import akram.bensalem.powersh.ui.theme.Dimens
 import akram.bensalem.powersh.ui.theme.PowerSHTheme
 import akram.bensalem.powersh.ui.theme.Theme
 import akram.bensalem.powersh.utils.Constants
+import akram.bensalem.powersh.utils.Language
 import akram.bensalem.powersh.utils.Sort
 import akram.bensalem.powersh.utils.authentification.Authenticate
+import akram.bensalem.powersh.utils.localization.Locales
 import android.app.Activity
 import android.content.res.Configuration
 import androidx.compose.animation.ExperimentalAnimationApi
@@ -274,7 +278,7 @@ fun MainListScreen(
                         )
                     }
                     "FAVOURITE" -> {
-                        favouriteScreen(
+                        FavouriteScreen(
                             cartFavourite = favouriteProduct,
                             onEntryClick = onEntryClick
                         )
@@ -323,7 +327,7 @@ fun AboutScreen() {
             Column(Modifier.fillMaxWidth()) {
                 AboutTopSection(
                     modifier = Modifier.align(Alignment.CenterHorizontally),
-                    appName = stringResource(id = R.string.app_name),
+                    appName = LocalStrings.current.powerSh,
                     version = "1.0.0",
                     appLogo = painterResource(id = R.drawable.big_circle_powersh),
                     onCheckUpdatesClicked = {}
@@ -333,7 +337,7 @@ fun AboutScreen() {
         },
         bottomBar = {
             Text(
-                text = stringResource(id = R.string.made_with_text),
+                text = LocalStrings.current.madeByAkramBensalem,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(Dimens.SmallPadding.size)
@@ -361,7 +365,7 @@ fun AboutScreen() {
                         .fillMaxWidth()
                         .padding(16.dp),
                     painter = painterResource(id = R.drawable.ic_about),
-                    contentDescription = stringResource(id = R.string.app_logo)
+                    contentDescription = LocalStrings.current.appLogo
                 )
             }
 
@@ -372,12 +376,12 @@ fun AboutScreen() {
                         .padding(Dimens.MediumPadding.size)
                 ) {
                     Text(
-                        "This project is made by:",
+                        LocalStrings.current.projectMadeBy,
                         color = MaterialTheme.colors.onBackground,
                         style = MaterialTheme.typography.body1,
                     )
                     Text(
-                        "- Akram Bensalem \n- Arbaoui Slimane\n- BELMILOUD ILIES DHIAEDDINE\n- Abdelkader YAHIAOUI\n- HADJ SADOK MOHAMMED NAZIM\n- ABDELLATIF ABDERAOUF\n- Merouan Boughedda",
+                        LocalStrings.current.akramBensalem,
                         color = MaterialTheme.colors.onSurface,
                         style = MaterialTheme.typography.body1,
                         modifier = Modifier.padding(start = Dimens.MiniSmallPadding.size)
@@ -417,15 +421,26 @@ fun SettingsPage() {
                     scope = scope,
                     settingsEntryName = settingsEntryName.value,
                     currentSortOption = settingsScreenData.sortOption,
-                    currentTheme = settingsScreenData.themeOption,
+                    currentLanguageOption = settingsScreenData.languageOption,
                     onSortOptionClicked = {
                         viewModel.saveSortOptionSetting(it)
                     },
+                    currentTheme = settingsScreenData.themeOption,
                     onThemeOptionClicked = {
                         viewModel.saveThemeSetting(it)
+                    },
+                    onLanguageOptionClicked = {
+                        viewModel.saveLanguageSetting(it)
+                        when(it) {
+                            1 -> lyricist.languageTag = Locales.AR
+                            2 -> lyricist.languageTag = Locales.FR
+                            3 -> lyricist.languageTag = Locales.EN
+                            else -> {
+                                //
+                            }
+                        }
                     }
                 )
-
             },
             sheetState = sheetState,
             sheetElevation = 0.dp,
@@ -437,6 +452,33 @@ fun SettingsPage() {
                 modifier = Modifier,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
+
+                item {
+                    val language = when (settingsScreenData.languageOption) {
+                        1 -> Language.ARABIC
+                        2 -> Language.FRENCH
+                        3 -> Language.ENGLISH
+                        else -> Language.FOLLOW_SYSTEM
+                    }
+                    SettingsEntry(
+                        modifier = Modifier.padding(
+                            vertical = Dimens.SmallPadding.size,
+                            horizontal = Dimens.MediumPadding.size
+                        ),
+                        settingsEntryName = Constants.LANGUAGE_OPTIONS,
+                        currentSettingValue = language.languageName,
+                        currentSettingIcon = language.icon,
+                        onSettingsEntryClick = {
+                            settingsEntryName.value = it
+                            scope.launch {
+                                sheetState.show()
+                            }
+                        }
+                    )
+                }
+
+
+
                 item {
                     val theme = when (settingsScreenData.themeOption) {
                         1 -> Theme.DARK_THEME

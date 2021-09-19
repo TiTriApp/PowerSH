@@ -17,6 +17,7 @@ class SettingsViewModel @Inject constructor(
 
     private val themeOptionValue = MutableStateFlow(-1)
     private val sortOptionValue = MutableStateFlow(0)
+    private val languageOptionValue = MutableStateFlow(-1)
 
     // Combining Flows from different points to be displayed on the screen
     // The state is only shared when the subscriber is active.
@@ -24,13 +25,16 @@ class SettingsViewModel @Inject constructor(
     // And sharing will stop after 5 seconds from when the subscriber stops being active.
     val uiState: StateFlow<SettingsScreenState> = combine(
         themeOptionValue,
-        sortOptionValue
-    ) { themeOptionValue, sortOptionValue ->
+        sortOptionValue,
+        languageOptionValue
+    ) { themeOptionValue, sortOptionValue , languageOptionValue->
         Timber.d("ThemeOption State: $themeOptionValue")
         Timber.d("Sort Option: $sortOptionValue")
+        Timber.d("Language Option: $languageOptionValue")
         SettingsScreenState.Settings(
             themeOption = themeOptionValue,
-            sortOption = sortOptionValue
+            sortOption = sortOptionValue,
+            languageOption = languageOptionValue
         )
     }.stateIn(
         scope = viewModelScope,
@@ -52,6 +56,15 @@ class SettingsViewModel @Inject constructor(
         }
     }
 
+    fun saveLanguageSetting(languageValue: Int) {
+        viewModelScope.launch {
+            dataStoreRepository.saveLanguageSetting(value = languageValue)
+            Timber.d("Theme Data Saved $languageValue")
+        }
+    }
+
+
+
     init {
         readSettings()
     }
@@ -68,6 +81,15 @@ class SettingsViewModel @Inject constructor(
                 themeOptionValue.value = themeValue
             }
         }
+
+        viewModelScope.launch {
+            dataStoreRepository.readLanguageSetting.collect { languageValue ->
+                Timber.d("Theme Data Changed $languageValue")
+                languageOptionValue.value = languageValue
+            }
+        }
+
+
         viewModelScope.launch {
             dataStoreRepository.readSortOptionSetting.collect { sortValue ->
                 Timber.d("Sort Data Changed $sortValue")

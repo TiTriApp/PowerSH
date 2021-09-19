@@ -1,5 +1,6 @@
 package akram.bensalem.powersh.ui.components.checkout
 
+import akram.bensalem.powersh.LocalStrings
 import akram.bensalem.powersh.ui.theme.CardCoverPink
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -48,18 +49,18 @@ fun DisplayRadioGroup(selected: MutableState<String>) {
                 radioPaymentOption(
                     selected = selected,
                     id = MainPayOptions.CASH_OPTION,
-                    title = "Cash on Delivery",
-                    detail = "Pay when the products are delivered to you",
-                    contentDescription = "Cash on Delivery icon",
+                    title = LocalStrings.current.cashOnDelivery,
+                    detail = LocalStrings.current.payWhenDelivered,
+                    contentDescription = LocalStrings.current.cashOnDelivery,
                     icon = Icons.Outlined.Money,
                 )
 
                 radioPaymentOption(
                     selected = selected,
                     id = MainPayOptions.CCP_OPTION,
-                    title = "CCP or BaridiMob",
-                    detail = "Pay now using your CCP or BaridiMob",
-                    contentDescription = "CCP or BaridiMob icon",
+                    title =  LocalStrings.current.ccpOrBaridiMob,
+                    detail = LocalStrings.current.payUsingCCP,
+                    contentDescription = LocalStrings.current.ccpOrBaridiMob,
                     icon = Icons.Outlined.CreditCard,
                 )
             }

@@ -1,7 +1,9 @@
 package akram.bensalem.powersh.utils
 
+import akram.bensalem.powersh.LocalStrings
 import akram.bensalem.powersh.data.model.Adress
 import akram.bensalem.powersh.data.model.ShoeProduct
+import akram.bensalem.powersh.utils.localization.Strings
 import android.content.Context
 import android.content.Intent
 import android.net.ConnectivityManager
@@ -95,7 +97,7 @@ fun isValidPasswordFormat(password: String): Boolean {
 
 }
 
-fun ErrorMessageOfPassword(password: String): String {
+fun ErrorMessageOfPassword(password: String, localString: Strings): String {
 
     val oneDigit = "(.*[0-9].*)" //at least 1 digit
     val oneLowerCase = "(.*[a-z].*)" //at least 1 lower case letter
@@ -106,19 +108,19 @@ fun ErrorMessageOfPassword(password: String): String {
     val more8Character = ".{8,}"
 
     return if (!isRegrexMatch(regrex = more8Character, password = password)){
-        "Password too short!"
+        localString.passwordTooShort
     } else if (!isRegrexMatch(regrex = noWhiteSpace, password = password)){
-        "White Space is not allowed!"
+        localString.whiteSpaceAreNorAllowed
     }else if (!isRegrexMatch(regrex = oneDigit, password = password)){
-        "At least One Digit!"
+        localString.oneDigit
     }else if (!isRegrexMatch(regrex = oneLowerCase, password = password)){
-        "At least One Lower Case letter!"
+        localString.oneLowerCase
     }else if (!isRegrexMatch(regrex = oneUpperCase, password = password)){
-        "At least One Upper Case letter!"
+        localString.oneUpperCase
     }else if (!isRegrexMatch(regrex = anyLetter, password = password)){
-        "At least One letter!"
+        localString.oneLetter
     }else if (!isRegrexMatch(regrex = oneSpecialCharacter, password = password)){
-        "At least Special Character!"
+        localString.oneSpecialCharacter
     } else ""
 }
 
@@ -166,10 +168,10 @@ fun callPhone(context: Context, phoneNumber: String = "+213555753567") {
 }
 
 
-fun getCurrentDate(): String {
+fun getCurrentDate(localString: Strings): String {
 
     val sdf = SimpleDateFormat(
-        "dd/MM/yyyy hh:mm:ss",
+        localString.dateFormat,
         Locale.getDefault()
     )
 

@@ -60,4 +60,10 @@ object Versions {
 
     //Email
     const val emailVesrion ="1.6.0"
+
+    // KSP
+    const val kspVersion ="1.5.30-1.0.0"
+
+    // Lyristic
+    const val lyricistVersion ="1.0.0"
 }

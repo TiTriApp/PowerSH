@@ -1,5 +1,6 @@
 package akram.bensalem.powersh.ui.components
 
+import akram.bensalem.powersh.LocalStrings
 import akram.bensalem.powersh.data.model.CardItem
 import akram.bensalem.powersh.data.model.ShoeProduct
 import akram.bensalem.powersh.ui.theme.CardCoverPink
@@ -72,7 +73,7 @@ fun ShoeFeatures(
             .padding(Dimens.MediumPadding.size)
     ) {
         Text(
-            text = "Payment Details",
+            text = LocalStrings.current.paymentDetail,
             color = MaterialTheme.colors.onBackground,
             style = MaterialTheme.typography.h6,
             modifier = Modifier
@@ -198,9 +199,9 @@ fun features(
             modifier = Modifier.height(180.dp),
             verticalArrangement = Arrangement.SpaceEvenly
         ) {
-            itemsTitle(title = "Size", modifier = modifier)
-            itemsTitle(title = "Color", modifier = modifier)
-            itemsTitle(title = "Quantity", modifier = modifier)
+            itemsTitle(title = LocalStrings.current.size, modifier = modifier)
+            itemsTitle(title = LocalStrings.current.color, modifier = modifier)
+            itemsTitle(title = LocalStrings.current.quantity, modifier = modifier)
         }
 
         Column(
@@ -319,7 +320,7 @@ fun specialItemButton(
         }) {
         Icon(
             imageVector = Icons.Outlined.Add,
-            contentDescription = "Add",
+            contentDescription = LocalStrings.current.add,
             tint = if (value.toInt() >= 10 || enabled.value) Color.LightGray else Color.DarkGray,
             modifier = Modifier
                 .clickable(
@@ -360,12 +361,12 @@ fun specialItemButton(
                 .weight(1f)
         )
         Icon(imageVector = Icons.Outlined.Remove,
-            contentDescription = "Minus",
-            tint = if (value.equals("1") || enabled.value) Color.LightGray else Color.DarkGray,
+            contentDescription = LocalStrings.current.minus,
+            tint = if (value == "1" || enabled.value) Color.LightGray else Color.DarkGray,
             modifier = Modifier
 
                 .clickable(
-                    enabled = !(value.equals("1") || enabled.value),
+                    enabled = !(value == "1" || enabled.value),
                 ) {
                     onSubstract()
                 }
@@ -400,7 +401,7 @@ fun payment(
             fontWeight = FontWeight.Bold,
             textAlign = TextAlign.Start,
             fontSize = 22.sp,
-            text = "${quantity.value * price} DA",
+            text = LocalStrings.current.detailQuantityValue(quantity.value * price),
             modifier = Modifier
                 .align(alignment = Alignment.CenterVertically)
         )

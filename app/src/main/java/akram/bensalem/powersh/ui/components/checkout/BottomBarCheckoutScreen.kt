@@ -1,5 +1,6 @@
 package akram.bensalem.powersh.ui.components.checkout
 
+import akram.bensalem.powersh.LocalStrings
 import androidx.compose.animation.*
 import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.updateTransition
@@ -80,7 +81,7 @@ fun BottomBarCheckoutScreen(
                     onBackPressed()
                 }) {
                 Text(
-                    text = "Back",
+                    text = LocalStrings.current.back,
                     color = MaterialTheme.colors.primary,
                     textAlign = TextAlign.Center,
                     modifier = Modifier.padding(
@@ -119,7 +120,7 @@ fun BottomBarCheckoutScreen(
                onNextPressed()
             }) {
             Text(
-                text = if (step.value < 2) "Next" else "Confirm",
+                text = if (step.value < 2) LocalStrings.current.next else LocalStrings.current.confirm,
                 color = if (enabled) Color.White else MaterialTheme.colors.onSurface,
                 textAlign = TextAlign.Center,
                 modifier = Modifier.padding(

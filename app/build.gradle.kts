@@ -7,13 +7,14 @@ plugins {
     id("dagger.hilt.android.plugin")
     id("com.google.gms.google-services")
     id ("com.github.ben-manes.versions")
+    id ("com.google.devtools.ksp")
 }
 
 android {
     compileSdk = AppConfig.compileSdkVersion
 
     defaultConfig {
-        applicationId = "com.akram.bensalem.powersh"
+        applicationId ="com.akram.bensalem.powersh"
         minSdk = AppConfig.minSdkVersion
         targetSdk = AppConfig.targetSdkVersion
         versionCode = AppConfig.versionCode
@@ -148,5 +149,15 @@ dependencies {
 
     implementation(Deps.android_mail)
     implementation(Deps.android_activation)
+
+
+    implementation("com.google.devtools.ksp:symbol-processing-api:1.5.30-1.0.0-beta09")
+
+    // Required
+    implementation (Deps.lyricist)
+
+    // If you want to use @Strings to generate code for you
+    compileOnly ("cafe.adriel.lyricist:lyricist-processor:1.0.0")
+    ksp ("cafe.adriel.lyricist:lyricist-processor:1.0.0")
 
 }

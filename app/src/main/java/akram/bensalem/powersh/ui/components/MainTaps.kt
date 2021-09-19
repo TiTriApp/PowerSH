@@ -1,5 +1,6 @@
 package akram.bensalem.powersh.ui.components
 
+import akram.bensalem.powersh.LocalStrings
 import akram.bensalem.powersh.R
 import akram.bensalem.powersh.ui.theme.PowerSHRed
 import akram.bensalem.powersh.ui.theme.PowerSHTheme
@@ -34,7 +35,7 @@ data class ScreenState(var state: Screen = Screen.TOUS) {
         TOUS(title = "All", icon = R.drawable.men),
         HOMME(title = "Men", icon = R.drawable.man),
         FEMME(title = "Women", icon = R.drawable.woman2),
-        ENFANT(title = "Baby", icon = R.drawable.baby)
+        ENFANT(title = "Children", icon = R.drawable.baby)
     }
 }
 
@@ -59,7 +60,16 @@ fun TabsPanel(
         tabs = {
             tabs.forEachIndexed { index, tab ->
                 CategoryTab(
-                    category = tab.title,
+                    category = when(tab.title){
+                        "All" -> LocalStrings.current.all
+                        "Men" -> LocalStrings.current.men
+                        "Women" -> LocalStrings.current.women
+                        "Children" -> LocalStrings.current.children
+                        else  -> ""
+                                              }
+
+
+                    ,
                     icon = tab.icon,
                     selected = index == pagerState.currentPage,
                     onClick = { onTabSelected(index) },

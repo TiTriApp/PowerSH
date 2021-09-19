@@ -1,5 +1,6 @@
 package akram.bensalem.powersh.ui.main.screens
 
+import akram.bensalem.powersh.LocalStrings
 import akram.bensalem.powersh.data.model.CardItem
 import akram.bensalem.powersh.data.model.OrderItem
 import akram.bensalem.powersh.ui.components.checkout.*
@@ -76,8 +77,10 @@ fun CheckoutScreen(
         mutableStateOf(TextFieldValue(""))
     }
 
+    val localString = LocalStrings.current
+
     val date = remember {
-        mutableStateOf(getCurrentDate())
+        mutableStateOf(getCurrentDate(localString))
     }
 
     val imageUri = remember {

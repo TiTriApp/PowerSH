@@ -1,5 +1,6 @@
 package akram.bensalem.powersh.ui.main.screens.login
 
+import akram.bensalem.powersh.LocalStrings
 import akram.bensalem.powersh.ui.components.CustomTextField
 import akram.bensalem.powersh.ui.components.EmailConfirmAlertDialog
 import akram.bensalem.powersh.ui.components.checkYourConectivityAlertDialog
@@ -90,6 +91,8 @@ fun SignUpScreen(
         mutableStateOf(true)
     }
 
+    val localStrings = LocalStrings.current
+
     Box(
         modifier = modifier
             .fillMaxSize()
@@ -112,7 +115,7 @@ fun SignUpScreen(
                             RoundedCornerShape(12.dp)
                         )
                         .padding(12.dp),
-                    title = "First Name",
+                    title = LocalStrings.current.firstName,
                     fieldState = firstNameState,
                     icon = Icons.Outlined.AccountCircle,
                     insideTextColor = MaterialTheme.colors.onBackground,
@@ -123,7 +126,7 @@ fun SignUpScreen(
                     keyboardType = KeyboardType.Text,
                     imeAction = ImeAction.Next,
                     isValid = isNameValid(name = firstNameState.value.text),
-                    errorMessage = "Too Short",
+                    errorMessage = LocalStrings.current.tooShort,
                     onNext = {
                         lastNameRequester.requestFocus()
                     },
@@ -144,7 +147,7 @@ fun SignUpScreen(
                             RoundedCornerShape(12.dp)
                         )
                         .padding(12.dp),
-                    title = "Last Name",
+                    title = LocalStrings.current.lastName,
                     fieldState = lastNameState,
                     icon = Icons.Outlined.AccountCircle,
                     insideTextColor = MaterialTheme.colors.onBackground,
@@ -155,7 +158,7 @@ fun SignUpScreen(
                     keyboardType = KeyboardType.Text,
                     imeAction = ImeAction.Next,
                     isValid = isNameValid(name = lastNameState.value.text),
-                    errorMessage = "Too Short",
+                    errorMessage = LocalStrings.current.tooShort,
                     onNext = {
                         emailRequester.requestFocus()
                     },
@@ -177,7 +180,7 @@ fun SignUpScreen(
                     .border(1.dp, MaterialTheme.colors.onBackground, RoundedCornerShape(12.dp))
                     .background(color = MaterialTheme.colors.surface, RoundedCornerShape(12.dp))
                     .padding(12.dp),
-                title = "Email Address",
+                title = LocalStrings.current.email,
                 fieldState = emailState,
                 icon = Icons.Outlined.Email,
                 insideTextColor = MaterialTheme.colors.onBackground,
@@ -188,7 +191,7 @@ fun SignUpScreen(
                 keyboardType = KeyboardType.Email,
                 imeAction = ImeAction.Next,
                 isValid = isEmailValid(email = emailState.value.text),
-                errorMessage = "This Email is not valid",
+                errorMessage = LocalStrings.current.emailIsNotValid,
                 onNext = {
                     mPasswordFocusRequester.requestFocus()
                 },
@@ -207,7 +210,7 @@ fun SignUpScreen(
                     .border(1.dp, MaterialTheme.colors.onBackground, RoundedCornerShape(12.dp))
                     .background(color = MaterialTheme.colors.surface, RoundedCornerShape(12.dp))
                     .padding(12.dp),
-                title = "Password",
+                title = LocalStrings.current.password,
                 fieldState = passwordState,
                 icon = Icons.Outlined.Password,
                 insideTextColor = MaterialTheme.colors.onBackground,
@@ -218,7 +221,7 @@ fun SignUpScreen(
                 keyboardType = KeyboardType.Password,
                 imeAction = ImeAction.Next,
                 isValid = isValidPasswordFormat(password = passwordState.value.text),
-                errorMessage = ErrorMessageOfPassword(password = passwordState.value.text),
+                errorMessage = ErrorMessageOfPassword(password = passwordState.value.text, localString = LocalStrings.current),
                 onNext = {
                     mRepeatPasswordFocusRequester.requestFocus()
                 },
@@ -238,7 +241,7 @@ fun SignUpScreen(
                     .border(1.dp, MaterialTheme.colors.onBackground, RoundedCornerShape(12.dp))
                     .background(color = MaterialTheme.colors.surface, RoundedCornerShape(12.dp))
                     .padding(12.dp),
-                title = "Repeat Password",
+                title = LocalStrings.current.repeatPassword,
                 fieldState = repeatPasswordState,
                 icon = Icons.Outlined.Password,
                 insideTextColor = MaterialTheme.colors.onBackground,
@@ -252,7 +255,7 @@ fun SignUpScreen(
                     password = passwordState.value.text,
                     repeatPassword = repeatPasswordState.value.text
                 ),
-                errorMessage = "The Repeat password doesn't match your password!",
+                errorMessage = LocalStrings.current.repeatPasswordError,
                 onNext = {
                     view.clearFocus()
                 },
@@ -295,14 +298,15 @@ fun SignUpScreen(
                             passwordState.value.text,
                             "${firstNameState.value.text} ${lastNameState.value.text}",
                             isOnProgress,
-                            isConfirmationEmailSent
+                            isConfirmationEmailSent,
+                            localStrings
                         )
                     }
 
                 })
             {
                 Text(
-                    text = "Sign Up",
+                    text = LocalStrings.current.signUp,
                     textAlign = TextAlign.Center,
                     color =if ( isValid(
                         email = emailState.value.text,

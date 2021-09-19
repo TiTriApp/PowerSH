@@ -1,10 +1,12 @@
 package akram.bensalem.powersh.ui.main.screens
 
+import akram.bensalem.powersh.LocalStrings
 import akram.bensalem.powersh.R
 import akram.bensalem.powersh.data.model.CardItem
 import akram.bensalem.powersh.ui.components.cartListProducts
 import akram.bensalem.powersh.ui.theme.PowerSHTheme
 import akram.bensalem.powersh.utils.Constants
+import akram.bensalem.powersh.utils.localization.Locales
 import android.content.res.Configuration
 import androidx.compose.animation.*
 import androidx.compose.animation.core.tween
@@ -114,7 +116,7 @@ fun cartScreen(
                         .align(Alignment.CenterHorizontally)
                         .padding(start = 32.dp, end = 32.dp),
                     painter = painterResource(id = R.drawable.ic_empty_cart),
-                    contentDescription = "Add To Cart"
+                    contentDescription = LocalStrings.current.addToCart
                 )
                 Text(
                     color = MaterialTheme.colors.onSurface,
@@ -122,7 +124,7 @@ fun cartScreen(
                     fontWeight = FontWeight.Bold,
                     fontSize = 18.sp,
                     textAlign = TextAlign.Center,
-                    text = "Cart is empty",
+                    text = LocalStrings.current.cartIsEmpty,
                     modifier = Modifier
                         .padding(top = 20.dp)
                         .align(Alignment.CenterHorizontally)
@@ -150,7 +152,7 @@ fun cartScreen(
                     fontWeight = FontWeight.SemiBold,
                     fontSize = 16.sp,
                     textAlign = TextAlign.Start,
-                    text = "Total Price",
+                    text = LocalStrings.current.totalPrice,
                     modifier = Modifier
                         .align(Alignment.Start)
                 )
@@ -161,7 +163,7 @@ fun cartScreen(
                     fontWeight = FontWeight.Bold,
                     textAlign = TextAlign.Start,
                     fontSize = 18.sp,
-                    text = "${totalPrice.value} DA",
+                    text = LocalStrings.current.totalPriceValue(totalPrice.value),
                     modifier = Modifier
                         .align(Alignment.Start)
                 )
@@ -184,7 +186,7 @@ fun cartScreen(
                     navController.navigate(PowerSHScreens.CheckoutScreen.name)
                 }) {
                 Text(
-                    text = if (totalPrice.value > 0) "CHECKOUT" else "Empty Cart",
+                    text = if (totalPrice.value > 0)LocalStrings.current.checkout else LocalStrings.current.emptyCart,
                     color = if (totalPrice.value > 0) Color.White else MaterialTheme.colors.onSurface,
                     textAlign = TextAlign.Center,
                     modifier = Modifier.padding(
@@ -261,7 +263,7 @@ fun fullCartNightPreview() {
     uiMode = Configuration.UI_MODE_NIGHT_YES
 )
 @Composable
-fun emptyCartNightPreview() {
+fun EmptyCartNightPreview() {
 
     val navController = rememberNavController()
     val cartProduct = remember { Constants.cartListEmpty }

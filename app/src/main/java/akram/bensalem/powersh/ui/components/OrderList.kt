@@ -1,11 +1,13 @@
 package akram.bensalem.powersh.ui.components
 
+import akram.bensalem.powersh.LocalStrings
 import akram.bensalem.powersh.data.model.OrderItem
 import akram.bensalem.powersh.ui.components.checkout.factureText
 import akram.bensalem.powersh.ui.theme.Dimens
 import akram.bensalem.powersh.ui.theme.PowerSHTheme
 import akram.bensalem.powersh.ui.theme.Shapes
 import akram.bensalem.powersh.utils.Constants
+import akram.bensalem.powersh.utils.getCurrentDate
 import android.util.Log
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.FastOutSlowInEasing
@@ -132,28 +134,28 @@ fun orderItemEntry(
                 ) {
 
                     factureText(
-                        title = "ID:",
+                        title = LocalStrings.current.id,
                         detail = "22154854",
                         titleColor = MaterialTheme.colors.onBackground,
                         detailColor = MaterialTheme.colors.onSurface,
                     )
                     factureText(
-                        title = "Date:",
+                        title = LocalStrings.current.date,
                         detail = order.date,
                         titleColor = MaterialTheme.colors.onBackground,
                         detailColor = MaterialTheme.colors.onSurface,
 
                         )
                     factureText(
-                        title = "Total:",
-                        detail = order.total.toString() + " DA",
+                        title =LocalStrings.current.total ,
+                        detail =LocalStrings.current.totalOrdersValue(order.total),
                         titleColor = MaterialTheme.colors.onBackground,
                         detailColor = MaterialTheme.colors.onSurface,
 
                         )
                     factureText(
-                        title = "Status:",
-                        detail = order.status.name,
+                        title =LocalStrings.current.status ,
+                        detail = LocalStrings.current.statusValue(order.status),
                         titleColor = MaterialTheme.colors.onBackground,
                         detailColor = MaterialTheme.colors.onSurface,
                     )
@@ -171,7 +173,7 @@ fun orderItemEntry(
                 ) {
                     Icon(
                         imageVector = Icons.Outlined.Info,
-                        contentDescription = "info about order",
+                        contentDescription = LocalStrings.current.info,
                         tint = MaterialTheme.colors.primary,
                         modifier = Modifier
                             .size(24.dp)
@@ -182,14 +184,14 @@ fun orderItemEntry(
             }
 
             factureText(
-                title = "Payment:",
+                title =LocalStrings.current.payment ,
                 detail = order.payment,
                 titleColor = MaterialTheme.colors.onBackground,
                 detailColor = MaterialTheme.colors.onSurface,
             )
 
             factureText(
-                title = "Address:",
+                title =LocalStrings.current.adress ,
                 detail = order.Address,
                 titleColor = MaterialTheme.colors.onBackground,
                 detailColor = MaterialTheme.colors.onSurface,
@@ -197,7 +199,7 @@ fun orderItemEntry(
 
 
             Text(
-                text = "Products:",
+                text =LocalStrings.current.product,
                 color = Color.Black,
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Medium,
@@ -206,8 +208,6 @@ fun orderItemEntry(
                     .padding(start = 16.dp, top = 4.dp, bottom = 8.dp)
             )
 
-
-            Log.d("AkramBensalem", "order.productList size id ${order.productList}")
 
             order.productList.forEach { row ->
                 finalCartItem(product = row) {}
@@ -231,7 +231,8 @@ fun orderItemEntryPreview() {
         orderItemEntry(
             modifier = Modifier,
             order = OrderItem(
-                productList = Constants.cartList1
+                productList = Constants.cartList1,
+                date =""
             ),
         )
     }

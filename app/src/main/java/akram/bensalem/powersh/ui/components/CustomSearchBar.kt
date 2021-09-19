@@ -1,5 +1,6 @@
 package akram.bensalem.powersh.ui.components
 
+import akram.bensalem.powersh.LocalStrings
 import akram.bensalem.powersh.R
 import akram.bensalem.powersh.ui.theme.Dimens
 import akram.bensalem.powersh.ui.theme.PowerSHTheme
@@ -62,7 +63,7 @@ import java.util.*
 @Composable
 fun CustomSearchBar(
     modifier: Modifier = Modifier,
-    hint: String = "Search by Shoes Name",
+    hint: String = LocalStrings.current.searchByShoesName,
     onSearch: (String) -> Unit = { },
     onOptionsClicked: () -> Unit = { },
     onDismissSearchClicked: () -> Unit = { },

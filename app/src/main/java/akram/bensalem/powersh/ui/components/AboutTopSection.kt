@@ -1,5 +1,6 @@
 package akram.bensalem.powersh.ui.components
 
+import akram.bensalem.powersh.LocalStrings
 import akram.bensalem.powersh.R
 import akram.bensalem.powersh.ui.theme.Dimens
 import akram.bensalem.powersh.ui.theme.PowerSHTheme
@@ -50,7 +51,7 @@ fun AboutTopSection(
                 .size(100.dp)
                 .padding(4.dp),
             painter = appLogo,
-            contentDescription = stringResource(id = R.string.app_logo)
+            contentDescription = LocalStrings.current.appLogo
         )
 
         Text(
@@ -62,7 +63,7 @@ fun AboutTopSection(
         )
 
         Text(
-            text = "Version: $version",
+            text = LocalStrings.current.versionIs(version),
             color = MaterialTheme.colors.onSurface,
             style = MaterialTheme.typography.subtitle2,
             modifier = Modifier
@@ -86,11 +87,11 @@ fun AboutTopSection(
             Icon(
                 imageVector = Icons.Outlined.SecurityUpdate,
                 contentDescription = null,
-                tint = Color.White
+                tint = Color.White,
             )
             Spacer(modifier = Modifier.width(4.dp))
             Text(
-                text = "Check Updates",
+                text = LocalStrings.current.checkUpdate,
                 color = Color.White,
                 modifier = Modifier
                     .padding(

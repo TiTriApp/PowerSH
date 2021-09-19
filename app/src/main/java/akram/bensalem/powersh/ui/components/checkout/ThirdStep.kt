@@ -1,9 +1,11 @@
 package akram.bensalem.powersh.ui.components.checkout
 
+import akram.bensalem.powersh.LocalStrings
 import akram.bensalem.powersh.data.model.CardItem
 import akram.bensalem.powersh.data.model.OrderItem
 import akram.bensalem.powersh.ui.components.ConfirmAlertDialog
 import akram.bensalem.powersh.ui.components.finalCartItem
+import akram.bensalem.powersh.ui.theme.CardCoverPink
 import akram.bensalem.powersh.ui.theme.Dimens
 import akram.bensalem.powersh.utils.getCurrentDate
 import androidx.compose.animation.*
@@ -41,7 +43,7 @@ fun ThirdStep(
     phoneState: MutableState<TextFieldValue>,
     lastNameState: MutableState<TextFieldValue>,
     firstNameState: MutableState<TextFieldValue>,
-    date: String = getCurrentDate(),
+    date: String = getCurrentDate(LocalStrings.current),
     onConfirmClicked: (OrderItem) -> Unit,
 ) {
 
@@ -69,170 +71,164 @@ fun ThirdStep(
     )
     {
 
-        Box(
+        ConfirmAlertDialog(
+            openDialog = openDialog,
+            orderItem = orderItem,
+            onConfirmClicked = onConfirmClicked
+        )
+
+        Card(
+            backgroundColor = MaterialTheme.colors.background,
+            elevation = 2.dp,
+            shape = RoundedCornerShape(12.dp),
             modifier =
             Modifier
                 .fillMaxSize()
                 .padding(top = 8.dp, bottom = 64.dp, start = 16.dp, end = 16.dp)
-                .background(
-                    Color.Transparent,
-                    RoundedCornerShape(12.dp),
-                )
         ) {
 
-
-            ConfirmAlertDialog(
-                openDialog = openDialog,
-                orderItem = orderItem,
-                onConfirmClicked = onConfirmClicked
-            )
-
-
-            Card(
-                backgroundColor = Color.White,
-                elevation = 2.dp,
-                shape = RoundedCornerShape(12.dp),
-                modifier =
+            Column(
                 Modifier
                     .fillMaxSize()
-                    .align(Alignment.Center)
+                    .background(
+                        color = CardCoverPink.copy(alpha = 0.23f),
+                        shape = RoundedCornerShape(12.dp)
+                    )
+            ) {}
+
+            LazyColumn(
+                modifier = Modifier.padding(
+                    start = Dimens.SmallPadding.size,
+                    end = Dimens.SmallPadding.size
+                ),
+                contentPadding = PaddingValues(
+                    top = 2.dp,
+                    bottom = 16.dp
+                )
             ) {
 
-                LazyColumn(
-                    modifier = Modifier.padding(
-                        start = Dimens.SmallPadding.size,
-                        end = Dimens.SmallPadding.size
-                    ),
-                    contentPadding = PaddingValues(
-                        top = 2.dp,
-                        bottom = 16.dp
-                    )
-                ) {
-
-                    item {
-                        Column(
-                            modifier = Modifier
-                                .fillMaxSize()
-                                .padding(start = 16.dp, end = 16.dp)
-                        ) {
+                item {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(start = 16.dp, end = 16.dp)
+                    ) {
 
 
-                            Text(
-                                text = "Your Billing",
-                                color = Color.Black,
-                                fontSize = 18.sp,
-                                fontWeight = FontWeight.SemiBold,
-                                textAlign = TextAlign.Center,
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(top = 8.dp, bottom = 16.dp)
-                            )
-
-                            factureText(
-                                title = "ID:",
-                                detail = "22154854"
-                            )
-                            factureText(
-                                title = "To:",
-                                detail = "${firstNameState.value.text} ${lastNameState.value.text}"
-                            )
-                            factureText(
-                                title = "Phone Number:",
-                                detail = phoneState.value.text
-                            )
-                            factureText(
-                                title = "Shipping Address:",
-                                detail = fullAddressState.value
-                            )
-                            factureText(
-                                title = "Payment Method:",
-                                detail = if (selected.value == MainPayOptions.CCP_OPTION) "CCP" else "Cash On Delivery"
-                            )
-                            factureText(
-                                title = "Date:",
-                                detail = date
-                            )
-
-                            Spacer(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .weight(1f)
-                            )
-
-                        }
-                    }
-                    item {
                         Text(
-                            text = "Your Purchases:",
-                            color = Color.Black,
-                            fontSize = 16.sp,
-                            fontWeight = FontWeight.Medium,
-                            textAlign = TextAlign.Start,
+                            text = LocalStrings.current.yourBilling,
+                            color = MaterialTheme.colors.onBackground,
+                            fontSize = 18.sp,
+                            fontWeight = FontWeight.SemiBold,
+                            textAlign = TextAlign.Center,
                             modifier = Modifier
-                                .padding(start = 16.dp, top = 4.dp, bottom = 8.dp)
+                                .fillMaxWidth()
+                                .padding(top = 8.dp, bottom = 16.dp)
+                        )
+
+                        factureText(
+                            title = LocalStrings.current.id,
+                            detail = "22154854"
+                        )
+                        factureText(
+                            title = LocalStrings.current.to,
+                            detail = "${firstNameState.value.text} ${lastNameState.value.text}"
+                        )
+                        factureText(
+                            title = LocalStrings.current.phoneNumber,
+                            detail = phoneState.value.text
+                        )
+                        factureText(
+                            title = LocalStrings.current.shippingAddress,
+                            detail = fullAddressState.value
+                        )
+                        factureText(
+                            title = LocalStrings.current.paymentMethod,
+                            detail = if (selected.value == MainPayOptions.CCP_OPTION) LocalStrings.current.ccp else LocalStrings.current.cashOnDelivery
+                        )
+                        factureText(
+                            title = LocalStrings.current.date,
+                            detail = date
+                        )
+
+                        Spacer(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .weight(1f)
                         )
 
                     }
-                    itemsIndexed(cartProduct) { _, row ->
-                        finalCartItem(product = row) {
-                            // do something
-                        }
-                        Spacer(modifier = Modifier.padding(Dimens.LargePadding.size))
-                    }
+                }
+                item {
+                    Text(
+                        text = LocalStrings.current.yourPurchases,
+                        color = MaterialTheme.colors.onBackground,
+                        fontSize = 16.sp,
+                        fontWeight = FontWeight.Medium,
+                        textAlign = TextAlign.Start,
+                        modifier = Modifier
+                            .padding(start = 16.dp, top = 4.dp, bottom = 8.dp)
+                    )
 
+                }
+                itemsIndexed(cartProduct) { _, row ->
+                    finalCartItem(product = row) {
+                        // do something
+                    }
+                    Spacer(modifier = Modifier.padding(Dimens.LargePadding.size))
                 }
 
             }
 
-
-            // here
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .align(Alignment.BottomEnd)
-                    .padding(
-                        top = 8.dp,
-                        bottom = Dimens.MiniSmallPadding.size,
-                        end = Dimens.MediumPadding.size
-                    )
-                    .background(
-                        Color.White, RoundedCornerShape(
-                            bottomEnd = 12.dp,
-                            bottomStart = 12.dp
-                        )
-                    )
-            ) {
-
-                Spacer(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .weight(1f)
-                )
-
-                Text(
-                    text = "Total Amount:",
-                    color = Color.Black,
-                    fontSize = 16.sp,
-                    fontWeight = FontWeight.Medium,
-                    textAlign = TextAlign.Start,
-                    modifier = Modifier
-                        .align(Alignment.CenterVertically)
-                        .padding(top = 4.dp, bottom = 4.dp)
-                )
-
-                Text(
-                    text = "${totalPrice.value} DA",
-                    color = MaterialTheme.colors.primary,
-                    fontSize = 16.sp,
-                    fontWeight = FontWeight.Normal,
-                    textAlign = TextAlign.Start,
-                    modifier = Modifier
-                        .align(Alignment.CenterVertically)
-                        .padding(start = 4.dp, top = 4.dp, bottom = 4.dp)
-                )
-            }
         }
 
 
+        // here
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(
+                    top = 8.dp,
+                    bottom = Dimens.MiniSmallPadding.size,
+                    end = Dimens.MediumPadding.size
+                )
+                .background(
+                    Color.White, RoundedCornerShape(
+                        bottomEnd = 12.dp,
+                        bottomStart = 12.dp
+                    )
+                )
+        ) {
+
+            Spacer(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(1f)
+            )
+
+            Text(
+                text = LocalStrings.current.totalAmount,
+                color = MaterialTheme.colors.onBackground,
+                fontSize = 16.sp,
+                fontWeight = FontWeight.Medium,
+                textAlign = TextAlign.Start,
+                modifier = Modifier
+                    .align(Alignment.CenterVertically)
+                    .padding(top = 4.dp, bottom = 4.dp)
+            )
+
+            Text(
+                text = LocalStrings.current.totalShoesValue(totalPrice.value),
+                color = MaterialTheme.colors.primary,
+                fontSize = 16.sp,
+                fontWeight = FontWeight.Normal,
+                textAlign = TextAlign.Start,
+                modifier = Modifier
+                    .align(Alignment.CenterVertically)
+                    .padding(start = 4.dp, top = 4.dp, bottom = 4.dp)
+            )
+        }
     }
+
+
 }

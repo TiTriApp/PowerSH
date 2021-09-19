@@ -1,5 +1,6 @@
 package akram.bensalem.powersh.ui.components
 
+import akram.bensalem.powersh.LocalStrings
 import akram.bensalem.powersh.R
 import akram.bensalem.powersh.ui.theme.Dimens
 import akram.bensalem.powersh.ui.theme.PowerSHTheme
@@ -134,7 +135,7 @@ fun CollapsingToolbarBase(
             ) {
                 Icon(
                     imageVector = Icons.Rounded.ArrowBack,
-                    contentDescription = stringResource(id = R.string.back_icon),
+                    contentDescription = LocalStrings.current.goBack,
                     tint = MaterialTheme.colors.onSurface
                 )
             }
