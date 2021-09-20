@@ -1,9 +1,11 @@
 package akram.bensalem.powersh.ui.components
 
+import akram.bensalem.powersh.lyricist
 import akram.bensalem.powersh.ui.theme.Dimens
 import akram.bensalem.powersh.ui.theme.PowerSHGreen
 import akram.bensalem.powersh.ui.theme.PowerSHTheme
 import akram.bensalem.powersh.utils.autofill
+import akram.bensalem.powersh.utils.localization.Locales
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.spring
@@ -27,6 +29,7 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -128,6 +131,9 @@ fun CustomTextField(
                                     contentDescription = null,
                                     tint = iconTint,
                                     modifier = Modifier.size(24.dp)
+                                                                .graphicsLayer {
+                                                                    rotationY = if (lyricist.languageTag == Locales.AR) 180f else 0f
+                                                                },
                                 )
                             }
 
@@ -162,6 +168,9 @@ fun CustomTextField(
                                     contentDescription = null,
                                     tint = if (!isValid) MaterialTheme.colors.error else PowerSHGreen,
                                     modifier = Modifier.size(24.dp)
+                                                                .graphicsLayer {
+                                                                    rotationY = if (lyricist.languageTag == Locales.AR) 180f else 0f
+                                                                },
                                 )
                             }
 

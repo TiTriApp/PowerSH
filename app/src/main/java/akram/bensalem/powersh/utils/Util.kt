@@ -48,11 +48,21 @@ fun isPhoneValid(phone : String): Boolean{
 }
 
 
-fun isNameValid(name : String): Boolean{
+fun isNameValid(name : String, letter: Int = 3): Boolean{
     return if (name.isEmpty()) {
         true
     } else {
-       name.length >= 3
+       name.length >= letter
+    }
+}
+
+
+fun isFullNameValid(name : String): Boolean{
+    return if (name.isEmpty()) {
+        true
+    } else {
+        val s =  name.split(" ")
+       s.size > 1 && s[0].length >= 3 && s[1].length >= 3
     }
 }
 

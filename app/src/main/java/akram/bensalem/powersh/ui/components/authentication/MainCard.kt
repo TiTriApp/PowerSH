@@ -2,9 +2,11 @@ package akram.bensalem.powersh.ui.components.authentication
 
 import akram.bensalem.powersh.LocalStrings
 import akram.bensalem.powersh.R
+import akram.bensalem.powersh.lyricist
 import akram.bensalem.powersh.ui.components.loginTabs
 import akram.bensalem.powersh.ui.theme.Dimens
 import akram.bensalem.powersh.ui.theme.PowerSHTheme
+import akram.bensalem.powersh.utils.localization.Locales
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.Image
@@ -119,6 +121,10 @@ fun MainCard(
                     ),
             ) {
                 Icon(
+                modifier = Modifier
+                                            .graphicsLayer {
+                                                rotationY = if (lyricist.languageTag == Locales.AR) 180f else 0f
+                                            },
                     imageVector = Icons.Rounded.ArrowBack,
                     contentDescription = LocalStrings.current.goBack,
                     tint = Color.White,

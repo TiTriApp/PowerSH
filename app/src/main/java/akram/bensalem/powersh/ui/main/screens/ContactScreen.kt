@@ -1,47 +1,64 @@
 package akram.bensalem.powersh.ui.main.screens
 
 import akram.bensalem.powersh.LocalStrings
+import akram.bensalem.powersh.lyricist
 import akram.bensalem.powersh.ui.components.confirmMessageSentAlertDialog
 import akram.bensalem.powersh.ui.theme.Dimens
+import akram.bensalem.powersh.ui.theme.PowerSHGreen
 import akram.bensalem.powersh.ui.theme.PowerSHLightRed
 import akram.bensalem.powersh.ui.theme.PowerSHTheme
-import akram.bensalem.powersh.utils.isOnline
+import akram.bensalem.powersh.utils.*
+import akram.bensalem.powersh.utils.email.Mailer
+import akram.bensalem.powersh.utils.localization.Locales
 import android.content.Context
 import android.content.Intent
 import android.content.res.Configuration
 import android.net.Uri
 import android.widget.Toast
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.spring
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.AccountCircle
-import androidx.compose.material.icons.outlined.Email
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.material.icons.outlined.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.autofill.AutofillType
 import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.ui.text.input.*
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.constraintlayout.compose.ConstraintLayout
 import com.google.accompanist.insets.navigationBarsPadding
 import com.google.accompanist.insets.statusBarsPadding
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import io.reactivex.rxjava3.schedulers.Schedulers
+import timber.log.Timber
 
 
 @OptIn(ExperimentalComposeUiApi::class)
@@ -88,12 +105,16 @@ fun contactScreen() {
 
     val localStrings = LocalStrings.current
 
-    Box(
+    ConstraintLayout(
         modifier = Modifier
+            .verticalScroll(state = rememberScrollState())
             .fillMaxSize()
             .statusBarsPadding()
             .navigationBarsPadding()
+
     ) {
+
+        val (card, send, progress) = createRefs()
 
         Card(
             shape = RoundedCornerShape(14.dp),
@@ -101,14 +122,20 @@ fun contactScreen() {
             elevation = 3.dp,
             modifier = Modifier
                 .fillMaxSize()
-                .align(Alignment.Center)
-                .statusBarsPadding()
-                .navigationBarsPadding()
+                .constrainAs(card) {
+                    top.linkTo(parent.top)
+                    start.linkTo(parent.start)
+                    end.linkTo(parent.end)
+                    bottom.linkTo(send.top)
+
+                }
                 .padding(
-                    bottom = 64.dp,
+                    top = Dimens.UpperMediumPadding.size,
+                    bottom = Dimens.UpperMediumPadding.size,
                     start = Dimens.UpperMediumPadding.size,
-                    end = Dimens.UpperMediumPadding.size
+                    end = Dimens.UpperMediumPadding.size,
                 )
+
         ) {
 
             Column(
@@ -139,7 +166,7 @@ fun contactScreen() {
                     textFieldModifier = Modifier
                         .border(1.dp, MaterialTheme.colors.primary, RoundedCornerShape(12.dp))
                         .background(color = PowerSHLightRed, RoundedCornerShape(12.dp))
-                        .padding(12.dp),
+                        .padding(8.dp),
                     title = LocalStrings.current.yourFullName ,
                     insideTextColor = MaterialTheme.colors.onBackground,
                     fieldState = nameState,
@@ -150,6 +177,8 @@ fun contactScreen() {
                     autofillType = AutofillType.PersonFullName,
                     keyboardType = KeyboardType.Text,
                     imeAction = ImeAction.Next,
+                    isValid = isFullNameValid(name = nameState.value.text),
+                    errorMessage = LocalStrings.current.tooShort,
                     onNext = {
                         emailRequester.requestFocus()
                     },
@@ -167,13 +196,15 @@ fun contactScreen() {
                     textFieldModifier = Modifier
                         .border(1.dp, MaterialTheme.colors.primary, RoundedCornerShape(12.dp))
                         .background(color = PowerSHLightRed, RoundedCornerShape(12.dp))
-                        .padding(12.dp),
+                        .padding(8.dp),
                     title = LocalStrings.current.yourEmail,
                     insideTextColor = MaterialTheme.colors.onBackground,
                     fieldState = emailState,
                     icon = Icons.Outlined.Email,
                     iconTint = MaterialTheme.colors.primary,
                     isPassword = false,
+                    isValid = isEmailValid(email = emailState.value.text),
+                    errorMessage = LocalStrings.current.emailIsNotValid,
                     focusRequester = emailRequester,
                     autofillType = AutofillType.EmailAddress,
                     keyboardType = KeyboardType.Text,
@@ -186,7 +217,7 @@ fun contactScreen() {
                     }
                 )
 
-                akram.bensalem.powersh.ui.components.CustomTextField(
+                messageTextField(
                     modifier = Modifier
                         .padding(0.dp, 8.dp)
                         .fillMaxWidth()
@@ -194,7 +225,7 @@ fun contactScreen() {
                     textFieldModifier = Modifier
                         .border(1.dp, MaterialTheme.colors.primary, RoundedCornerShape(12.dp))
                         .background(color = PowerSHLightRed, RoundedCornerShape(12.dp))
-                        .padding(96.dp),
+                        .padding(12.dp),
                     title = LocalStrings.current.yourMessage,
                     insideTextColor = MaterialTheme.colors.onBackground,
                     fieldState = messageState,
@@ -203,6 +234,8 @@ fun contactScreen() {
                     singleLine = false,
                     isPassword = false,
                     focusRequester = messageRequester,
+                    isValid = isNameValid(name = messageState.value.text, 16),
+                    errorMessage = LocalStrings.current.tooShort,
                     autofillType = AutofillType.NewPassword,
                     keyboardType = KeyboardType.Text,
                     imeAction = ImeAction.Done,
@@ -213,6 +246,9 @@ fun contactScreen() {
                         view.clearFocus()
                     }
                 )
+                
+                Spacer(modifier = Modifier.height(16.dp))
+                
             }
         }
 
@@ -223,30 +259,42 @@ fun contactScreen() {
             ),
             shape = CircleShape,
             modifier = Modifier
-                .align(Alignment.BottomCenter)
-                .padding(start = 16.dp, end = 16.dp, top = 32.dp, bottom = 32.dp),
+                .constrainAs(send) {
+                    start.linkTo(parent.start)
+                    end.linkTo(parent.end)
+                    bottom.linkTo(parent.bottom)
+                    top.linkTo(card.bottom)
+                }
+                .padding(
+                    bottom =  32.dp,
+                    top = 32.dp
+                ),
+            enabled = isValid(
+                email = emailState.value.text,
+               message =  messageState.value.text,
+                fullName = nameState.value.text ),
             onClick = {
                 isOnline.value = isOnline(context = context)
-                if (isOnline.value && emailState.value.text.isNotEmpty() && messageState.value.text.isNotEmpty() && nameState.value.text.isNotEmpty()) {
-                    // send message
-//      isMessageSent.value = true
-                    sendEmail(
-                        context = context,
-                        recipient = "powersshoes2@gmail.com",
-                        subject = nameState.value.text,
-                        message = "Email is : ${emailState.value.text} + ${messageState.value.text}",
-                        isMessageSent = isMessageSent
-                    )
+                if (isOnline.value) {
 
-/*
+                    isOnProgress.value = true
 
-                    val sender = GMailSender(
-                        "arslimane32@gmail.com",
-                        "123456789Sl"
-                    )
-
-                    sender.sendMail("arslimane32@gmail.com", "arslimane32@gmail.com", "arslimane32@gmail.com", "powersshoes2@gmail.com")
-*/
+                    Mailer.sendMail(
+                        "powersshoes2@gmail.com",
+                        nameState.value.text,
+                        emailState.value.text +"\n" + messageState.value.text)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(
+                            {
+                                isOnProgress.value = false
+                                isMessageSent.value = true
+                            },
+                            {
+                                isOnProgress.value = false
+                                Toast.makeText(context, localStrings.contactFailed, Toast.LENGTH_SHORT).show()
+                            }
+                                )
 
 
                 } else if (isOnline.value) {
@@ -259,7 +307,10 @@ fun contactScreen() {
             Text(
                 text = LocalStrings.current.send,
                 textAlign = TextAlign.Center,
-                color = Color.White,
+                color = if  (isValid(
+                    email = emailState.value.text,
+                    message =  messageState.value.text,
+                    fullName = nameState.value.text )) Color.White else  MaterialTheme.colors.onSurface,
                 modifier = Modifier.padding(
                     start = 24.dp,
                     end = 24.dp,
@@ -271,7 +322,13 @@ fun contactScreen() {
 
 
         if (isOnProgress.value) CircularProgressIndicator(
-            modifier = Modifier.align(Alignment.Center)
+            modifier = Modifier.constrainAs(progress) {
+                top.linkTo(parent.top)
+                start.linkTo(parent.start)
+                end.linkTo(parent.end)
+                bottom.linkTo(parent.bottom)
+
+            }
         )
 
         confirmMessageSentAlertDialog(isMessageSent, nameState, emailState, messageState)
@@ -307,6 +364,204 @@ fun sendEmail(
 
 }
 
+
+
+
+private fun isValid(email : String,
+                    fullName :String,
+                    message: String ):Boolean {
+    return (
+            email.isNotEmpty()
+                    && fullName.isNotEmpty()
+                    && message.isNotEmpty()
+                    && isEmailValid(email)
+                    && isFullNameValid(fullName)
+                    && isNameValid(message, 16)
+            )
+}
+
+
+
+
+
+
+
+
+@ExperimentalComposeUiApi
+@Composable
+fun messageTextField(
+    modifier: Modifier = Modifier,
+    textFieldModifier: Modifier = Modifier,
+    title: String,
+    icon: ImageVector? = null,
+    iconTint: Color = Color.DarkGray,
+    isPassword: Boolean =false,
+    fieldState: MutableState<TextFieldValue> = remember {
+        mutableStateOf(TextFieldValue())
+    },
+    insideTextColor: Color = Color.DarkGray,
+    focusRequester: FocusRequester = FocusRequester(),
+    autofillType: AutofillType = AutofillType.EmailAddress,
+    singleLine: Boolean = true,
+    keyboardType: KeyboardType = KeyboardType.Text,
+    imeAction: ImeAction = ImeAction.Next,
+    isValid: Boolean = true,
+    errorMessage : String = "Error: You input is not valid",
+    onNext: () -> Unit = {},
+    onDone: () -> Unit = {},
+){
+
+    var isFieldFocus by remember {
+        mutableStateOf(false)
+    }
+
+    var isIconButtonPressed by remember {
+        mutableStateOf(false)
+    }
+
+    val color =
+        if (fieldState.value.text.isNotEmpty()) MaterialTheme.colors.primary.copy(0.9f) else Color.LightGray
+
+
+    val textColor by animateColorAsState(
+        color,
+        spring(Spring.DampingRatioLowBouncy, Spring.StiffnessLow)
+    )
+
+
+    Column(
+        modifier = modifier
+
+    ) {
+        Text(
+            text = title,
+            fontWeight = FontWeight.SemiBold,
+            color = if (isFieldFocus) MaterialTheme.colors.primary else textColor,
+            modifier = Modifier.padding(top = 4.dp, start = 2.dp, bottom = 8.dp)
+        )
+        BasicTextField(
+            modifier = textFieldModifier
+                .fillMaxWidth()
+                .focusRequester(focusRequester)
+                .autofill(
+                    autofillTypes = listOf(autofillType),
+                    onFill = { fieldState.value = TextFieldValue(it) },
+                )
+                .onFocusChanged {
+                    isFieldFocus = it.isFocused
+                },
+            singleLine = singleLine,
+            textStyle = TextStyle(
+                color = insideTextColor
+            ),
+            cursorBrush = SolidColor(insideTextColor),
+            decorationBox = { innerTextField ->
+                Row(
+                    verticalAlignment = Alignment.Top,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(160.dp),
+                    content = {
+                        if (icon != null) {
+                            IconButton(
+                                onClick = {
+                                    isIconButtonPressed = !isIconButtonPressed
+                                },
+                                modifier = Modifier
+                                    .size(32.dp)
+                                    .align(Alignment.Top)
+                            ) {
+                                Icon(
+                                    imageVector = if (!isPassword) icon else {
+                                        if (!isIconButtonPressed) Icons.Outlined.VisibilityOff else Icons.Outlined.Visibility
+                                    },
+                                    contentDescription = null,
+                                    tint = iconTint,
+                                    modifier = Modifier.size(24.dp)
+                                                                .graphicsLayer {
+                                                                    rotationY = if (lyricist.languageTag == Locales.AR) 180f else 0f
+                                                                },
+                                )
+                            }
+
+                        }
+                        Box(
+                            modifier = Modifier.weight(1f),
+                            contentAlignment = Alignment.CenterStart,
+                            content = {
+                                Box(
+                                    modifier.padding(1.dp)
+                                ){
+                                    if (fieldState.value.text.isEmpty()) {
+                                        Text(
+                                            textAlign = TextAlign.Start,
+                                            modifier = Modifier
+                                                .fillMaxWidth()
+                                                .padding(horizontal = 2.dp),
+                                            text = fieldState.value.text,
+                                            color = insideTextColor
+                                        )
+                                    }
+                                    innerTextField()
+                                }
+
+                            }
+                        )
+                        if (fieldState.value.text.isNotEmpty()) {
+                            IconButton(
+                                onClick = {},
+                                enabled = false,
+                                modifier = Modifier
+                                    .size(32.dp)
+                                    .align(Alignment.Top)
+                            ) {
+                                Icon(
+                                    imageVector =if (!isValid) Icons.Outlined.ErrorOutline else Icons.Outlined.CheckCircleOutline,
+                                    contentDescription = null,
+                                    tint = if (!isValid) MaterialTheme.colors.error else PowerSHGreen,
+                                    modifier = Modifier.size(24.dp)
+                                                                .graphicsLayer {
+                                                                    rotationY = if (lyricist.languageTag == Locales.AR) 180f else 0f
+                                                                },
+                                )
+                            }
+
+                        }
+                    }
+                )
+            },
+            keyboardActions = KeyboardActions(
+                onNext = {
+                    onNext()
+                },
+                onDone = {
+                    onDone()
+                }
+            ),
+            visualTransformation = if (isIconButtonPressed || !isPassword) VisualTransformation.None else PasswordVisualTransformation(),
+            value = fieldState.value,
+            onValueChange = {
+                fieldState.value = it
+            },
+            keyboardOptions = KeyboardOptions(
+                imeAction = imeAction,
+                keyboardType = keyboardType
+            ),
+        )
+
+        if (!isValid) {
+            Text(
+                text = errorMessage,
+                color = MaterialTheme.colors.error,
+                style = MaterialTheme.typography.caption,
+                modifier = Modifier.padding(start = Dimens.SmallPadding.size)
+            )
+        }
+
+    }
+
+
+}
 
 @Preview
 @Composable

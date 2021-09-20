@@ -2,8 +2,10 @@ package akram.bensalem.powersh.ui.components
 
 import akram.bensalem.powersh.LocalStrings
 import akram.bensalem.powersh.R
+import akram.bensalem.powersh.lyricist
 import akram.bensalem.powersh.ui.theme.Dimens
 import akram.bensalem.powersh.ui.theme.PowerSHTheme
+import akram.bensalem.powersh.utils.localization.Locales
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.tween
@@ -17,6 +19,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -85,6 +88,10 @@ fun AboutTopSection(
                 .elevation(0.dp)
         ) {
             Icon(
+            modifier = Modifier
+                               .graphicsLayer {
+                                            rotationY = if (lyricist.languageTag == Locales.AR) 180f else 0f
+                                        },
                 imageVector = Icons.Outlined.SecurityUpdate,
                 contentDescription = null,
                 tint = Color.White,

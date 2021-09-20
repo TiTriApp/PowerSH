@@ -2,10 +2,12 @@ package akram.bensalem.powersh.ui.main.screens
 
 import akram.bensalem.powersh.LocalStrings
 import akram.bensalem.powersh.R
+import akram.bensalem.powersh.lyricist
 import akram.bensalem.powersh.ui.components.CollapsingToolbarBase
 import akram.bensalem.powersh.ui.theme.Dimens
 import akram.bensalem.powersh.ui.theme.PowerSHTheme
 import akram.bensalem.powersh.utils.authentification.Authenticate
+import akram.bensalem.powersh.utils.localization.Locales
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.tween
@@ -29,13 +31,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -125,7 +127,10 @@ fun profileScreen(
                             .padding(
                                 horizontal = 4.dp,
                                 vertical = Dimens.ElevationPadding.size
-                            ),
+                            )
+                            .graphicsLayer {
+                                rotationY = if (lyricist.languageTag == Locales.AR) 180f else 0f
+                            },
                         style = TextStyle(
                             fontWeight = FontWeight.Normal,
                             fontSize = 14.sp
@@ -249,7 +254,7 @@ fun profileScreen(
 fun profileItem(
     modifier: Modifier = Modifier,
     title: String,
-    content: String ,
+    content: String,
     child: @Composable (Modifier) -> Unit = {}
 ) {
     Column(
@@ -362,6 +367,10 @@ fun profileHeader(
                 .elevation(1.dp)
         ) {
             Icon(
+                modifier = Modifier
+                    .graphicsLayer {
+                        rotationY = if (lyricist.languageTag == Locales.AR) 180f else 0f
+                    },
                 imageVector = Icons.Outlined.Edit,
                 contentDescription = null,
                 tint = MaterialTheme.colors.primary

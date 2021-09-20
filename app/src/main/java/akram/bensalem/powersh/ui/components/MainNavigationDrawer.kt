@@ -3,10 +3,12 @@ package akram.bensalem.powersh.ui.components
 
 import akram.bensalem.powersh.LocalStrings
 import akram.bensalem.powersh.R
+import akram.bensalem.powersh.lyricist
 import akram.bensalem.powersh.ui.main.screens.PowerSHScreens
 import akram.bensalem.powersh.ui.theme.Dimens
 import akram.bensalem.powersh.ui.theme.PowerSHTheme
 import akram.bensalem.powersh.utils.authentification.Authenticate
+import akram.bensalem.powersh.utils.localization.Locales
 import android.app.Activity
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -19,6 +21,7 @@ import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -30,6 +33,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.google.accompanist.insets.navigationBarsPadding
+import com.google.accompanist.insets.statusBarsPadding
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -49,17 +53,14 @@ fun MainDrawer(
     Column(
         modifier
             .fillMaxSize()
-            .padding(start = 0.dp, top = 0.dp)
+            .statusBarsPadding()
     ) {
 
         Row(
             horizontalArrangement = Arrangement.spacedBy(16.dp),
             modifier = Modifier
                 .fillMaxWidth()
-                .clickable(
-                    interactionSource = remember { MutableInteractionSource() },
-                    indication = rememberRipple(radius = 250.dp)
-                ) {
+                .clickable{
                     if (isLogged.value) {
                         navController.navigate(PowerSHScreens.ProfileScreen.name)
                     } else {
@@ -237,7 +238,10 @@ fun DrawerRow(
             Icon(
                 icon,
                 contentDescription = title,
-                modifier = Modifier.size(36.dp),
+                modifier = Modifier.size(36.dp)
+                                            .graphicsLayer {
+                                                rotationY = if (lyricist.languageTag == Locales.AR) 180f else 0f
+                                            },
                 tint = if (selectedScreen.value == id.uppercase()) MaterialTheme.colors.primary else MaterialTheme.colors.onBackground,
             )
 

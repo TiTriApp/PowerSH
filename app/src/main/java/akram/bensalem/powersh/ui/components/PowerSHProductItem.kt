@@ -1,8 +1,11 @@
 package akram.bensalem.powersh.ui.components
 
+import akram.bensalem.powersh.LocalStrings
 import akram.bensalem.powersh.data.model.ShoeProduct
+import akram.bensalem.powersh.lyricist
 import akram.bensalem.powersh.ui.theme.*
 import akram.bensalem.powersh.utils.Constants
+import akram.bensalem.powersh.utils.localization.Locales
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -10,11 +13,13 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.AddShoppingCart
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
@@ -121,6 +126,9 @@ fun ProductShoesEntry(
                             vertical = Dimens.SmallPadding.size,
                             horizontal = Dimens.SmallPadding.size
                         )
+                        .graphicsLayer {
+                            rotationY = if (lyricist.languageTag == Locales.AR) 180f else 0f
+                        }
                 )
 
 
@@ -151,7 +159,7 @@ fun ProductShoesEntry(
                     ) {
                         if (shoeProduct.marketPriceStart != shoeProduct.marketPriceEnd) {
                             Text(
-                                text = "${shoeProduct.marketPriceEnd} DA",
+                                text = LocalStrings.current.totalPriceValue(shoeProduct.marketPriceEnd),
                                 color = MaterialTheme.colors.primary,
                                 style = MaterialTheme.typography.subtitle2,
                                 textDecoration = TextDecoration.LineThrough,
@@ -161,7 +169,7 @@ fun ProductShoesEntry(
                             )
                         }
                         Text(
-                            text = "${shoeProduct.marketPriceStart} DA",
+                            text =LocalStrings.current.totalPriceValue(shoeProduct.marketPriceStart),
                             color = PowerSHGreen,
                             style = MaterialTheme.typography.subtitle2,
                             fontWeight = FontWeight.Medium,
@@ -180,8 +188,13 @@ fun ProductShoesEntry(
                         onEntryClick()
                     }) {
                     Icon(
-                        imageVector = Icons.Outlined.Info,
-                        contentDescription = "More",
+                        modifier = Modifier
+                            .graphicsLayer {
+                                rotationY = if (lyricist.languageTag == Locales.AR) 180f else 0f
+                            },
+
+                        imageVector =Icons.Outlined.AddShoppingCart,
+                        contentDescription = LocalStrings.current.info,
                         tint = Color.LightGray
                     )
                 }

@@ -1,6 +1,9 @@
 package akram.bensalem.powersh.utils.localization
 
 import akram.bensalem.powersh.data.model.OrderStatus
+import akram.bensalem.powersh.ui.theme.Theme
+import akram.bensalem.powersh.utils.Constants
+import akram.bensalem.powersh.utils.Sort
 
 @cafe.adriel.lyricist.processor.Strings(languageTag = Locales.FR)
 val FrStrings = Strings(
@@ -39,6 +42,9 @@ val FrStrings = Strings(
     totalPriceValue = { price ->
         "$price DA"
     },
+    totalPriceValueString = {price ->
+        "$price DA"
+    },
     checkout = "Vérifier",
     emptyCart = "Panier vide",
 
@@ -72,13 +78,13 @@ val FrStrings = Strings(
     oneFieldOrManyEmpty = "Un des champs ou plusieurs sont vides",
 
     emptyOrderList = "Liste de commandes vide",
-    noOrders = "Il n'y a pas de commandes!",
+    noOrders = "Il n'y a pas des commandes!",
     totalOrders = "Total des commandes",
     totalOrdersValue = {orders ->
         when {
-            orders > 1 -> "$orders commandes"
-            orders == 1 -> "Un seul commande"
-            else -> "pas de commande"
+            orders > 1 -> "$orders Commandes"
+            orders == 1 -> "Un seul Commande"
+            else -> "Pas de Commande"
         }
     },
 
@@ -215,7 +221,7 @@ val FrStrings = Strings(
     versionIs = {version ->
         "Version: $version"
     },
-    checkUpdate = "Vérifier les mises à jour",
+    checkUpdate = "Mise à jour",
     yourBilling = "Votre facturation",
     to = "À:",
     phoneNumber = "Numéro de téléphone:",
@@ -230,7 +236,7 @@ val FrStrings = Strings(
     daira = "Daira",
     commune = "Commune",
 
-    ccpOrBaridiMob = "CCP or BaridiMob",
+    ccpOrBaridiMob = "CCP ou BaridiMob",
     payWhenDelivered = "Payez lorsque les produits vous sont livrés",
     payUsingCCP = "Payez maintenant avec votre CCP ou BaridiMob",
 
@@ -249,6 +255,35 @@ val FrStrings = Strings(
     callUs = "APPELEZ-NOUS",
     dearCustomerVerifyYourInfo = "Cher client, assurez-vous de bien remplir vos informations et vous recevrez un appel de notre service client pour confirmer votre commande",
     back = "Précédent",
-    next = "Suivant"
+    next = "Suivant",
 
-)
+
+
+
+
+
+    dearCustomerFillTheForm = "Cher client, assurez-vous de confirmer vos informations de livraison en remplissant ce formulaire :",
+    phoneNumberIsNotValid = "Ce numéro de téléphone n'est pas valide",
+    languageOption = "Option de Langue",
+    themeOptions = "Options du Thème",
+    sortOptions = "Option de tri par défaut" ,
+    lightTheme = "Thème de la lumière",
+    darkTheme = "Thème sombre",
+    followSystemMode = "Suivre les paramètres système",
+    alphabeticASC = "Ordre Alphabétique",
+    heightPrice = "Prix le plus élevé d'abord",
+    lowPrice = "Prix le plus bas d'abord",
+    lastRelease = "Version la plus ancienne en premier",
+    firstRelease = "Dernière version d'abord",
+
+    fullAddress ="Adresse Complète",
+
+            contactFailed = "Échec de l'envoi du message!",
+    open = "Ouvrir",
+
+    billingHaveBeenPrinted = "La facture a été imprimée!",
+    at = {time ->
+        "À $time"}
+
+
+    )

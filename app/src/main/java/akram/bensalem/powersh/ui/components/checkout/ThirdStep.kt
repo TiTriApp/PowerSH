@@ -172,9 +172,7 @@ fun ThirdStep(
 
                 }
                 itemsIndexed(cartProduct) { _, row ->
-                    finalCartItem(product = row) {
-                        // do something
-                    }
+                    finalCartItem(product = row)
                     Spacer(modifier = Modifier.padding(Dimens.LargePadding.size))
                 }
 

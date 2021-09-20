@@ -1,8 +1,10 @@
 package akram.bensalem.powersh.ui.components
 
 import akram.bensalem.powersh.LocalStrings
+import akram.bensalem.powersh.lyricist
 import akram.bensalem.powersh.ui.theme.Amber500
 import akram.bensalem.powersh.ui.theme.PowerSHTheme
+import akram.bensalem.powersh.utils.localization.Locales
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -16,6 +18,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -56,7 +59,7 @@ fun CartButton(
                 )
                 Spacer(modifier = Modifier.height(2.dp))
                 Text(
-                    text = "$" + "%.2f".format(price),
+                    text = LocalStrings.current.totalPriceValueString("%.2f".format(price)) ,
                     color = Color.DarkGray,
                     fontStyle = FontStyle.Normal,
                     fontWeight = FontWeight.Normal,
@@ -76,7 +79,12 @@ fun CartButton(
                 style = MaterialTheme.typography.button
             )
 
-            Icon(imageVector = Icons.Rounded.ChevronRight, contentDescription = "Icon")
+            Icon(
+            modifier = Modifier
+                                        .graphicsLayer {
+                                            rotationY = if (lyricist.languageTag == Locales.AR) 180f else 0f
+                                        },
+            imageVector = Icons.Rounded.ChevronRight, contentDescription = "Icon")
         }
     }
 }

@@ -39,6 +39,7 @@ import com.google.accompanist.navigation.animation.composable
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import kotlinx.coroutines.launch
+import java.util.*
 
 
 @ExperimentalPermissionsApi
@@ -380,7 +381,12 @@ fun PowerSHNavHost(
                             2 -> lyricist.languageTag = Locales.FR
                             3 -> lyricist.languageTag = Locales.EN
                             else -> {
-                            //
+                                when(Locale.getDefault().language){
+                                    "en" -> lyricist.languageTag = Locales.EN
+                                    "fr" -> lyricist.languageTag =Locales.FR
+                                    "ar" -> lyricist.languageTag =Locales.AR
+                                    else -> lyricist.languageTag =Locales.EN
+                                }
                              }
                         }
 

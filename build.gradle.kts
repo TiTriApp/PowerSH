@@ -6,6 +6,8 @@ buildscript {
         mavenCentral()
         maven(url = "https://www.jitpack.io")
         maven ( url ="https://oss.sonatype.org/content/repositories/snapshots/" )
+        maven ( url = "https://oss.jfrog.org/libs-snapshot" )
+
 
     }
     dependencies {

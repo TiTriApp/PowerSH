@@ -2,9 +2,11 @@ package akram.bensalem.powersh.ui.components
 
 import akram.bensalem.powersh.LocalStrings
 import akram.bensalem.powersh.data.model.CardItem
+import akram.bensalem.powersh.lyricist
 import akram.bensalem.powersh.ui.theme.CardCoverPink
 import akram.bensalem.powersh.ui.theme.Dimens
 import akram.bensalem.powersh.ui.theme.Shapes
+import akram.bensalem.powersh.utils.localization.Locales
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.ExperimentalFoundationApi
@@ -117,7 +119,8 @@ fun cardItemEntry(
             modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Box(contentAlignment = Alignment.Center) {
+            Box(contentAlignment = Alignment.Center,
+            modifier = Modifier.weight(1f)) {
                 Column(
                     Modifier
                         .size(130.dp)
@@ -131,7 +134,7 @@ fun cardItemEntry(
                 if (imageLoading) {
                     LoadingImage(
                         modifier = Modifier
-                            .size(162.dp)
+                            .size(130.dp)
                             .padding(Dimens.MediumPadding.size)
                     )
                 }
@@ -159,6 +162,7 @@ fun cardItemEntry(
                         bottom = Dimens.MediumPadding.size,
                         end = Dimens.MediumPadding.size
                     )
+                    .weight(1f)
             ) {
                 Text(
                     text = product.title,
@@ -177,7 +181,7 @@ fun cardItemEntry(
                 )
                 SubtitleText(
                     subtitleName = LocalStrings.current.marketValue,
-                    subtitleData = product.price.toString()
+                    subtitleData =LocalStrings.current.totalPriceValue(product.price)
                 )
 
             }
@@ -190,6 +194,7 @@ fun cardItemEntry(
                 modifier = Modifier
                     .background(shape = CircleShape, color = Color.Transparent)
                     .align(Alignment.CenterVertically)
+                    .padding(4.dp, 0.dp)
             ) {
                 Icon(
                     imageVector = Icons.Outlined.DeleteForever,
@@ -198,6 +203,9 @@ fun cardItemEntry(
                     modifier = Modifier
                         .size(24.dp)
                         .align(Alignment.CenterVertically)
+                        .graphicsLayer {
+                          rotationY = if (lyricist.languageTag == Locales.AR) 180f else 0f
+                                                    },
                 )
             }
         }

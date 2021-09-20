@@ -35,6 +35,8 @@ data class Strings(
     val cartIsEmpty : String,
     val totalPrice: String,
     val totalPriceValue: (totalPrice: Int) -> String,
+    val totalPriceValueString: (totalPrice: String) -> String,
+
     val checkout : String,
     val emptyCart : String,
 
@@ -216,6 +218,8 @@ data class Strings(
     val phoneNumberIsNotValid : String,
     val languageOption : String,
     val themeOptions : String,
+    val sortOptions : String,
+
     val lightTheme : String,
     val darkTheme : String,
     val followSystemMode : String,
@@ -226,5 +230,13 @@ data class Strings(
     val firstRelease : String,
     val lastRelease : String,
 
+    val fullAddress : String,
+
+    val contactFailed :String,
+
+    val open : String,
+
+    val billingHaveBeenPrinted : String,
+    val at : (String) -> String,
 
     )

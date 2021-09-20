@@ -2,8 +2,10 @@ package akram.bensalem.powersh.ui.components
 
 import akram.bensalem.powersh.LocalStrings
 import akram.bensalem.powersh.R
+import akram.bensalem.powersh.lyricist
 import akram.bensalem.powersh.ui.theme.Dimens
 import akram.bensalem.powersh.ui.theme.PowerSHTheme
+import akram.bensalem.powersh.utils.localization.Locales
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.*
@@ -134,6 +136,10 @@ fun CollapsingToolbarBase(
                     .padding(Dimens.SmallPadding.size)
             ) {
                 Icon(
+                modifier = Modifier
+                                            .graphicsLayer {
+                                                rotationY = if (lyricist.languageTag == Locales.AR) 180f else 0f
+                                            },
                     imageVector = Icons.Rounded.ArrowBack,
                     contentDescription = LocalStrings.current.goBack,
                     tint = MaterialTheme.colors.onSurface

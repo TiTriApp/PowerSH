@@ -3,11 +3,13 @@ package akram.bensalem.powersh.ui.components
 import akram.bensalem.powersh.LocalStrings
 import akram.bensalem.powersh.data.model.CardItem
 import akram.bensalem.powersh.data.model.ShoeProduct
+import akram.bensalem.powersh.lyricist
 import akram.bensalem.powersh.ui.theme.CardCoverPink
 import akram.bensalem.powersh.ui.theme.Dimens
 import akram.bensalem.powersh.ui.theme.PowerSHTheme
 import akram.bensalem.powersh.ui.theme.Shapes
 import akram.bensalem.powersh.utils.Constants
+import akram.bensalem.powersh.utils.localization.Locales
 import android.content.res.Configuration
 import androidx.compose.animation.*
 import androidx.compose.animation.core.Animatable
@@ -328,6 +330,9 @@ fun specialItemButton(
                 ) {
                     onAdd()
                 }
+                                            .graphicsLayer {
+                                                rotationY = if (lyricist.languageTag == Locales.AR) 180f else 0f
+                                            },
 
         )
         ClickableText(
@@ -370,6 +375,9 @@ fun specialItemButton(
                 ) {
                     onSubstract()
                 }
+                                            .graphicsLayer {
+                                                rotationY = if (lyricist.languageTag == Locales.AR) 180f else 0f
+                                            },
 
 
         )

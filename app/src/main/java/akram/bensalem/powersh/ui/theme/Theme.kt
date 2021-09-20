@@ -76,7 +76,7 @@ private object PowerSHRippleTheme : RippleTheme {
     @Composable
     override fun rippleAlpha(): RippleAlpha = RippleTheme.defaultRippleAlpha(
         Color.Black,
-        lightTheme = !isSystemInDarkTheme()
+        lightTheme =!isSystemInDarkTheme()
     )
 
 }

@@ -2,8 +2,10 @@ package com.akram.bensalem.powersh.ui.screens.onboarding
 
 import akram.bensalem.powersh.R
 import akram.bensalem.powersh.data.model.OnBoardingItem
+import akram.bensalem.powersh.lyricist
 import akram.bensalem.powersh.ui.main.viewModel.OnBoardingViewModel
 import akram.bensalem.powersh.ui.theme.Dimens
+import akram.bensalem.powersh.utils.localization.Locales
 import androidx.annotation.VisibleForTesting
 import androidx.compose.animation.*
 import androidx.compose.animation.core.*
@@ -19,6 +21,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -220,6 +223,10 @@ fun OnboardingPageOptions(
                         style = MaterialTheme.typography.button,
                     )
                     Icon(
+                    modifier = Modifier
+                                                .graphicsLayer {
+                                                    rotationY = if (lyricist.languageTag == Locales.AR) 180f else 0f
+                                                },
                         imageVector = Icons.Outlined.KeyboardArrowRight,
                         tint = MaterialTheme.colors.primary,
                         contentDescription = null

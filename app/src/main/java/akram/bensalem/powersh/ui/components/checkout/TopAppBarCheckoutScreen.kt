@@ -1,6 +1,8 @@
 package akram.bensalem.powersh.ui.components.checkout
 
 import akram.bensalem.powersh.LocalStrings
+import akram.bensalem.powersh.lyricist
+import akram.bensalem.powersh.utils.localization.Locales
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -13,6 +15,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.text.capitalize
 import androidx.compose.ui.unit.dp
 import java.util.*
@@ -40,6 +43,10 @@ fun TopAppBarCheckout(
                     onBackPress()
                 }) {
                     Icon(
+                    modifier = Modifier
+                                                .graphicsLayer {
+                                                    rotationY = if (lyricist.languageTag == Locales.AR) 180f else 0f
+                                                },
                         tint = MaterialTheme.colors.onBackground,
                         imageVector = Icons.Outlined.ArrowBack,
                         contentDescription = LocalStrings.current.goBack

@@ -2,7 +2,9 @@ package akram.bensalem.powersh.ui.components
 
 
 import akram.bensalem.powersh.LocalStrings
+import akram.bensalem.powersh.lyricist
 import akram.bensalem.powersh.ui.theme.Dimens
+import akram.bensalem.powersh.utils.localization.Locales
 import android.util.Log
 import androidx.compose.animation.*
 import androidx.compose.animation.core.animateDp
@@ -21,6 +23,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -108,6 +111,9 @@ fun QuantityToggle(
                             bottom = 0.dp
                         )
                         .size(iconSize)
+                                                    .graphicsLayer {
+                                                        rotationY = if (lyricist.languageTag == Locales.AR) 180f else 0f
+                                                    },
 
                 )
             }
@@ -118,7 +124,7 @@ fun QuantityToggle(
                 color = if (!isAddedToCart.value) Color.White else MaterialTheme.colors.primary,
                 fontStyle = FontStyle.Normal,
                 fontWeight = if (!isAddedToCart.value) FontWeight.Normal else FontWeight.Medium,
-                fontSize = 16.sp,
+                fontSize = 13.sp,
                 modifier = Modifier
                     .animateContentSize()
                     .padding(
@@ -208,6 +214,9 @@ fun UploadImageToggle(
                             bottom = 0.dp
                         )
                         .size(iconSize)
+                                                    .graphicsLayer {
+                                                        rotationY = if (lyricist.languageTag == Locales.AR) 180f else 0f
+                                                    },
 
                 )
             }

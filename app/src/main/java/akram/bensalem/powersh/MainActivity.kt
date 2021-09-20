@@ -18,14 +18,12 @@ import akram.bensalem.powersh.repository.DataStoreRepository
 import akram.bensalem.powersh.ui.navigation.PowerSHApp
 import akram.bensalem.powersh.utils.authentification.Authenticate
 import akram.bensalem.powersh.utils.localization.*
-import android.content.res.Configuration
 import androidx.compose.runtime.*
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.unit.LayoutDirection
 import cafe.adriel.lyricist.Lyricist
 import cafe.adriel.lyricist.ProvideStrings
 import cafe.adriel.lyricist.rememberStrings
-import kotlinx.coroutines.launch
 import java.util.*
 import javax.inject.Inject
 
@@ -44,7 +42,7 @@ lateinit var lyricist: Lyricist<Strings>
 
 
 @AndroidEntryPoint
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(){
 
     @Inject
     lateinit var dataStoreRepository: DataStoreRepository
@@ -60,15 +58,12 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         installSplashScreen()
 
-
-
-
-
         // Enable edge-to-edge experience and ProvideWindowInsets to the composables
         WindowCompat.setDecorFitsSystemWindows(window, false)
 
 
         setContent {
+
 
             lyricist = rememberStrings(strings)
 
@@ -79,8 +74,6 @@ class MainActivity : AppCompatActivity() {
 
             val orderList = remember { mutableStateListOf<OrderItem>() }
 
-
-            val scope = rememberCoroutineScope()
 
 
             val themeValue = remember {
@@ -111,12 +104,17 @@ class MainActivity : AppCompatActivity() {
                 2 -> lyricist.languageTag = Locales.FR
                 3 -> lyricist.languageTag = Locales.EN
                 else -> {
-                    //
+                    when(Locale.getDefault().language){
+                        "en" -> lyricist.languageTag = Locales.EN
+                            "fr" -> lyricist.languageTag =Locales.FR
+                        "ar" -> lyricist.languageTag =Locales.AR
+                        else -> lyricist.languageTag =Locales.EN
+                    }
                 }
             }
 
 
-            CompositionLocalProvider(LocalLayoutDirection provides fromValueToLanguage(languageValue.value)) {
+            CompositionLocalProvider(LocalLayoutDirection provides fromValueToLanguage(languageValue.value,Locale.getDefault().language )) {
 
 
                 ProvideStrings(lyricist, LocalStrings) {
@@ -130,14 +128,12 @@ class MainActivity : AppCompatActivity() {
                 Timber.d("setContent called")
             }
         }
-
-
     }
 }
 
-fun fromValueToLanguage(value : Int): LayoutDirection{
+fun fromValueToLanguage(value : Int, defaultLanguage: String): LayoutDirection{
     return when(value){
-        -1 -> LayoutDirection.Ltr
+        -1 ->if (defaultLanguage == "ar") LayoutDirection.Rtl else LayoutDirection.Ltr
         1 -> LayoutDirection.Rtl
         2 -> LayoutDirection.Ltr
         3 -> LayoutDirection.Ltr

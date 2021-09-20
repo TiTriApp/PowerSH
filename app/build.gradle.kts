@@ -147,8 +147,8 @@ dependencies {
 
     implementation(Deps.gson)
 
-    implementation(Deps.android_mail)
-    implementation(Deps.android_activation)
+    /*implementation(Deps.android_mail)
+    implementation(Deps.android_activation)*/
 
 
     implementation("com.google.devtools.ksp:symbol-processing-api:1.5.30-1.0.0-beta09")
@@ -156,8 +156,25 @@ dependencies {
     // Required
     implementation (Deps.lyricist)
 
-    // If you want to use @Strings to generate code for you
     compileOnly ("cafe.adriel.lyricist:lyricist-processor:1.0.0")
     ksp ("cafe.adriel.lyricist:lyricist-processor:1.0.0")
+
+
+    implementation ("io.reactivex.rxjava3:rxandroid:3.0.0")
+    implementation ("io.reactivex.rxjava3:rxjava:3.0.0")
+
+
+    implementation (files("libs/mail.jar"))
+    implementation (files("libs/activation.jar"))
+    implementation (files("libs/additionnal.jar"))
+
+
+
+    implementation("com.google.android.libraries.maps:maps:3.1.0-beta")
+    implementation("com.google.maps.android:maps-v3-ktx:2.2.0")
+    implementation("androidx.fragment:fragment:1.3.6")
+
+    implementation("com.android.volley:volley:1.2.1")
+    implementation("com.itextpdf:itext7-core:7.1.11")
 
 }

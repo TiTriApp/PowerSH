@@ -94,7 +94,7 @@ fun ConfirmAlertDialog(
                     }) {
                     Text(
                         text = LocalStrings.current.confirm,
-                        color = YellowOnboarding,
+                        color = Color.White,
                         style = TextStyle(
                             background = MaterialTheme.colors.primary,
                         ),
@@ -122,9 +122,6 @@ fun ConfirmAlertDialog(
                     Text(
                         text = LocalStrings.current.cancel,
                         color = MaterialTheme.colors.primary,
-                        style = TextStyle(
-                            background = Color.White,
-                        ),
                         textAlign = TextAlign.Center,
                         modifier = Modifier.padding(
                             start = 16.dp,

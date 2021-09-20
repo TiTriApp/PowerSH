@@ -40,6 +40,9 @@ val EnStrings = Strings(
     totalPriceValue = { price ->
         "$price DZD"
     },
+    totalPriceValueString = {price ->
+        "$price DZD"
+    },
     checkout = "Checkout",
     emptyCart = "Empty Cart",
 
@@ -234,6 +237,7 @@ val EnStrings = Strings(
     phoneNumberIsNotValid = "This Phone number is not valid",
     languageOption = Constants.LANGUAGE_OPTIONS,
     themeOptions = Constants.THEME_OPTIONS,
+    sortOptions = Constants.SORT_OPTIONS ,
     lightTheme = Theme.LIGHT_THEME.themeName,
     darkTheme = Theme.DARK_THEME.themeName,
     followSystemMode = "Follow System Settings",
@@ -241,5 +245,12 @@ val EnStrings = Strings(
     heightPrice = Sort.HIGH_PRICE_FIRST.type,
     lowPrice = Sort.LOW_PRICE_FIRST.type,
     lastRelease = Sort.NEW_RELEASE_FIRST.type,
-    firstRelease = Sort.NEW_RELEASE_FIRST.type
+    firstRelease = Sort.NEW_RELEASE_FIRST.type,
+    fullAddress = "Full Address",
+    contactFailed = "Failed in send message!",
+
+    open = "Open",
+    billingHaveBeenPrinted = "The Billing has been printed!",
+    at = {time ->
+        "At $time"}
 )

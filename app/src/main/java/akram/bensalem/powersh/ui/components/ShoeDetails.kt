@@ -3,10 +3,12 @@ package akram.bensalem.powersh.ui.components
 import akram.bensalem.powersh.LocalStrings
 import akram.bensalem.powersh.R
 import akram.bensalem.powersh.data.model.ShoeProduct
+import akram.bensalem.powersh.lyricist
 import akram.bensalem.powersh.ui.theme.Dimens
 import akram.bensalem.powersh.ui.theme.PowerSHTheme
 import akram.bensalem.powersh.ui.theme.Shapes
 import akram.bensalem.powersh.utils.Constants
+import akram.bensalem.powersh.utils.localization.Locales
 import android.content.res.Configuration
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.Animatable
@@ -99,7 +101,9 @@ fun ShoeDetails(
                     imageVector = if (favourite.value) Icons.Outlined.Favorite else Icons.Outlined.FavoriteBorder,
                     contentDescription = LocalStrings.current.addToFavourite,
                     tint = MaterialTheme.colors.primary.copy(alpha = 0.8f),
-                    modifier = Modifier
+                    modifier = Modifier.graphicsLayer {
+                          rotationY = if (lyricist.languageTag == Locales.AR) 180f else 0f
+                          },
                 )
             }
 
@@ -189,6 +193,9 @@ fun ShoeDetails(
                     contentDescription = LocalStrings.current.showMoreOrLess,
                     tint = MaterialTheme.colors.onSurface,
                     modifier = Modifier.rotate(angle)
+                                                .graphicsLayer {
+                                                    rotationY = if (lyricist.languageTag == Locales.AR) 180f else 0f
+                                                },
                 )
             }
         }
@@ -229,6 +236,10 @@ fun SubtitleTextWithIcon(
             imageVector = icon,
             contentDescription = iconDescription,
             tint = MaterialTheme.colors.onSurface,
+            modifier = Modifier
+                                        .graphicsLayer {
+                                            rotationY = if (lyricist.languageTag == Locales.AR) 180f else 0f
+                                        },
         )
         Spacer(modifier = Modifier.width(Dimens.MediumPadding.size))
         SubtitleText(

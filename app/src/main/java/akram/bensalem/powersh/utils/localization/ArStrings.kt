@@ -9,13 +9,13 @@ val ArStrings = Strings(
     title = "الصفحة الرئيسية",
 
 
-    madeByAkramBensalem = "طور مع ❤ من طرف أكرم بن سالم",
+    madeByAkramBensalem = "طور من طرف أكرم بن سالم ❤",
     appLogo = "شعار التطبيق",
 
     akramBensalem = "أكرم بن سالم",
 
 
-    projectMadeBy ="هذا المشروع من صنع:",
+    projectMadeBy ="هذا المشروع من برمجة وتطوير:",
 
 
     home = "الصفحة الرئيسية",
@@ -38,6 +38,9 @@ val ArStrings = Strings(
     cartIsEmpty = "سلةالمشتريات فارغة",
     totalPrice = "السعر الكلي",
     totalPriceValue = { price ->
+        "$price دج "
+    },
+    totalPriceValueString ={ price ->
         "$price دج "
     },
     checkout = "ادفع الآن",
@@ -163,10 +166,10 @@ val ArStrings = Strings(
     uploaded = "تم التحميل",
     selectFavouriteColor = "اختر لونك المفضل",
     selectFavouriteSize = "حدد مقاس حذائك",
-    id = "الرقم التعريفي",
-    date = "تاريخ:",
+    id = "الرقم التعريفي:",
+    date = "التاريخ:",
     total = "المجموع:",
-    status = "حالة:",
+    status = "الحالة:",
     statusValue = {status ->
         when(status){
             OrderStatus.PENDING -> "قيد الانتظار"
@@ -176,9 +179,9 @@ val ArStrings = Strings(
         }
     },
     info = "معلومات",
-    payment = "الدفع",
-    adress = "عنوان:",
-    product = "منتجات:",
+    payment = "الدفع:",
+    adress = "العنوان:",
+    product = "المنتجات:",
     confirmation = "تأكيد",
     ok = "حسنا",
 
@@ -207,7 +210,7 @@ val ArStrings = Strings(
     confirm = "تأكيد",
     cancel = "إلغاء",
     versionIs = {version ->
-          " $version إصدار:"
+          "إصدار: $version"
     },
     checkUpdate = "تفقد آخر تحديث",
     yourBilling = "الفاتورة الخاصة بك",
@@ -243,8 +246,35 @@ val ArStrings = Strings(
     callUs = "اتصل بنا",
     dearCustomerVerifyYourInfo = "عزيزي العميل تأكد من تعبئة معلوماتك بعناية وستتلقى مكالمة من خدمة العملاء لتأكيد طلبك",
     back = "السابق",
-    next = "التالي"
+    next = "التالي",
 
 
 
-)
+    dearCustomerFillTheForm = "عزيزي العميل ، تأكد من تأكيد معلومات التسليم الخاصة بك عن طريق ملء هذا النموذج:",
+    phoneNumberIsNotValid = "رقم الهاتف هذا غير صالح",
+    languageOption = "خيار اللغة",
+    themeOptions = "حالة الإضاءة",
+    sortOptions = "خيار خاصية الفرز الافتراضي" ,
+
+    lightTheme = "وضع النهار",
+    darkTheme = "وضع الليلي",
+    followSystemMode = "تتبع إعدادات نظام",
+    alphabeticASC = "ترتيب أبجدي",
+    heightPrice = "اعلى سعر اولا",
+    lowPrice = "أقل سعر أولا",
+    lastRelease = "الإصدار الأقدم أولاً",
+    firstRelease = "أحدث إصدار أولا",
+    fullAddress = "العنوان الكامل",
+    contactFailed = "فشل في إرسال الرسالة!",
+
+    open = "إفتح",
+
+    billingHaveBeenPrinted = "تمت طباعة الفاتورة!",
+    at = {time ->
+        "على $time"}
+
+
+
+
+
+    )

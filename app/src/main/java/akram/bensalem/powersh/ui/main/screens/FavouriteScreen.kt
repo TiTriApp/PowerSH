@@ -3,9 +3,11 @@ package akram.bensalem.powersh.ui.main.screens
 import akram.bensalem.powersh.LocalStrings
 import akram.bensalem.powersh.R
 import akram.bensalem.powersh.data.model.ShoeProduct
+import akram.bensalem.powersh.lyricist
 import akram.bensalem.powersh.ui.components.ProductShoesEntry
 import akram.bensalem.powersh.ui.theme.CardCoverPink
 import akram.bensalem.powersh.ui.theme.Dimens
+import akram.bensalem.powersh.utils.localization.Locales
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.tween
@@ -22,6 +24,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontStyle
@@ -109,7 +112,10 @@ fun FavouriteScreen(
                 Image(
                     modifier = Modifier
                         .align(Alignment.CenterHorizontally)
-                        .padding(start = 32.dp, end = 32.dp),
+                        .padding(start = 32.dp, end = 32.dp)
+                        .graphicsLayer {
+                            rotationY = if (lyricist.languageTag == Locales.AR) 180f else 0f
+                        },
                     painter = painterResource(id = R.drawable.ic_favourite),
                     contentDescription = LocalStrings.current.addToFavourite
                 )

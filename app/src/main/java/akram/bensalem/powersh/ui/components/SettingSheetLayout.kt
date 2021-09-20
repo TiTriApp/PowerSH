@@ -1,5 +1,6 @@
 package akram.bensalem.powersh.ui.components
 
+import akram.bensalem.powersh.LocalStrings
 import akram.bensalem.powersh.ui.theme.*
 import akram.bensalem.powersh.utils.Constants
 import akram.bensalem.powersh.utils.Language
@@ -79,6 +80,7 @@ fun SettingEntrySheet(
     onLanguageOptionClicked: (Int) -> Unit = {}
 ) {
 
+    val localStrings = LocalStrings.current
     SettingSheetLayout(
         modifier = modifier,
         sheetState = sheetState,
@@ -90,114 +92,128 @@ fun SettingEntrySheet(
             modifier = Modifier
                 .fillMaxWidth()
         ) {
-            if (settingsEntryName == Constants.THEME_OPTIONS) {
-                items(Theme.values()) { item ->
-                    val selectedColor by animateColorAsState(
-                        targetValue = if (currentTheme == item.themeValue) {
-                            MaterialTheme.colors.primary
-                                .copy(alpha = .6f)
-                        } else Color.Transparent,
-                        animationSpec = tween(
-                            durationMillis = 500,
-                            easing = LinearOutSlowInEasing
+            when (settingsEntryName) {
+                localStrings.themeOptions -> {
+                    items(Theme.values()) { item ->
+                        val selectedColor by animateColorAsState(
+                            targetValue = if (currentTheme == item.themeValue) {
+                                MaterialTheme.colors.primary
+                                    .copy(alpha = .6f)
+                            } else Color.Transparent,
+                            animationSpec = tween(
+                                durationMillis = 500,
+                                easing = LinearOutSlowInEasing
+                            )
                         )
-                    )
-                    val contentColor by animateColorAsState(
-                        targetValue = if (currentTheme == item.themeValue) {
-                            LightDark
-                                .copy(alpha = .9f)
-                        } else MaterialTheme.colors.onBackground,
-                        animationSpec = tween(
-                            durationMillis = 500,
-                            easing = LinearOutSlowInEasing
+                        val contentColor by animateColorAsState(
+                            targetValue = if (currentTheme == item.themeValue) {
+                                LightDark
+                                    .copy(alpha = .9f)
+                            } else MaterialTheme.colors.onBackground,
+                            animationSpec = tween(
+                                durationMillis = 500,
+                                easing = LinearOutSlowInEasing
+                            )
                         )
-                    )
 
-                    SheetOption(
-                        modifier = Modifier
-                            .fillMaxWidth(),
-                        sortOptionName = item.themeName,
-                        icon = item.icon,
-                        onOptionClicked = {
-                            onThemeOptionClicked(item.themeValue)
-                        },
-                        selectedSortColor = selectedColor,
-                        contentColor = contentColor
-                    )
+                        SheetOption(
+                            modifier = Modifier
+                                .fillMaxWidth(),
+                            sortOptionName = when(item.themeName){
+                                Theme.LIGHT_THEME.themeName -> LocalStrings.current.lightTheme
+                                Theme.DARK_THEME.themeName -> LocalStrings.current.darkTheme
+                                else -> LocalStrings.current.followSystemMode
+                            },
+                            icon = item.icon,
+                            onOptionClicked = {
+                                onThemeOptionClicked(item.themeValue)
+                            },
+                            selectedSortColor = selectedColor,
+                            contentColor = contentColor
+                        )
+                    }
                 }
-            } else if (settingsEntryName == Constants.SORT_OPTIONS) {
-                items(Sort.values()) { item ->
-                    val selectedColor by animateColorAsState(
-                        targetValue = if (currentSortOption == item.sortValue) {
-                            MaterialTheme.colors.primary
-                                .copy(alpha = .6f)
-                        } else Color.Transparent,
-                        animationSpec = tween(
-                            durationMillis = 500,
-                            easing = LinearOutSlowInEasing
+                localStrings.sortOptions -> {
+                    items(Sort.values()) { item ->
+                        val selectedColor by animateColorAsState(
+                            targetValue = if (currentSortOption == item.sortValue) {
+                                MaterialTheme.colors.primary
+                                    .copy(alpha = .6f)
+                            } else Color.Transparent,
+                            animationSpec = tween(
+                                durationMillis = 500,
+                                easing = LinearOutSlowInEasing
+                            )
                         )
-                    )
-                    val contentColor by animateColorAsState(
-                        targetValue = if (currentSortOption == item.sortValue) {
-                            LightDark
-                                .copy(alpha = .9f)
-                        } else MaterialTheme.colors.onBackground,
-                        animationSpec = tween(
-                            durationMillis = 500,
-                            easing = LinearOutSlowInEasing
+                        val contentColor by animateColorAsState(
+                            targetValue = if (currentSortOption == item.sortValue) {
+                                LightDark
+                                    .copy(alpha = .9f)
+                            } else MaterialTheme.colors.onBackground,
+                            animationSpec = tween(
+                                durationMillis = 500,
+                                easing = LinearOutSlowInEasing
+                            )
                         )
-                    )
 
-                    SheetOption(
-                        modifier = Modifier
-                            .fillMaxWidth(),
-                        sortOptionName = item.type,
-                        icon = item.icon,
-                        onOptionClicked = {
-                            onSortOptionClicked(item.sortValue)
-                        },
-                        selectedSortColor = selectedColor,
-                        contentColor = contentColor
-                    )
+                        SheetOption(
+                            modifier = Modifier
+                                .fillMaxWidth(),
+                            sortOptionName = when(item.type){
+                                Sort.ALPHABETICAL_ASC.type -> LocalStrings.current.alphabeticASC
+                                Sort.HIGH_PRICE_FIRST.type -> LocalStrings.current.heightPrice
+                                Sort.LOW_PRICE_FIRST.type -> LocalStrings.current.lowPrice
+                                Sort.NEW_RELEASE_FIRST.type -> LocalStrings.current.firstRelease
+                                Sort.OLD_RELEASE_FIRST.type -> LocalStrings.current.lastRelease
+                                else -> LocalStrings.current.alphabeticASC
+                            },
+                            icon = item.icon,
+                            onOptionClicked = {
+                                onSortOptionClicked(item.sortValue)
+                            },
+                            selectedSortColor = selectedColor,
+                            contentColor = contentColor
+                        )
+                    }
                 }
-            } else if (settingsEntryName == Constants.LANGUAGE_OPTIONS) {
-                items(Language.values()){item ->
-                    val selectedColor by animateColorAsState(
-                        targetValue = if (currentLanguageOption == item.languageValue) {
-                            MaterialTheme.colors.primary
-                                .copy(alpha = .6f)
-                        } else Color.Transparent,
-                        animationSpec = tween(
-                            durationMillis = 500,
-                            easing = LinearOutSlowInEasing
+                localStrings.languageOption -> {
+                    items(Language.values()){item ->
+                        val selectedColor by animateColorAsState(
+                            targetValue = if (currentLanguageOption == item.languageValue) {
+                                MaterialTheme.colors.primary
+                                    .copy(alpha = .6f)
+                            } else Color.Transparent,
+                            animationSpec = tween(
+                                durationMillis = 500,
+                                easing = LinearOutSlowInEasing
+                            )
                         )
-                    )
-                    val contentColor by animateColorAsState(
-                        targetValue = if (currentLanguageOption == item.languageValue) {
-                            LightDark
-                                .copy(alpha = .9f)
-                        } else MaterialTheme.colors.onBackground,
-                        animationSpec = tween(
-                            durationMillis = 500,
-                            easing = LinearOutSlowInEasing
+                        val contentColor by animateColorAsState(
+                            targetValue = if (currentLanguageOption == item.languageValue) {
+                                LightDark
+                                    .copy(alpha = .9f)
+                            } else MaterialTheme.colors.onBackground,
+                            animationSpec = tween(
+                                durationMillis = 500,
+                                easing = LinearOutSlowInEasing
+                            )
                         )
-                    )
 
-                    SheetOption(
-                        modifier = Modifier
-                            .fillMaxWidth(),
-                        sortOptionName = item.languageName,
-                        icon = item.icon,
-                        onOptionClicked = {
-                            onLanguageOptionClicked(item.languageValue)
-                        },
-                        selectedSortColor = selectedColor,
-                        contentColor = contentColor
-                    )
+                        SheetOptionLanguage(
+                            modifier = Modifier
+                                .fillMaxWidth(),
+                            sortOptionName = if (item.languageName != Language.FOLLOW_SYSTEM.languageName) item.languageName else localStrings.followSystemMode,
+                            icon = item.icon,
+                            onOptionClicked = {
+                                onLanguageOptionClicked(item.languageValue)
+                            },
+                            selectedSortColor = selectedColor,
+                            contentColor = contentColor
+                        )
+                    }
+
+
                 }
-
-
-
             }
         }
     }

@@ -17,27 +17,31 @@ import akram.bensalem.powersh.utils.Language
 import akram.bensalem.powersh.utils.Sort
 import akram.bensalem.powersh.utils.authentification.Authenticate
 import akram.bensalem.powersh.utils.localization.Locales
+import akram.bensalem.powersh.utils.rememberMapViewWithLifecycle
 import android.app.Activity
 import android.content.res.Configuration
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -46,18 +50,26 @@ import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.viewinterop.AndroidView
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.google.accompanist.insets.navigationBarsPadding
-import com.google.accompanist.insets.statusBarsPadding
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.rememberPagerState
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.SwipeRefreshIndicator
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
+import com.google.android.libraries.maps.CameraUpdateFactory
+import com.google.android.libraries.maps.model.LatLng
+import com.google.android.libraries.maps.model.MarkerOptions
+import com.google.maps.android.ktx.awaitMap
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import timber.log.Timber
+import java.util.*
+import kotlin.collections.ArrayList
 
 @OptIn(ExperimentalPagerApi::class)
 @ExperimentalMaterialApi
@@ -104,8 +116,7 @@ fun MainListScreen(
 
     ModalBottomSheetLayout(
         modifier = Modifier
-            .fillMaxWidth()
-            .statusBarsPadding(),
+            .fillMaxWidth(),
         sheetContent = {
             ModalBottomSheet(
                 sheetState = sheetState,
@@ -125,7 +136,8 @@ fun MainListScreen(
     ) {
 
         Scaffold(
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier
+                .fillMaxSize(),
             scaffoldState = scaffoldState,
             topBar = {
                 mainTopBar(
@@ -233,8 +245,10 @@ fun MainListScreen(
                                             modifier = Modifier
                                                 .weight(1f)
                                                 .padding(
-                                                    end = if (index + 1 < shoeProductList.size) Dimens.SmallPadding.size else 0.dp,
-                                                )
+                                                    end = if (index + 1 < shoeProductList.size) Dimens.SmallPadding.size else 64.dp,
+                                                    start = if (index + 1 < shoeProductList.size) Dimens.ZeroPadding.size else 64.dp,
+
+                                                    )
                                         )
                                         if (index + 1 < shoeProductList.size) {
                                             ProductShoesEntry(
@@ -293,7 +307,7 @@ fun MainListScreen(
                         AboutScreen()
                     }
                     "ORDERS" -> {
-                        orderScreen(orderList = orderList, onInfo = {}, onEntryClick = onEntryClick)
+                        orderScreen(orderList = orderList, onPrinted = {}, onEntryClick = {})
                     }
                     else -> {
                         Text(
@@ -320,45 +334,30 @@ fun MainListScreen(
 
 @Composable
 fun AboutScreen() {
-    Scaffold(
-        modifier = Modifier
-            .fillMaxSize(),
-        topBar = {
-            Column(Modifier.fillMaxWidth()) {
-                AboutTopSection(
-                    modifier = Modifier.align(Alignment.CenterHorizontally),
-                    appName = LocalStrings.current.powerSh,
-                    version = "1.0.0",
-                    appLogo = painterResource(id = R.drawable.big_circle_powersh),
-                    onCheckUpdatesClicked = {}
-                )
-            }
 
-        },
-        bottomBar = {
-            Text(
-                text = LocalStrings.current.madeByAkramBensalem,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(Dimens.SmallPadding.size)
-                    .navigationBarsPadding(),
-                style = TextStyle(
-                    fontWeight = FontWeight.Normal,
-                    fontSize = 16.sp,
-                    color = MaterialTheme.colors.onSurface
-                ),
-                textAlign = TextAlign.Center,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis
-            )
-        }
-    ) {
+    val mapView = rememberMapViewWithLifecycle()
+
         LazyColumn(
-            modifier = Modifier.padding(
+            modifier = Modifier
+                .fillMaxSize()
+                .navigationBarsPadding()
+                .padding(
                 vertical = Dimens.MediumPadding.size,
                 horizontal = Dimens.SmallPadding.size
             )
         ) {
+            item{
+                Column(Modifier.fillMaxWidth()) {
+                    AboutTopSection(
+                        modifier = Modifier.align(Alignment.CenterHorizontally),
+                        appName = LocalStrings.current.powerSh,
+                        version = "1.0.0",
+                        appLogo = painterResource(id = R.drawable.big_circle_powersh),
+                        onCheckUpdatesClicked = {}
+                    )
+                }
+            }
+
             item {
                 Image(
                     modifier = Modifier
@@ -370,7 +369,7 @@ fun AboutScreen() {
             }
 
             item {
-                Column(
+                Row(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(Dimens.MediumPadding.size)
@@ -390,9 +389,51 @@ fun AboutScreen() {
 
             }
 
-        }
 
-    }
+            item {
+                val localString = LocalStrings.current
+
+                AndroidView(
+                    modifier = Modifier.fillMaxWidth()
+                        .height(260.dp)
+                        .padding(Dimens.LargePadding.size, Dimens.MediumPadding.size)
+                        .background(Color.Transparent, RoundedCornerShape(12.dp))
+                        .shadow(elevation = 2.dp,shape = RoundedCornerShape(12.dp))
+                        .border(width =1.dp, color = MaterialTheme.colors.onSurface,shape = RoundedCornerShape(12.dp))
+                    ,
+                    factory= { mapView}) {mapView->
+                    CoroutineScope(Dispatchers.Main).launch {
+                        val map = mapView.awaitMap()
+                        map.uiSettings.isZoomControlsEnabled = true
+                        val pickUp =  LatLng(36.25682, 2.78190)
+                        map.moveCamera(CameraUpdateFactory.newLatLngZoom(pickUp,10f))
+                        val markerOptions = MarkerOptions()
+                            .title(localString.akramBensalem)
+                            .position(pickUp)
+                        map.addMarker(markerOptions)
+
+                    }
+                }
+            }
+
+            item{
+                Text(
+                    text = LocalStrings.current.madeByAkramBensalem,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(Dimens.SmallPadding.size)
+                        .navigationBarsPadding(),
+                    style = TextStyle(
+                        fontWeight = FontWeight.Normal,
+                        fontSize = 16.sp,
+                        color = MaterialTheme.colors.onSurface
+                    ),
+                    textAlign = TextAlign.Center,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
+                )
+            }
+        }
 }
 
 
@@ -427,18 +468,30 @@ fun SettingsPage() {
                     },
                     currentTheme = settingsScreenData.themeOption,
                     onThemeOptionClicked = {
+                        scope.launch {
+                            sheetState.hide()
+                        }
                         viewModel.saveThemeSetting(it)
                     },
                     onLanguageOptionClicked = {
                         viewModel.saveLanguageSetting(it)
+                        scope.launch {
+                            sheetState.hide()
+                        }
                         when(it) {
                             1 -> lyricist.languageTag = Locales.AR
                             2 -> lyricist.languageTag = Locales.FR
                             3 -> lyricist.languageTag = Locales.EN
                             else -> {
-                                //
+                                when(Locale.getDefault().language){
+                                    "en" -> lyricist.languageTag = Locales.EN
+                                    "fr" -> lyricist.languageTag =Locales.FR
+                                    "ar" -> lyricist.languageTag =Locales.AR
+                                    else -> lyricist.languageTag =Locales.EN
+                                }
                             }
                         }
+
                     }
                 )
             },
@@ -460,13 +513,13 @@ fun SettingsPage() {
                         3 -> Language.ENGLISH
                         else -> Language.FOLLOW_SYSTEM
                     }
-                    SettingsEntry(
+                    SettingsEntryLanguage(
                         modifier = Modifier.padding(
                             vertical = Dimens.SmallPadding.size,
                             horizontal = Dimens.MediumPadding.size
                         ),
-                        settingsEntryName = Constants.LANGUAGE_OPTIONS,
-                        currentSettingValue = language.languageName,
+                        settingsEntryName = LocalStrings.current.languageOption,
+                        currentSettingValue =if (language.languageName != Language.FOLLOW_SYSTEM.languageName) language.languageName else LocalStrings.current.followSystemMode,
                         currentSettingIcon = language.icon,
                         onSettingsEntryClick = {
                             settingsEntryName.value = it
@@ -481,8 +534,8 @@ fun SettingsPage() {
 
                 item {
                     val theme = when (settingsScreenData.themeOption) {
-                        1 -> Theme.DARK_THEME
-                        2 -> Theme.LIGHT_THEME
+                        1 -> Theme.LIGHT_THEME
+                        2 -> Theme.DARK_THEME
                         else -> Theme.FOLLOW_SYSTEM
                     }
                     SettingsEntry(
@@ -490,8 +543,12 @@ fun SettingsPage() {
                             vertical = Dimens.SmallPadding.size,
                             horizontal = Dimens.MediumPadding.size
                         ),
-                        settingsEntryName = Constants.THEME_OPTIONS,
-                        currentSettingValue = theme.themeName,
+                        settingsEntryName = LocalStrings.current.themeOptions,
+                        currentSettingValue = when(theme.themeName){
+                            Theme.LIGHT_THEME.themeName -> LocalStrings.current.lightTheme
+                            Theme.DARK_THEME.themeName -> LocalStrings.current.darkTheme
+                            else -> LocalStrings.current.followSystemMode
+                        },
                         currentSettingIcon = theme.icon,
                         onSettingsEntryClick = {
                             settingsEntryName.value = it
@@ -514,8 +571,15 @@ fun SettingsPage() {
                             vertical = Dimens.SmallPadding.size,
                             horizontal = Dimens.MediumPadding.size
                         ),
-                        settingsEntryName = Constants.SORT_OPTIONS,
-                        currentSettingValue = sort.type,
+                        settingsEntryName =LocalStrings.current.sortOptions,
+                        currentSettingValue = when(sort.type){
+                            Sort.ALPHABETICAL_ASC.type -> LocalStrings.current.alphabeticASC
+                            Sort.HIGH_PRICE_FIRST.type -> LocalStrings.current.heightPrice
+                            Sort.LOW_PRICE_FIRST.type -> LocalStrings.current.lowPrice
+                            Sort.NEW_RELEASE_FIRST.type -> LocalStrings.current.firstRelease
+                            Sort.OLD_RELEASE_FIRST.type -> LocalStrings.current.lastRelease
+                            else -> LocalStrings.current.alphabeticASC
+                        },
                         currentSettingIcon = sort.icon,
                         onSettingsEntryClick = {
                             settingsEntryName.value = it

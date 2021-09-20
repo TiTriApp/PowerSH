@@ -3,6 +3,7 @@ package akram.bensalem.powersh.ui.main.screens
 import akram.bensalem.powersh.LocalStrings
 import akram.bensalem.powersh.R
 import akram.bensalem.powersh.data.model.CardItem
+import akram.bensalem.powersh.lyricist
 import akram.bensalem.powersh.ui.components.cartListProducts
 import akram.bensalem.powersh.ui.theme.PowerSHTheme
 import akram.bensalem.powersh.utils.Constants
@@ -22,6 +23,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -114,7 +116,10 @@ fun cartScreen(
                 Image(
                     modifier = Modifier
                         .align(Alignment.CenterHorizontally)
-                        .padding(start = 32.dp, end = 32.dp),
+                        .padding(start = 32.dp, end = 32.dp)
+                        .graphicsLayer {
+                            rotationY = if (lyricist.languageTag == Locales.AR) 180f else 0f
+                        },
                     painter = painterResource(id = R.drawable.ic_empty_cart),
                     contentDescription = LocalStrings.current.addToCart
                 )

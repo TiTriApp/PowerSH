@@ -4,6 +4,7 @@ import akram.bensalem.powersh.LocalStrings
 import akram.bensalem.powersh.ui.components.CollapsingToolbarBase
 import akram.bensalem.powersh.ui.components.SettingEntrySheet
 import akram.bensalem.powersh.ui.components.SettingsEntry
+import akram.bensalem.powersh.ui.components.SettingsEntryLanguage
 import akram.bensalem.powersh.ui.theme.Dimens
 import akram.bensalem.powersh.ui.theme.PowerSHTheme
 import akram.bensalem.powersh.ui.theme.Theme
@@ -87,9 +88,15 @@ fun SettingsScreen(
                 },
                 onThemeOptionClicked = {
                     onThemeOptionClicked(it)
+                    scope.launch {
+                        sheetState.hide()
+                    }
                 },
                 onLanguageOptionClicked = {
                     onLanguageOptionClicked(it)
+                    scope.launch {
+                        sheetState.hide()
+                    }
                 }
             )
 
@@ -138,7 +145,7 @@ fun SettingsScreen(
                         3 -> Language.ENGLISH
                         else -> Language.FOLLOW_SYSTEM
                     }
-                    SettingsEntry(
+                    SettingsEntryLanguage(
                         modifier = Modifier.padding(
                             vertical = Dimens.SmallPadding.size,
                             horizontal = Dimens.MediumPadding.size
@@ -156,8 +163,8 @@ fun SettingsScreen(
                 }
                 item {
                     val theme = when (currentTheme) {
-                        1 -> Theme.DARK_THEME
-                        2 -> Theme.LIGHT_THEME
+                        1 -> Theme.LIGHT_THEME
+                        2 -> Theme.DARK_THEME
                         else -> Theme.FOLLOW_SYSTEM
                     }
                     SettingsEntry(
@@ -194,7 +201,7 @@ fun SettingsScreen(
                             vertical = Dimens.SmallPadding.size,
                             horizontal = Dimens.MediumPadding.size
                         ),
-                        settingsEntryName = Constants.SORT_OPTIONS,
+                        settingsEntryName =LocalStrings.current.sortOptions,
                         currentSettingValue = when(sort.type){
                             Sort.ALPHABETICAL_ASC.type -> LocalStrings.current.alphabeticASC
                             Sort.HIGH_PRICE_FIRST.type -> LocalStrings.current.heightPrice

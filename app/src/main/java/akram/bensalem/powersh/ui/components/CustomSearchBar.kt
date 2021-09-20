@@ -2,11 +2,13 @@ package akram.bensalem.powersh.ui.components
 
 import akram.bensalem.powersh.LocalStrings
 import akram.bensalem.powersh.R
+import akram.bensalem.powersh.lyricist
 import akram.bensalem.powersh.ui.theme.Dimens
 import akram.bensalem.powersh.ui.theme.PowerSHTheme
 import akram.bensalem.powersh.ui.theme.Shapes
 import akram.bensalem.powersh.utils.asAutoCompleteEntities
 import akram.bensalem.powersh.utils.autofill
+import akram.bensalem.powersh.utils.localization.Locales
 import android.content.res.Configuration
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.animateColorAsState
@@ -42,6 +44,7 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
@@ -175,6 +178,10 @@ fun CustomSearchBar(
                                 modifier = Modifier
                                     .padding(Dimens.MediumPadding.size)
                                     .rotate(searchAndOptionsAngle)
+                                    .graphicsLayer {
+
+                                                                    rotationY = if (lyricist.languageTag == Locales.AR) 180f else 0f
+                                                                },
                             )
                         } else {
                             IconButton(
@@ -190,7 +197,11 @@ fun CustomSearchBar(
                                     imageVector = Icons.Rounded.ArrowBack,
                                     contentDescription = stringResource(id = R.string.back_icon),
                                     tint = MaterialTheme.colors.onSurface,
-                                    modifier = Modifier.rotate(angle)
+                                    modifier = Modifier
+                                    .rotate(angle)
+                                                                .graphicsLayer {
+                                                                    rotationY = if (lyricist.languageTag == Locales.AR) 180f else 0f
+                                                                },
                                 )
                             }
                         }
@@ -278,6 +289,9 @@ fun CustomSearchBar(
                                     contentDescription = stringResource(id = R.string.clear_icon),
                                     tint = MaterialTheme.colors.onSurface,
                                     modifier = Modifier.rotate(angle)
+                                                                .graphicsLayer {
+                                                                    rotationY = if (lyricist.languageTag == Locales.AR) 180f else 0f
+                                                                },
                                 )
                             }
                         }
@@ -303,7 +317,10 @@ fun CustomSearchBar(
                     Modifier
                         .align(Alignment.CenterVertically)
                         .size(24.dp)
-                        .rotate(searchAndOptionsAngle),
+                        .rotate(searchAndOptionsAngle)
+                                                    .graphicsLayer {
+                                                        rotationY = if (lyricist.languageTag == Locales.AR) 180f else 0f
+                                                    },
                     tint = Color.White,
                     painter = painterResource(id = R.drawable.ic_filter),
                     contentDescription = stringResource(id = R.string.option_icon),
@@ -467,6 +484,9 @@ fun CustomEditText(
                                     .padding(Dimens.MediumPadding.size)
                                     .rotate(searchAndOptionsAngle)
                                     .size(36.dp)
+                                                                .graphicsLayer {
+                                                                    rotationY = if (lyricist.languageTag == Locales.AR) 180f else 0f
+                                                                },
                             )
                         }
 
@@ -485,6 +505,9 @@ fun CustomEditText(
                                 contentDescription = stringResource(id = R.string.back_icon),
                                 tint = MaterialTheme.colors.onSurface,
                                 modifier = Modifier.rotate(angle)
+                                                            .graphicsLayer {
+                                                                rotationY = if (lyricist.languageTag == Locales.AR) 180f else 0f
+                                                            },
                             )
                         }
                     }
@@ -587,6 +610,9 @@ fun CustomEditText(
                                 contentDescription = stringResource(id = R.string.clear_icon),
                                 tint = MaterialTheme.colors.onSurface,
                                 modifier = Modifier.rotate(angle)
+                                                            .graphicsLayer {
+                                                                rotationY = if (lyricist.languageTag == Locales.AR) 180f else 0f
+                                                            },
                             )
                         }
                     }

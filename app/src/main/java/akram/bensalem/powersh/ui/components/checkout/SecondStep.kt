@@ -335,7 +335,7 @@ fun SecondStep(
                                 RoundedCornerShape(12.dp)
                             )
                             .padding(8.dp),
-                        title = "Full Address",
+                        title = LocalStrings.current.fullAddress,
                         fieldState = fullAddressState,
                         focusRequester = mFullAddressRequester,
                         icon = Icons.Outlined.Place,

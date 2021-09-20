@@ -1,8 +1,10 @@
 package akram.bensalem.powersh.ui.components
 
 import akram.bensalem.powersh.LocalStrings
+import akram.bensalem.powersh.lyricist
 import akram.bensalem.powersh.ui.theme.Dimens
 import akram.bensalem.powersh.ui.theme.PowerSHTheme
+import akram.bensalem.powersh.utils.localization.Locales
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.scaleIn
@@ -20,6 +22,7 @@ import androidx.compose.material.icons.rounded.ArrowUpward
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.tooling.preview.Preview
 import com.google.accompanist.insets.statusBarsPadding
 import kotlinx.coroutines.CoroutineScope
@@ -65,6 +68,10 @@ fun ScrollToTopButton(
                         .padding(horizontal = Dimens.MediumPadding.size)
                 ) {
                     Icon(
+                    modifier = Modifier
+                                                .graphicsLayer {
+                                                    rotationY = if (lyricist.languageTag == Locales.AR) 180f else 0f
+                                                },
                         imageVector = Icons.Rounded.ArrowUpward,
                         contentDescription = LocalStrings.current.scrollUp,
                         tint = MaterialTheme.colors.onBackground,

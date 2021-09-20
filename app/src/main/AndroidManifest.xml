@@ -7,6 +7,9 @@
     <uses-permission android:name="android.permission.CAMERA"/>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
 
+
+
+
     <application
         android:name="akram.bensalem.powersh.PowerSHApplication"
         android:allowBackup="true"
@@ -15,6 +18,10 @@
         android:roundIcon="@drawable/big_circle_powersh"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppSplash">
+
+        <meta-data android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyBigzG48r-xGDiW-0ZQJEUAU5KPOvckzIc"/>
+
         <activity
             android:name="akram.bensalem.powersh.MainActivity"
             android:exported="true"

@@ -2,8 +2,10 @@ package akram.bensalem.powersh.ui.components
 
 import akram.bensalem.powersh.LocalStrings
 import akram.bensalem.powersh.R
+import akram.bensalem.powersh.lyricist
 import akram.bensalem.powersh.ui.theme.*
 import akram.bensalem.powersh.utils.Sort
+import akram.bensalem.powersh.utils.localization.Locales
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.tween
@@ -23,7 +25,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -110,7 +114,14 @@ fun ModalBottomSheet(
                     SheetOption(
                         modifier = Modifier
                             .fillMaxWidth(),
-                        sortOptionName = item.type,
+                        sortOptionName = when(item.type){
+                            Sort.ALPHABETICAL_ASC.type -> LocalStrings.current.alphabeticASC
+                            Sort.HIGH_PRICE_FIRST.type -> LocalStrings.current.heightPrice
+                            Sort.LOW_PRICE_FIRST.type -> LocalStrings.current.lowPrice
+                            Sort.NEW_RELEASE_FIRST.type -> LocalStrings.current.firstRelease
+                            Sort.OLD_RELEASE_FIRST.type -> LocalStrings.current.lastRelease
+                            else -> LocalStrings.current.alphabeticASC
+                        } ,
                         icon = item.icon,
                         onOptionClicked = {
                             onSortOptionClicked(item.sortValue)
@@ -174,6 +185,10 @@ fun TopSheetSection(
         ) {
             IconButton(onClick = onCloseClicked) {
                 Icon(
+                modifier = Modifier
+                                            .graphicsLayer {
+                                                rotationY = if (lyricist.languageTag == Locales.AR) 180f else 0f
+                                            },
                     imageVector = Icons.Outlined.Close,
                     contentDescription = LocalStrings.current.close,
                     tint = MaterialTheme.colors.onBackground
@@ -204,6 +219,7 @@ fun TopSheetSection(
         }
     }
 }
+
 
 @Composable
 fun SheetOption(
@@ -238,7 +254,58 @@ fun SheetOption(
                 .padding(Dimens.MediumPadding.size)
         ) {
             Icon(
-                imageVector = icon,
+                imageVector =icon,
+                contentDescription = iconDescription,
+                tint = contentColor,
+            )
+            Spacer(modifier = Modifier.width(Dimens.MediumPadding.size))
+            Text(
+                text = sortOptionName,
+                style = style,
+                color = contentColor,
+                maxLines = maxLines,
+                overflow = TextOverflow.Ellipsis
+            )
+        }
+    }
+}
+
+
+
+@Composable
+fun SheetOptionLanguage(
+    modifier: Modifier = Modifier,
+    sortOptionName: String,
+    style: TextStyle = TextStyle(
+        fontWeight = FontWeight.Normal,
+        fontSize = 16.sp
+    ),
+    maxLines: Int = 1,
+    iconDescription: String? = null,
+    icon: Int,
+    contentColor: Color = MaterialTheme.colors.onBackground,
+    onOptionClicked: () -> Unit = { },
+    selectedSortColor: Color = Color.Transparent
+) {
+
+    Box(
+        modifier = modifier
+            .clip(Shapes.large)
+            .background(
+                color = selectedSortColor,
+                shape = Shapes.large
+            )
+            .clickable { onOptionClicked() }
+    ) {
+        Row(
+            horizontalArrangement = Arrangement.Start,
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(Dimens.MediumPadding.size)
+        ) {
+            Icon(
+                painter = painterResource(id =icon),
                 contentDescription = iconDescription,
                 tint = contentColor,
             )
@@ -276,11 +343,11 @@ private fun UpdatesAndAbout(
             Icon(
                 imageVector = Icons.Outlined.SecurityUpdate,
                 contentDescription = null,
-                tint = MaterialTheme.colors.onPrimary
+                tint = Color.White
             )
             Spacer(modifier = Modifier.width(4.dp))
             Text(
-                text = "Check Updates",
+                text = LocalStrings.current.checkUpdate,
                 modifier = Modifier
                     .padding(
                         horizontal = 4.dp,
@@ -288,7 +355,8 @@ private fun UpdatesAndAbout(
                     ),
                 style = TextStyle(
                     fontWeight = FontWeight.Normal,
-                    fontSize = 16.sp
+                    fontSize = 16.sp,
+                    color = Color.White
                 ),
                 textAlign = TextAlign.Center,
                 maxLines = 1,
@@ -307,11 +375,11 @@ private fun UpdatesAndAbout(
             Icon(
                 imageVector = Icons.Outlined.Info,
                 contentDescription = null,
-                tint = MaterialTheme.colors.onPrimary
+                tint =  Color.White
             )
             Spacer(modifier = Modifier.width(4.dp))
             Text(
-                text = "About",
+                text = LocalStrings.current.aboutUs,
                 modifier = Modifier
                     .padding(
                         horizontal = 4.dp,
@@ -319,7 +387,8 @@ private fun UpdatesAndAbout(
                     ),
                 style = TextStyle(
                     fontWeight = FontWeight.Normal,
-                    fontSize = 16.sp
+                    fontSize = 16.sp,
+                    color = Color.White
                 ),
                 textAlign = TextAlign.Center,
                 maxLines = 1,
