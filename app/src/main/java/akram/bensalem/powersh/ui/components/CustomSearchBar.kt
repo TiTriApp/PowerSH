@@ -74,6 +74,25 @@ fun CustomSearchBar(
     = LocalSoftwareKeyboardController.current,
     focusManager: FocusManager = LocalFocusManager.current
 ) {
+
+
+    val alphaAnimatedProgress = remember {
+        Animatable(initialValue = 0f)
+    }
+    LaunchedEffect(key1 = Unit) {
+        alphaAnimatedProgress.animateTo(
+            targetValue = 1f,
+            animationSpec = tween(300, easing = FastOutSlowInEasing)
+        )
+    }
+
+
+    val alphaAnimatedModifier = Modifier
+        .graphicsLayer(
+            alpha = alphaAnimatedProgress.value,
+        )
+
+
     var searchText by remember {
         mutableStateOf("")
     }
@@ -158,7 +177,7 @@ fun CustomSearchBar(
                         shape = CircleShape
                     )
             ) {
-                ConstraintLayout(Modifier.fillMaxWidth()) {
+                ConstraintLayout(alphaAnimatedModifier.fillMaxWidth()) {
                     val (search, field, options) = createRefs()
 
                     Box(

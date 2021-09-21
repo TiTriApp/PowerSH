@@ -54,6 +54,7 @@ fun MainDrawer(
         modifier
             .fillMaxSize()
             .statusBarsPadding()
+
     ) {
 
         Row(

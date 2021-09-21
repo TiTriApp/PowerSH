@@ -118,6 +118,8 @@ fun orderScreen(
                 .align(Alignment.Center)
         ) {
             Column(
+                Modifier
+                    .fillMaxWidth()
             ) {
                 Image(
                     modifier = Modifier
@@ -173,7 +175,7 @@ fun orderScreen(
                         fontStyle = FontStyle.Normal,
                         fontWeight = FontWeight.Bold,
                         textAlign = TextAlign.Start,
-                        fontSize = 18.sp,
+                        fontSize = 14.sp,
                         text = LocalStrings.current.at(getCurrentDate(LocalStrings.current)),
                         modifier = Modifier
                             .align(Alignment.Start)
@@ -204,8 +206,8 @@ fun orderScreen(
                             modifier = Modifier.padding(
                                 start = 24.dp,
                                 end = 24.dp,
-                                top = 6.dp,
-                                bottom = 6.dp
+                                top = 4.dp,
+                                bottom = 4.dp
                             )
                         )
                     }

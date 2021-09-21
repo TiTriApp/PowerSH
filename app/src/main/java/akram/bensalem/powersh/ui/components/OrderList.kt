@@ -49,8 +49,9 @@ fun orderItemEntry(
     onPrint: () -> Unit = {},
 ) {
 
+    //Scale animation
     val animatedProgress = remember {
-        Animatable(initialValue = 1.15f)
+        Animatable(initialValue = 0.7f)
     }
     LaunchedEffect(key1 = Unit) {
         animatedProgress.animateTo(
@@ -59,12 +60,11 @@ fun orderItemEntry(
         )
     }
 
-    val animatedModifier = modifier
+    val animatedModifier = Modifier
         .graphicsLayer(
             scaleX = animatedProgress.value,
             scaleY = animatedProgress.value
         )
-
 
     val visible = remember {
         mutableStateOf(false)

@@ -7,8 +7,7 @@ import akram.bensalem.powersh.ui.theme.PowerSHTheme
 import akram.bensalem.powersh.utils.autofill
 import akram.bensalem.powersh.utils.localization.Locales
 import androidx.compose.animation.animateColorAsState
-import androidx.compose.animation.core.Spring
-import androidx.compose.animation.core.spring
+import androidx.compose.animation.core.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
@@ -64,6 +63,44 @@ fun CustomTextField(
 ) {
 
 
+
+    //Scale animation
+    val animatedProgress = remember {
+        Animatable(initialValue = 0.7f)
+    }
+    LaunchedEffect(key1 = Unit) {
+        animatedProgress.animateTo(
+            targetValue = 1f,
+            animationSpec = tween(300, easing = FastOutSlowInEasing)
+        )
+    }
+
+    val animatedModifier = modifier
+        .graphicsLayer(
+            scaleX = animatedProgress.value,
+            scaleY = animatedProgress.value
+        )
+
+
+    val alphaAnimatedProgress = remember {
+        Animatable(initialValue = 0f)
+    }
+    LaunchedEffect(key1 = Unit) {
+        alphaAnimatedProgress.animateTo(
+            targetValue = 1f,
+            animationSpec = tween(300, easing = FastOutSlowInEasing)
+        )
+    }
+
+
+    val alphaAnimatedModifier = Modifier
+        .graphicsLayer(
+            alpha = alphaAnimatedProgress.value,
+        )
+
+
+
+
     var isFieldFocus by remember {
         mutableStateOf(false)
     }
@@ -84,7 +121,7 @@ fun CustomTextField(
 
 
     Column(
-        modifier = modifier
+        modifier = animatedModifier
 
     ) {
         Text(
@@ -120,7 +157,7 @@ fun CustomTextField(
                                 onClick = {
                                     isIconButtonPressed = !isIconButtonPressed
                                 },
-                                modifier = Modifier
+                                modifier = alphaAnimatedModifier
                                     .size(32.dp)
                                     .align(Alignment.Top)
                             ) {
@@ -159,7 +196,7 @@ fun CustomTextField(
                             IconButton(
                                 onClick = {},
                                 enabled = false,
-                                modifier = Modifier
+                                modifier = alphaAnimatedModifier
                                     .size(32.dp)
                                     .align(Alignment.Top)
                             ) {
@@ -167,10 +204,7 @@ fun CustomTextField(
                                     imageVector =if (!isValid) Icons.Outlined.ErrorOutline else Icons.Outlined.CheckCircleOutline,
                                     contentDescription = null,
                                     tint = if (!isValid) MaterialTheme.colors.error else PowerSHGreen,
-                                    modifier = Modifier.size(24.dp)
-                                                                .graphicsLayer {
-                                                                    rotationY = if (lyricist.languageTag == Locales.AR) 180f else 0f
-                                                                },
+                                    modifier = Modifier.size(24.dp),
                                 )
                             }
 

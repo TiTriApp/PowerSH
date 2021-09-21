@@ -141,9 +141,9 @@ val ArStrings = Strings(
     goBack = "عد",
     imageOfPowerSHShoes = "صورة حذاء PowerSH",
     paymentDetail = "بيانات الدفع",
-    size = "مقاس",
+    size = "المقاس",
     color = "اللون",
-    quantity = "كمية",
+    quantity = "الكمية",
     add = "أضف",
     minus = "أنقص",
     detailQuantityValue = {total ->
@@ -199,7 +199,7 @@ val ArStrings = Strings(
     checkYourConnectivity = "تحقق من الاتصال الخاص بك",
     problemWithInternetCheckItPlease = "هناك مشكلة في الإنترنت الخاص بك!\n" +
             " تحقق من ذلك مرة أخرى ، من فضلك",
-    viewCart = "عرض سلةالمشتريات",
+    viewCart = "عرض سلة المشتريات",
 
 
 
@@ -271,10 +271,16 @@ val ArStrings = Strings(
 
     billingHaveBeenPrinted = "تمت طباعة الفاتورة!",
     at = {time ->
-        "على $time"}
+        "على $time"},
+
+    entrerEnContact = "تواصل معنا",
+
+    black = "أسود",
+    red = "أحمر",
+    white = "أبيض",
+    blue = "أزرق",
+    brown = "بني"
 
 
 
-
-
-    )
+)

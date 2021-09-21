@@ -8,6 +8,11 @@ import akram.bensalem.powersh.ui.theme.PowerSHTheme
 import akram.bensalem.powersh.utils.*
 import akram.bensalem.powersh.utils.authentification.Authenticate
 import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.animation.animateColor
+import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.core.updateTransition
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
@@ -18,16 +23,14 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.AccountCircle
 import androidx.compose.material.icons.outlined.Email
 import androidx.compose.material.icons.outlined.Password
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.autofill.AutofillType
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.text.input.ImeAction
@@ -38,6 +41,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
 
+private enum class SignUpModeState { FILL, EMPTY }
+
+
 @ExperimentalAnimationApi
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
@@ -46,6 +52,26 @@ fun SignUpScreen(
     authentication: MutableState<Authenticate> = remember { mutableStateOf(Authenticate(null)) } ,
     onBackToMainScreen: () -> Unit = {}
 ) {
+
+
+
+    val alphaAnimatedProgress = remember {
+        Animatable(initialValue = 0f)
+    }
+    LaunchedEffect(key1 = Unit) {
+        alphaAnimatedProgress.animateTo(
+            targetValue = 1f,
+            animationSpec = tween(300, easing = FastOutSlowInEasing)
+        )
+    }
+
+
+    val alphaAnimatedModifier = Modifier
+        .graphicsLayer(
+            alpha = alphaAnimatedProgress.value,
+        )
+
+
 
 
     val emailState = remember {
@@ -92,6 +118,33 @@ fun SignUpScreen(
     }
 
     val localStrings = LocalStrings.current
+
+
+    val transition = updateTransition(
+        if (isValid(
+                email = emailState.value.text,
+                password = passwordState.value.text,
+                firstName = firstNameState.value.text,
+                lastName = lastNameState.value.text,
+                repeatPassword = repeatPasswordState.value.text
+            )) SignUpModeState.FILL else SignUpModeState.EMPTY,
+        label = ""
+    )
+
+
+    val backgroundColor by transition.animateColor { state ->
+        when (state) {
+            SignUpModeState.FILL -> MaterialTheme.colors.primary
+            SignUpModeState.EMPTY -> MaterialTheme.colors.surface
+        }
+    }
+
+    val contentColor by transition.animateColor { state ->
+        when (state) {
+            SignUpModeState.FILL -> MaterialTheme.colors.primary
+            SignUpModeState.EMPTY -> LocalContentColor.current
+        }
+    }
 
     Box(
         modifier = modifier
@@ -265,18 +318,20 @@ fun SignUpScreen(
             )
 
             Spacer(
-                modifier = modifier
+                modifier = alphaAnimatedModifier
                     .fillMaxWidth()
                     .weight(1f)
             )
 
             Button(
                 colors = ButtonDefaults.buttonColors(
-                    contentColor = Color.White,
-                    backgroundColor = MaterialTheme.colors.primary,
+                    backgroundColor = backgroundColor,
+                    contentColor = contentColor,
+                    disabledBackgroundColor = backgroundColor,
+                    disabledContentColor = contentColor
                 ),
                 shape = RoundedCornerShape(12.dp),
-                modifier = Modifier
+                modifier = alphaAnimatedModifier
                     .padding(16.dp, 24.dp)
                     .align(Alignment.CenterHorizontally)
                     .background(color = MaterialTheme.colors.primary, shape = CircleShape),

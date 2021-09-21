@@ -15,12 +15,11 @@ import android.content.Intent
 import android.content.res.Configuration
 import android.net.Uri
 import android.widget.Toast
+import androidx.compose.animation.animateColor
 import androidx.compose.animation.animateColorAsState
-import androidx.compose.animation.core.Spring
-import androidx.compose.animation.core.spring
+import androidx.compose.animation.core.*
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
@@ -58,12 +57,53 @@ import com.google.accompanist.insets.navigationBarsPadding
 import com.google.accompanist.insets.statusBarsPadding
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.schedulers.Schedulers
-import timber.log.Timber
+
+
+private enum class SendModeState { FILL, EMPTY }
 
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun contactScreen() {
+
+
+
+    //Scale animation
+    val animatedProgress = remember {
+        Animatable(initialValue = 0.7f)
+    }
+    LaunchedEffect(key1 = Unit) {
+        animatedProgress.animateTo(
+            targetValue = 1f,
+            animationSpec = tween(300, easing = FastOutSlowInEasing)
+        )
+    }
+
+    val animatedModifier = Modifier
+        .graphicsLayer(
+            scaleX = animatedProgress.value,
+            scaleY = animatedProgress.value
+        )
+
+
+
+
+    val alphaAnimatedProgress = remember {
+        Animatable(initialValue = 0f)
+    }
+    LaunchedEffect(key1 = Unit) {
+        alphaAnimatedProgress.animateTo(
+            targetValue = 1f,
+            animationSpec = tween(300, easing = FastOutSlowInEasing)
+        )
+    }
+
+
+    val bottomAnimatedModifier = Modifier
+        .graphicsLayer(
+            alpha = alphaAnimatedProgress.value,
+        )
+
 
 
     val emailState = remember {
@@ -105,6 +145,31 @@ fun contactScreen() {
 
     val localStrings = LocalStrings.current
 
+
+
+    val transition = updateTransition(
+        if (isValid(
+            email = emailState.value.text,
+            message =  messageState.value.text,
+            fullName = nameState.value.text )) SendModeState.FILL else SendModeState.EMPTY,
+        label = ""
+    )
+
+
+    val backgroundColor by transition.animateColor { state ->
+        when (state) {
+            SendModeState.FILL -> MaterialTheme.colors.primary
+            SendModeState.EMPTY -> MaterialTheme.colors.surface
+        }
+    }
+
+    val contentColor by transition.animateColor { state ->
+        when (state) {
+            SendModeState.FILL -> MaterialTheme.colors.primary
+            SendModeState.EMPTY -> LocalContentColor.current
+        }
+    }
+
     ConstraintLayout(
         modifier = Modifier
             .verticalScroll(state = rememberScrollState())
@@ -120,7 +185,7 @@ fun contactScreen() {
             shape = RoundedCornerShape(14.dp),
             backgroundColor = MaterialTheme.colors.surface,
             elevation = 3.dp,
-            modifier = Modifier
+            modifier = animatedModifier
                 .fillMaxSize()
                 .constrainAs(card) {
                     top.linkTo(parent.top)
@@ -131,7 +196,7 @@ fun contactScreen() {
                 }
                 .padding(
                     top = Dimens.UpperMediumPadding.size,
-                    bottom = Dimens.UpperMediumPadding.size,
+                    bottom = Dimens.MediumPadding.size,
                     start = Dimens.UpperMediumPadding.size,
                     end = Dimens.UpperMediumPadding.size,
                 )
@@ -146,7 +211,7 @@ fun contactScreen() {
 
 
                 Text(
-                    text = LocalStrings.current.contactUs,
+                    text = LocalStrings.current.entrerEnContact,
                     fontWeight = FontWeight.Bold,
                     fontSize = 21.sp,
                     color = MaterialTheme.colors.primary,
@@ -254,11 +319,13 @@ fun contactScreen() {
 
         Button(
             colors = ButtonDefaults.buttonColors(
-                contentColor = Color.White,
-                backgroundColor = MaterialTheme.colors.primary,
+                backgroundColor = backgroundColor,
+                contentColor = contentColor,
+                disabledBackgroundColor = backgroundColor,
+                disabledContentColor = contentColor
             ),
             shape = CircleShape,
-            modifier = Modifier
+            modifier = bottomAnimatedModifier
                 .constrainAs(send) {
                     start.linkTo(parent.start)
                     end.linkTo(parent.end)
@@ -266,8 +333,8 @@ fun contactScreen() {
                     top.linkTo(card.bottom)
                 }
                 .padding(
-                    bottom =  32.dp,
-                    top = 32.dp
+                    bottom =  24.dp,
+                    top = 24.dp
                 ),
             enabled = isValid(
                 email = emailState.value.text,
@@ -371,7 +438,7 @@ private fun isValid(email : String,
                     fullName :String,
                     message: String ):Boolean {
     return (
-            email.isNotEmpty()
+                    email.isNotEmpty()
                     && fullName.isNotEmpty()
                     && message.isNotEmpty()
                     && isEmailValid(email)
@@ -411,6 +478,43 @@ fun messageTextField(
     onDone: () -> Unit = {},
 ){
 
+
+    //Scale animation
+    val animatedProgress = remember {
+        Animatable(initialValue = 0.7f)
+    }
+    LaunchedEffect(key1 = Unit) {
+        animatedProgress.animateTo(
+            targetValue = 1f,
+            animationSpec = tween(300, easing = FastOutSlowInEasing)
+        )
+    }
+
+    val animatedModifier = modifier
+        .graphicsLayer(
+            scaleX = animatedProgress.value,
+            scaleY = animatedProgress.value
+        )
+
+
+    val alphaAnimatedProgress = remember {
+        Animatable(initialValue = 0f)
+    }
+    LaunchedEffect(key1 = Unit) {
+        alphaAnimatedProgress.animateTo(
+            targetValue = 1f,
+            animationSpec = tween(300, easing = FastOutSlowInEasing)
+        )
+    }
+
+
+    val alphaAnimatedModifier = Modifier
+        .graphicsLayer(
+            alpha = alphaAnimatedProgress.value,
+        )
+
+
+
     var isFieldFocus by remember {
         mutableStateOf(false)
     }
@@ -430,7 +534,7 @@ fun messageTextField(
 
 
     Column(
-        modifier = modifier
+        modifier = animatedModifier
 
     ) {
         Text(
@@ -467,7 +571,7 @@ fun messageTextField(
                                 onClick = {
                                     isIconButtonPressed = !isIconButtonPressed
                                 },
-                                modifier = Modifier
+                                modifier = alphaAnimatedModifier
                                     .size(32.dp)
                                     .align(Alignment.Top)
                             ) {
@@ -511,7 +615,7 @@ fun messageTextField(
                             IconButton(
                                 onClick = {},
                                 enabled = false,
-                                modifier = Modifier
+                                modifier = alphaAnimatedModifier
                                     .size(32.dp)
                                     .align(Alignment.Top)
                             ) {
@@ -519,10 +623,7 @@ fun messageTextField(
                                     imageVector =if (!isValid) Icons.Outlined.ErrorOutline else Icons.Outlined.CheckCircleOutline,
                                     contentDescription = null,
                                     tint = if (!isValid) MaterialTheme.colors.error else PowerSHGreen,
-                                    modifier = Modifier.size(24.dp)
-                                                                .graphicsLayer {
-                                                                    rotationY = if (lyricist.languageTag == Locales.AR) 180f else 0f
-                                                                },
+                                    modifier = Modifier.size(24.dp),
                                 )
                             }
 

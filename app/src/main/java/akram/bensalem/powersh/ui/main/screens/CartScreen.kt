@@ -10,16 +10,14 @@ import akram.bensalem.powersh.utils.Constants
 import akram.bensalem.powersh.utils.localization.Locales
 import android.content.res.Configuration
 import androidx.compose.animation.*
+import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.core.updateTransition
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -46,6 +44,42 @@ fun cartScreen(
     navController: NavController,
     cartProduct: MutableList<CardItem>,
 ) {
+
+
+    //Scale animation
+    val animatedProgress = remember {
+        androidx.compose.animation.core.Animatable(initialValue = 0.7f)
+    }
+    LaunchedEffect(key1 = Unit) {
+        animatedProgress.animateTo(
+            targetValue = 1f,
+            animationSpec = tween(300, easing = FastOutSlowInEasing)
+        )
+    }
+
+    val animatedModifier = Modifier
+        .graphicsLayer(
+            scaleX = animatedProgress.value,
+            scaleY = animatedProgress.value
+        )
+
+
+
+    val alphaAnimatedProgress = remember {
+        androidx.compose.animation.core.Animatable(initialValue = 0f)
+    }
+    LaunchedEffect(key1 = Unit) {
+        alphaAnimatedProgress.animateTo(
+            targetValue = 1f,
+            animationSpec = tween(300, easing = FastOutSlowInEasing)
+        )
+    }
+
+
+    val alphaAnimatedModifier = Modifier
+        .graphicsLayer(
+            alpha = alphaAnimatedProgress.value,
+        )
 
 
     val totalPrice = remember {
@@ -83,9 +117,9 @@ fun cartScreen(
 
 
     Column(
-        modifier = Modifier
+        modifier = animatedModifier
             .fillMaxSize()
-            .padding(top = 16.dp, bottom = 16.dp, start = 16.dp, end = 16.dp)
+            .padding(top = 16.dp, bottom = 0.dp, start = 16.dp, end = 16.dp)
             .navigationBarsPadding()
     ) {
 
@@ -112,7 +146,12 @@ fun cartScreen(
                 .weight(1f)
                 .align(Alignment.CenterHorizontally)
         ) {
-            Column {
+            Column(
+                Modifier
+                    .fillMaxWidth()
+            ) {
+
+
                 Image(
                     modifier = Modifier
                         .align(Alignment.CenterHorizontally)
@@ -121,8 +160,10 @@ fun cartScreen(
                             rotationY = if (lyricist.languageTag == Locales.AR) 180f else 0f
                         },
                     painter = painterResource(id = R.drawable.ic_empty_cart),
-                    contentDescription = LocalStrings.current.addToCart
-                )
+                    contentDescription = LocalStrings.current.addToCart,
+                    alpha = 0.90F,
+                    )
+
                 Text(
                     color = MaterialTheme.colors.onSurface,
                     fontStyle = FontStyle.Normal,
@@ -134,6 +175,9 @@ fun cartScreen(
                         .padding(top = 20.dp)
                         .align(Alignment.CenterHorizontally)
                 )
+
+
+
             }
 
 
@@ -144,9 +188,9 @@ fun cartScreen(
 
 
         Row(
-            modifier = Modifier
+            modifier = alphaAnimatedModifier
                 .fillMaxWidth()
-                .padding(start = 16.dp, end = 0.dp, bottom = 8.dp, top = 16.dp)
+                .padding(start = 0.dp, end = 0.dp, bottom = 8.dp, top = 16.dp)
         ) {
             Column(
                 modifier = Modifier

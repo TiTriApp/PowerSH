@@ -97,14 +97,16 @@ fun ShoeDetails(
                 modifier = Modifier
                     .padding(horizontal = Dimens.SmallPadding.size)
             ) {
-                Icon(
-                    imageVector = if (favourite.value) Icons.Outlined.Favorite else Icons.Outlined.FavoriteBorder,
-                    contentDescription = LocalStrings.current.addToFavourite,
-                    tint = MaterialTheme.colors.primary.copy(alpha = 0.8f),
-                    modifier = Modifier.graphicsLayer {
-                          rotationY = if (lyricist.languageTag == Locales.AR) 180f else 0f
-                          },
-                )
+                PulseEffect(pulseFraction = if (favourite.value) 1F else 1.2F){
+                    Icon(
+                        imageVector = if (favourite.value) Icons.Outlined.Favorite else Icons.Outlined.FavoriteBorder,
+                        contentDescription = LocalStrings.current.addToFavourite,
+                        tint = MaterialTheme.colors.primary.copy(alpha = 0.8f),
+                        modifier = Modifier.graphicsLayer {
+                            rotationY = if (lyricist.languageTag == Locales.AR) 180f else 0f
+                        },
+                    )
+                }
             }
 
 

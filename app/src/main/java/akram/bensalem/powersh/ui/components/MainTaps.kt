@@ -5,6 +5,9 @@ import akram.bensalem.powersh.R
 import akram.bensalem.powersh.ui.theme.PowerSHRed
 import akram.bensalem.powersh.ui.theme.PowerSHTheme
 import androidx.compose.animation.animateColor
+import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.tween
 import androidx.compose.animation.core.updateTransition
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
@@ -14,10 +17,13 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -46,11 +52,25 @@ fun TabsPanel(
     onTabSelected: (Int) -> Unit = {},
 ) {
 
+    val alphaAnimatedProgress = remember {
+        Animatable(initialValue = 0f)
+    }
+    LaunchedEffect(key1 = Unit) {
+        alphaAnimatedProgress.animateTo(
+            targetValue = 1f,
+            animationSpec = tween(300, easing = FastOutSlowInEasing)
+        )
+    }
 
+
+    val alphaAnimatedModifier = Modifier
+        .graphicsLayer(
+            alpha = alphaAnimatedProgress.value,
+        )
     val tabs = ScreenState.Screen.values()
 
     ScrollableTabRow(
-
+        modifier = alphaAnimatedModifier,
         selectedTabIndex = pagerState.currentPage,
         backgroundColor = MaterialTheme.colors.background,
         edgePadding = 16.dp,

@@ -10,6 +10,8 @@ import akram.bensalem.powersh.ui.theme.Dimens
 import akram.bensalem.powersh.utils.localization.Locales
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -21,6 +23,8 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -41,10 +45,48 @@ fun FavouriteScreen(
     cartFavourite: MutableList<ShoeProduct>,
     onEntryClick: (ShoeProduct) -> Unit = { },
 ) {
+
+
+    //Scale animation
+    val animatedProgress = remember {
+        Animatable(initialValue = 0.7f)
+    }
+    LaunchedEffect(key1 = Unit) {
+        animatedProgress.animateTo(
+            targetValue = 1f,
+            animationSpec = tween(300, easing = FastOutSlowInEasing)
+        )
+    }
+
+    val animatedModifier = Modifier
+        .graphicsLayer(
+            scaleX = animatedProgress.value,
+            scaleY = animatedProgress.value
+        )
+
+
+    val alphaAnimatedProgress = remember {
+        Animatable(initialValue = 0f)
+    }
+    LaunchedEffect(key1 = Unit) {
+        alphaAnimatedProgress.animateTo(
+            targetValue = 1f,
+            animationSpec = tween(300, easing = FastOutSlowInEasing)
+        )
+    }
+
+
+    val alphaAnimatedModifier = Modifier
+        .graphicsLayer(
+            alpha = alphaAnimatedProgress.value,
+        )
+
+
+
     Box(
-        modifier = Modifier
+        modifier = animatedModifier
             .fillMaxSize()
-            .padding(top = 16.dp, bottom = 16.dp, start = 16.dp, end = 16.dp)
+            .padding(top = 16.dp, bottom = 0.dp, start = 16.dp, end = 16.dp)
             .navigationBarsPadding()
     ) {
 
@@ -117,8 +159,9 @@ fun FavouriteScreen(
                             rotationY = if (lyricist.languageTag == Locales.AR) 180f else 0f
                         },
                     painter = painterResource(id = R.drawable.ic_favourite),
-                    contentDescription = LocalStrings.current.addToFavourite
-                )
+                    contentDescription = LocalStrings.current.addToFavourite,
+                    alpha = 0.90F,
+                    )
                 Text(
                     color = MaterialTheme.colors.onSurface,
                     fontStyle = FontStyle.Normal,
@@ -136,7 +179,7 @@ fun FavouriteScreen(
         }
 
         Row(
-            modifier = Modifier
+            modifier = alphaAnimatedModifier
                 .fillMaxWidth()
                 .padding(start = 16.dp, end = 0.dp, bottom = 8.dp, top = 16.dp)
                 .align(Alignment.BottomCenter)

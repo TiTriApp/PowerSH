@@ -32,23 +32,21 @@ fun mainTopBar(
 
     TopAppBar(
         title = {
-            Column(Modifier
-                .statusBarsPadding()) {
                 Text(
-                    modifier = Modifier,
+                    modifier = Modifier.statusBarsPadding(),
                     color = MaterialTheme.colors.onBackground,
                     text = getScreenTitle(state = pageState.value, localString = LocalStrings.current)
                 )
-                Spacer(modifier = Modifier.fillMaxWidth().height(16.dp))
-            }
 
         },
         modifier = Modifier
-            .fillMaxWidth(),
+            .fillMaxWidth()
+            .height(72.dp),
         backgroundColor = MaterialTheme.colors.surface,
         navigationIcon = {
-            Column(Modifier.statusBarsPadding()) {
-                IconButton(onClick = {
+                IconButton(
+                    modifier = Modifier.statusBarsPadding(),
+                    onClick = {
                     onOpenMenu()
                 }) {
                     Icon(
@@ -61,10 +59,9 @@ fun mainTopBar(
                         contentDescription = LocalStrings.current.openMenu
                     )
                 }
-            }
         },
         actions = {},
-        elevation = 0.dp,
+        elevation = 4.dp,
     )
 }
 

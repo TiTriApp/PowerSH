@@ -283,7 +283,13 @@ val FrStrings = Strings(
 
     billingHaveBeenPrinted = "La facture a été imprimée!",
     at = {time ->
-        "À $time"}
+        "À $time"},
+    entrerEnContact = "Entrer en Contact",
+    black = "Noire",
+    red = "Rouge",
+    white = "Blanche",
+    blue = "Bleu",
+    brown = "Marron"
 
 
     )

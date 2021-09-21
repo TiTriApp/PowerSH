@@ -5,6 +5,7 @@ import akram.bensalem.powersh.data.model.ShoeProduct
 import akram.bensalem.powersh.ui.components.CollapsingToolbarBase
 import akram.bensalem.powersh.ui.components.DetailsCards
 import akram.bensalem.powersh.ui.components.ToolbarImage
+import akram.bensalem.powersh.ui.components.details.HorizontalPagerWithOffsetTransition
 import akram.bensalem.powersh.ui.theme.PowerSHTheme
 import akram.bensalem.powersh.utils.Constants
 import android.content.res.Configuration
@@ -72,6 +73,7 @@ fun DetailsScreen(
                         .fillMaxSize(),
                     imageUrl = shoeProduct.imageUrl
                 )
+
             }
         }
     ) {

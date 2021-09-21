@@ -252,5 +252,14 @@ val EnStrings = Strings(
     open = "Open",
     billingHaveBeenPrinted = "The Billing has been printed!",
     at = {time ->
-        "At $time"}
+        "At $time"},
+
+    entrerEnContact = "Contact Us",
+
+    black = "Black",
+    red = "Red",
+    white = "White",
+    blue = "Blue",
+    brown = "Brown"
+
 )

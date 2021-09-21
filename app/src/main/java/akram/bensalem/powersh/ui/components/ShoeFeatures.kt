@@ -4,6 +4,7 @@ import akram.bensalem.powersh.LocalStrings
 import akram.bensalem.powersh.data.model.CardItem
 import akram.bensalem.powersh.data.model.ShoeProduct
 import akram.bensalem.powersh.lyricist
+import akram.bensalem.powersh.ui.components.details.HorizontalPagerWithOffsetTransition
 import akram.bensalem.powersh.ui.theme.CardCoverPink
 import akram.bensalem.powersh.ui.theme.Dimens
 import akram.bensalem.powersh.ui.theme.PowerSHTheme
@@ -15,11 +16,11 @@ import androidx.compose.animation.*
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.text.ClickableText
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Add
@@ -27,9 +28,9 @@ import androidx.compose.material.icons.outlined.Remove
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -103,8 +104,9 @@ fun ShoeFeatures(
         ) {
             Column(
                 modifier = Modifier
-                    .padding(Dimens.MediumPadding.size)
+                    .padding(top = Dimens.MiniSmallPadding.size)
             ) {
+
                 features(
                     quantity = quantity,
                     isColorDialogVisible = isColorDialogVisible,
@@ -113,7 +115,6 @@ fun ShoeFeatures(
                     sizeSelected = sizeSelected,
                     isAddedToCart = isAddedToCart
                 )
-
 
                 AnimatedVisibility(
                     visible = isAddedToCart.value,
@@ -136,7 +137,6 @@ fun ShoeFeatures(
                     )
                 }
 
-
                 payment(
                     price = shoeProduct.marketPriceStart,
                     quantity = quantity,
@@ -156,7 +156,6 @@ fun ShoeFeatures(
                         )
                     },
                 ) {
-
                     cartProduct.remove(
                         CardItem(
                             id = 1,
@@ -179,6 +178,8 @@ fun ShoeFeatures(
 }
 
 
+
+@ExperimentalAnimationApi
 @Composable
 fun features(
     quantity: MutableState<Int>,
@@ -187,67 +188,216 @@ fun features(
     isSizeDialogVisible: MutableState<Boolean>,
     sizeSelected: MutableState<Int>,
     isAddedToCart: MutableState<Boolean>,
-) {
+){
 
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(start = 16.dp, end = 16.dp, top = 16.dp, bottom = 0.dp)
+            .padding(start = 0.dp, end = 0.dp, top = 16.dp, bottom = 16.dp)
     ) {
-        //
-        //   var modifier = Modifier.align(Alignment.CenterVertically)
-        var modifier = Modifier
+
         Column(
-            modifier = Modifier.height(180.dp),
+            modifier = Modifier
+                .weight(1f)
+                .padding(start = 24.dp, end = 8.dp),
             verticalArrangement = Arrangement.SpaceEvenly
         ) {
-            itemsTitle(title = LocalStrings.current.size, modifier = modifier)
-            itemsTitle(title = LocalStrings.current.color, modifier = modifier)
-            itemsTitle(title = LocalStrings.current.quantity, modifier = modifier)
+            itemsTitle(
+                title = LocalStrings.current.size,
+                modifier =Modifier.align(Alignment.CenterHorizontally)
+            )
+            itemButton(
+                modifier = Modifier,
+                enabled = !isAddedToCart.value,
+                onClicked = {
+                    isSizeDialogVisible.value = !isSizeDialogVisible.value
+                }
+            ) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                ) {
+                    Text(
+                        text = "${sizeSelected.value}",
+                        fontSize = 16.sp,
+                        fontWeight = FontWeight.Normal,
+                        textAlign = TextAlign.Center,
+                        color = MaterialTheme.colors.onBackground,
+                        modifier = Modifier.align(Alignment.Center)
+                            .padding(
+                                start = 0.dp,
+                                end = 0.dp,
+                                top = 0.dp,
+                                bottom = 0.dp,
+                            )
+                    )
+                }
+            }
+
+
+
+
+        }
+        Column(
+            modifier = Modifier
+                .weight(1f)
+                .padding(start = 16.dp, end = 16.dp),
+            verticalArrangement = Arrangement.SpaceEvenly
+        ) {
+            itemsTitle(
+                title = LocalStrings.current.color,
+                modifier = Modifier
+                    .align(Alignment.CenterHorizontally)
+                    .padding(end = 0.dp)
+            )
+
+            itemButton(
+                modifier = Modifier,
+                enabled = !isAddedToCart.value,
+                onClicked = {
+                    isColorDialogVisible.value = !isColorDialogVisible.value
+                }
+            ) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                ) {
+                    Text(
+                        text = when(colorSelected.value){
+                            "Black" -> LocalStrings.current.black
+                            "Red" -> LocalStrings.current.red
+                            "Blue" -> LocalStrings.current.blue
+                            "White" -> LocalStrings.current.white
+                             "Brown" -> LocalStrings.current.brown
+                            else -> LocalStrings.current.black
+                          },
+                        fontSize = 16.sp,
+                        fontWeight = FontWeight.Normal,
+                        textAlign = TextAlign.Center,
+                        color = MaterialTheme.colors.onBackground,
+                        modifier = Modifier.align(Alignment.Center)
+                            .padding(
+                            start = 0.dp,
+                            end = 0.dp,
+                            top = 0.dp,
+                            bottom = 0.dp,
+                        )
+                    )
+                }
+            }
+
         }
 
         Column(
-            modifier = Modifier.height(180.dp),
+            modifier = Modifier
+                .weight(1f)
+                .padding(start = 8.dp, end = 24.dp),
             verticalArrangement = Arrangement.SpaceEvenly
-
         ) {
-            itemButton(
-                value = "  ${sizeSelected.value}  ",
-                modifier = modifier,
-                isColorDialogVisible = isSizeDialogVisible,
-                enabled = isAddedToCart,
+            itemsTitle(
+                title = LocalStrings.current.quantity,
+                modifier =Modifier.align(Alignment.CenterHorizontally)
             )
             itemButton(
-                value = colorSelected.value,
-                modifier = modifier,
-                isColorDialogVisible = isColorDialogVisible,
-                enabled = isAddedToCart
-            )
-            specialItemButton(
-                value = "${quantity.value}",
                 modifier = Modifier,
-                enabled = isAddedToCart,
-                onAdd = {
-                    quantity.value += 1
-                },
-                onSubstract = {
-                    if (quantity.value > 1)
-                        quantity.value -= 1
-                    else quantity.value = 1
+            ){
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                ) {
+
+                    IconButton(
+                        modifier =Modifier
+                            .size(32.dp)
+                            .align(Alignment.CenterVertically),
+                        onClick = {
+                            if (quantity.value > 1)
+                            quantity.value -= 1
+                        else quantity.value = 1
+                                  },
+                        enabled = !("${quantity.value}" == "1" || isAddedToCart.value)
+                    ) {
+                        Icon(imageVector = Icons.Outlined.Remove,
+                            contentDescription = LocalStrings.current.minus,
+                            tint = if ("${quantity.value}" == "1" || isAddedToCart.value)  Color.Transparent else MaterialTheme.colors.onSurface,
+                            modifier = Modifier
+                                .size(24.dp)
+                                .graphicsLayer {
+                                    rotationY = if (lyricist.languageTag == Locales.AR) 180f else 0f
+                                },
+                        )
+
+                    }
+
+                    AnimatedContent(
+                        modifier =Modifier
+                            .align(Alignment.CenterVertically)
+                            .weight(1f) ,
+                        targetState = "${quantity.value}",
+                        transitionSpec = {
+                            if (targetState > initialState) {
+                                slideInVertically({ height -> height }) + fadeIn() with
+                                        slideOutVertically({ height -> -height }) + fadeOut()
+                            } else {
+                                slideInVertically({ height -> -height }) + fadeIn() with
+                                        slideOutVertically({ height -> height }) + fadeOut()
+                            }.using(
+                                SizeTransform(clip = false)
+                            )
+                        }
+                    ) { targetCount ->
+                        Text(
+                            text = "$targetCount",
+                            fontSize = 16.sp,
+                            fontWeight = FontWeight.Normal,
+                            textAlign = TextAlign.Center,
+                            color = MaterialTheme.colors.onBackground,
+                            modifier = Modifier
+                                .padding(
+                                    start = 0.dp,
+                                    end = 0.dp,
+                                )
+                        )
+                    }
+
+
+                    IconButton(
+                        modifier =Modifier
+                            .size(32.dp)
+                            .align(Alignment.CenterVertically),
+                        onClick = {   quantity.value += 1 },
+                        enabled =!(quantity.value >= 9 || isAddedToCart.value)
+                    ) {
+                        Icon(
+                            imageVector = Icons.Outlined.Add,
+                            contentDescription = LocalStrings.current.add,
+                            tint = if (quantity.value >= 9 || isAddedToCart.value)  Color.Transparent else  MaterialTheme.colors.onSurface,
+                            modifier = Modifier
+                                .size(24.dp)
+                                .graphicsLayer {
+                                    rotationY = if (lyricist.languageTag == Locales.AR) 180f else 0f
+                                },
+                        )
+                    }
                 }
-            )
+            }
+
+
+
         }
 
     }
+
+
 }
 
 
 @Composable
-fun itemsTitle(title: String, modifier: Modifier) {
+fun itemsTitle(title: String, modifier: Modifier = Modifier) {
     Text(
         text = "$title:",
         textAlign = TextAlign.Center,
-        fontSize = 20.sp,
+        fontSize = 16.sp,
         fontWeight = FontWeight.Bold,
         color = MaterialTheme.colors.onBackground,
         modifier = modifier
@@ -257,133 +407,50 @@ fun itemsTitle(title: String, modifier: Modifier) {
 }
 
 
+
+
+@OptIn(ExperimentalAnimationApi::class)
+@ExperimentalAnimationApi
 @Composable
 fun itemButton(
-    value: String, modifier: Modifier,
-    isColorDialogVisible: MutableState<Boolean>,
-    enabled: MutableState<Boolean>,
-) {
-
-    OutlinedButton(
-        enabled = !enabled.value,
-        colors = ButtonDefaults.buttonColors(
-            backgroundColor = CardCoverPink,
-            contentColor = Color.LightGray,
-        ),
-        shape = CircleShape,
-        modifier = modifier
-            .padding(start = 48.dp, top = 8.dp, bottom = 8.dp)
-            .width(160.dp),
-        onClick = {
-            isColorDialogVisible.value = !isColorDialogVisible.value
-        }) {
-        Text(
-            text = value,
-            fontSize = 16.sp,
-            fontWeight = FontWeight.Normal,
-            textAlign = TextAlign.Center,
-            color = MaterialTheme.colors.onBackground,
-            modifier = Modifier.padding(
-                start = 36.dp,
-                end = 36.dp,
-            )
-        )
-    }
-
-}
-
-@Composable
-fun specialItemButton(
-    value: String,
     modifier: Modifier = Modifier,
-    onAdd: () -> Unit = {},
-    onSubstract: () -> Unit = {},
-    enabled: MutableState<Boolean>
+    enabled : Boolean = false ,
+    onClicked : () -> Unit = {},
+    content : @Composable () -> Unit
 ) {
-
-    OutlinedButton(
-        enabled = false,
-        colors = ButtonDefaults.buttonColors(
-            backgroundColor = CardCoverPink,
-            contentColor = Color.LightGray,
-            disabledBackgroundColor = if (!enabled.value) CardCoverPink else MaterialTheme.colors.onSurface.copy(
-                alpha = 0.12f
-            ),
-            disabledContentColor = if (!enabled.value) Color.LightGray else MaterialTheme.colors.onSurface.copy(
-                alpha = 0.12f
-            ),
-        ),
-        shape = CircleShape,
+    Card(
         modifier = modifier
-            .padding(start = 48.dp, top = 8.dp, bottom = 8.dp)
-            .width(160.dp),
-        onClick = {
-
-        }) {
-        Icon(
-            imageVector = Icons.Outlined.Add,
-            contentDescription = LocalStrings.current.add,
-            tint = if (value.toInt() >= 10 || enabled.value) Color.LightGray else Color.DarkGray,
-            modifier = Modifier
-                .clickable(
-                    enabled = !(value.toInt() >= 10 || enabled.value),
-                ) {
-                    onAdd()
-                }
-                                            .graphicsLayer {
-                                                rotationY = if (lyricist.languageTag == Locales.AR) 180f else 0f
-                                            },
-
-        )
-        ClickableText(
-            text = AnnotatedString(""),
-            onClick = {
-                if (value.toInt() <= 10 || !enabled.value)
-                    onAdd()
-            },
-            modifier = Modifier
-                .weight(1f)
-        )
-        Text(
-            text = "$value",
-            fontSize = 16.sp,
-            fontWeight = FontWeight.Normal,
-            textAlign = TextAlign.Center,
-            color = MaterialTheme.colors.onBackground,
-            modifier = Modifier.padding(
-                start = 0.dp,
-                end = 0.dp,
-            )
-        )
-
-        ClickableText(
-            text = AnnotatedString(""),
-            onClick = {
-                if (value != "1" || !enabled.value)
-                    onSubstract()
-            },
-            modifier = Modifier
-                .weight(1f)
-        )
-        Icon(imageVector = Icons.Outlined.Remove,
-            contentDescription = LocalStrings.current.minus,
-            tint = if (value == "1" || enabled.value) Color.LightGray else Color.DarkGray,
-            modifier = Modifier
-
-                .clickable(
-                    enabled = !(value == "1" || enabled.value),
-                ) {
-                    onSubstract()
-                }
-                                            .graphicsLayer {
-                                                rotationY = if (lyricist.languageTag == Locales.AR) 180f else 0f
-                                            },
+            .background(color = Color.Transparent, shape =RoundedCornerShape(12.dp) )
+            .clip(shape =RoundedCornerShape(12.dp))
+            .clickable(enabled = enabled){
+                onClicked()
+            }
+            .aspectRatio(1.8f)
+            .background(color = Color.Transparent, shape =RoundedCornerShape(12.dp) )
+            .clip(shape =RoundedCornerShape(12.dp)),
+        backgroundColor = MaterialTheme.colors.background,
+        shape = RoundedCornerShape(16.dp),
+        border = BorderStroke(width = 1.dp, color = MaterialTheme.colors.onSurface.copy(0.5f)),
 
 
-        )
+    ){
+
+
+        Column(
+            Modifier
+                .fillMaxSize()
+                .background(
+                    color = CardCoverPink.copy(alpha = 0.5f),
+                    shape = RoundedCornerShape(12.dp)
+                )
+        ) {}
+
+        content()
 
     }
+
 }
+
 
 
 @Composable

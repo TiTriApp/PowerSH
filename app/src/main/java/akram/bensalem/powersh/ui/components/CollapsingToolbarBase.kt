@@ -44,19 +44,6 @@ import com.google.accompanist.insets.statusBarsPadding
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.PagerState
 
-/**
- * Collapsing Toolbar that can be used in a topBar slot of Scaffold.
- * It has a back button, default bottom rounded corners
- * & a box scope which holds content centered by default.
- * You need to implement nestedScrollConnection to set the offset values
- * See Usage of this in AboutScreen or SettingsScreen or DetailsScreen
- *
- * To use this Toolbar with a persistent Image that's always visible
- * and just shrinks when scroll then leave the toolbarHeading blank("")
- *
- * With nestedScrollConnection know that the maximum offset that can be
- * reached is -132.0
- */
 @Composable
 fun CollapsingToolbarBase(
     modifier: Modifier = Modifier,
@@ -69,7 +56,7 @@ fun CollapsingToolbarBase(
     ),
     backgroundColor: Color = MaterialTheme.colors.surface,
     toolbarHeight: Dp,
-    minShrinkHeight: Dp = 100.dp,
+    minShrinkHeight: Dp = 72.dp,
     toolbarOffset: Float,
     content: @Composable BoxScope.() -> Unit
 ) {
@@ -124,6 +111,17 @@ fun CollapsingToolbarBase(
                 shape = shape
             )
     ) {
+
+
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .statusBarsPadding()
+                .alpha(1 - animatedTitleAlpha),
+            contentAlignment = contentAlignment,
+            content = content
+        )
+
         Row(
             modifier = Modifier
                 .statusBarsPadding(),
@@ -136,10 +134,10 @@ fun CollapsingToolbarBase(
                     .padding(Dimens.SmallPadding.size)
             ) {
                 Icon(
-                modifier = Modifier
-                                            .graphicsLayer {
-                                                rotationY = if (lyricist.languageTag == Locales.AR) 180f else 0f
-                                            },
+                    modifier = Modifier
+                        .graphicsLayer {
+                            rotationY = if (lyricist.languageTag == Locales.AR) 180f else 0f
+                        },
                     imageVector = Icons.Rounded.ArrowBack,
                     contentDescription = LocalStrings.current.goBack,
                     tint = MaterialTheme.colors.onSurface
@@ -156,14 +154,8 @@ fun CollapsingToolbarBase(
             )
         }
 
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .statusBarsPadding()
-                .alpha(1 - animatedTitleAlpha),
-            contentAlignment = contentAlignment,
-            content = content
-        )
+
+
     }
 }
 

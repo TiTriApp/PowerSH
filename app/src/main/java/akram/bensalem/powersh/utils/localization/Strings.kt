@@ -238,5 +238,13 @@ data class Strings(
 
     val billingHaveBeenPrinted : String,
     val at : (String) -> String,
+    
+    val entrerEnContact: String,
+    val black : String,
+    val red : String,
+    val blue : String,
+    val white : String,
+    val brown : String,
+
 
     )

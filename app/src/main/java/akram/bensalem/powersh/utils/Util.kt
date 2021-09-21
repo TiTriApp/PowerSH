@@ -62,7 +62,7 @@ fun isFullNameValid(name : String): Boolean{
         true
     } else {
         val s =  name.split(" ")
-       s.size > 1 && s[0].length >= 3 && s[1].length >= 3
+       s.size > 1 && s[0].length >= 3 && s[1].length >= 2
     }
 }
 

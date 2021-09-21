@@ -10,6 +10,9 @@ import akram.bensalem.powersh.ui.theme.PowerSHTheme
 import akram.bensalem.powersh.utils.localization.Locales
 import akram.bensalem.powersh.utils.rememberMapViewWithLifecycle
 import android.content.res.Configuration
+import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -18,12 +21,12 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
@@ -52,6 +55,7 @@ import com.google.android.libraries.maps.model.PolylineOptions
 import com.google.maps.android.ktx.awaitMap
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @Composable
@@ -62,7 +66,56 @@ fun AboutScreen(
     onBackButtonPressed: () -> Unit = { }
 ) {
 
-    val mapView = rememberMapViewWithLifecycle()
+    //Scale animation
+    val animatedProgress = remember {
+        Animatable(initialValue = 0.7f)
+    }
+    LaunchedEffect(key1 = Unit) {
+        animatedProgress.animateTo(
+            targetValue = 1f,
+            animationSpec = tween(300, easing = FastOutSlowInEasing)
+        )
+    }
+
+    val animatedModifier = Modifier
+        .graphicsLayer(
+            scaleX = animatedProgress.value,
+            scaleY = animatedProgress.value
+        )
+
+
+    val alphaAnimatedProgress = remember {
+        Animatable(initialValue = 0f)
+    }
+    LaunchedEffect(key1 = Unit) {
+        alphaAnimatedProgress.animateTo(
+            targetValue = 1f,
+            animationSpec = tween(300, easing = FastOutSlowInEasing)
+        )
+    }
+
+
+    val alphaAnimatedModifier = Modifier
+        .graphicsLayer(
+            alpha = alphaAnimatedProgress.value,
+        )
+
+
+    val isMapVisible = remember {
+        mutableStateOf(false)
+    }
+    LaunchedEffect(isMapVisible.value) {
+        if (!isMapVisible.value) {
+            delay(500)
+            isMapVisible.value = true
+        }
+    }
+
+
+
+
+
+
     val localString = LocalStrings.current
 
 
@@ -102,14 +155,14 @@ fun AboutScreen(
         },
     ) {
         LazyColumn(
-            modifier = modifier
+            modifier = animatedModifier
                 .nestedScroll(nestedScrollConnection),
             state = listState
         ) {
 
             item {
                 Image(
-                    modifier = Modifier
+                    modifier = alphaAnimatedModifier
                         .fillMaxWidth()
                         .padding(16.dp)
                         .graphicsLayer {
@@ -122,7 +175,7 @@ fun AboutScreen(
 
             item {
                 Row(
-                    modifier = Modifier
+                    modifier = alphaAnimatedModifier
                         .fillMaxWidth()
                         .padding(Dimens.MediumPadding.size)
                 ) {
@@ -140,34 +193,53 @@ fun AboutScreen(
                 }
 
             }
-
             item {
-                AndroidView(
-                    modifier = Modifier.fillMaxWidth()
-                             .height(260.dp)
-                             .padding(Dimens.LargePadding.size, Dimens.MediumPadding.size)
-                             .background(Color.Transparent, RoundedCornerShape(12.dp))
-                             .shadow(elevation = 2.dp,shape = RoundedCornerShape(12.dp))
-                             .border(width =1.dp, color = MaterialTheme.colors.onSurface,shape = RoundedCornerShape(12.dp))
-                    ,
-                    factory= { mapView}) {mapView->
-                    CoroutineScope(Dispatchers.Main).launch {
-                        val map = mapView.awaitMap()
-                        map.uiSettings.isZoomControlsEnabled = true
-                        val pickUp =  LatLng(36.25682, 2.78190)
-                        map.moveCamera(CameraUpdateFactory.newLatLngZoom(pickUp,10f))
-                        val markerOptions = MarkerOptions()
-                            .title(localString.akramBensalem)
-                            .position(pickUp)
-                        map.addMarker(markerOptions)
+                val coroutineScope = rememberCoroutineScope()
+
+                val mapView = rememberMapViewWithLifecycle()
+                if (isMapVisible.value) {
+
+                    AndroidView(
+                        modifier = alphaAnimatedModifier
+                            .fillMaxWidth()
+                            .height(260.dp)
+                            .padding(Dimens.LargePadding.size, Dimens.MediumPadding.size)
+                            .background(Color.Transparent, RoundedCornerShape(12.dp))
+                            .shadow(elevation = 2.dp, shape = RoundedCornerShape(12.dp))
+                            .border(
+                                width = 1.dp,
+                                color = MaterialTheme.colors.onSurface,
+                                shape = RoundedCornerShape(12.dp)
+                            ),
+                        factory = { mapView }) { mapView ->
+                        CoroutineScope(Dispatchers.Main).launch {
+                            coroutineScope.launch {
+                                val map = mapView.awaitMap()
+                                map.uiSettings.isZoomControlsEnabled = true
+                                val pickUp = LatLng(36.25682, 2.78190)
+                                map.moveCamera(CameraUpdateFactory.newLatLngZoom(pickUp, 10f))
+                                val markerOptions = MarkerOptions()
+                                    .title(localString.akramBensalem)
+                                    .position(pickUp)
+                                map.addMarker(markerOptions)
+                            }
+                        }
+                    }
+                }  else {
+                    Column(
+                        animatedModifier.fillMaxWidth()
+                    ) {
+                        CircularProgressIndicator(modifier = animatedModifier.align(Alignment.CenterHorizontally))
 
                     }
                 }
             }
+
+
             item{
                 Text(
                     text = LocalStrings.current.madeByAkramBensalem,
-                    modifier = Modifier
+                    modifier = alphaAnimatedModifier
                         .fillMaxWidth()
                         .padding(Dimens.SmallPadding.size)
                         .navigationBarsPadding(),

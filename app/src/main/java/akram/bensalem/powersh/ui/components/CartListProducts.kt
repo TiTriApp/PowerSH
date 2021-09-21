@@ -5,13 +5,18 @@ import akram.bensalem.powersh.data.model.CardItem
 import akram.bensalem.powersh.lyricist
 import akram.bensalem.powersh.ui.theme.CardCoverPink
 import akram.bensalem.powersh.ui.theme.Dimens
+import akram.bensalem.powersh.ui.theme.PowerSHRed
 import akram.bensalem.powersh.ui.theme.Shapes
+import akram.bensalem.powersh.utils.PARTICLE_LENGTH
+import akram.bensalem.powersh.utils.Particle
+import akram.bensalem.powersh.utils.generateParticle
 import akram.bensalem.powersh.utils.localization.Locales
-import androidx.compose.animation.core.FastOutSlowInEasing
-import androidx.compose.animation.core.tween
+import android.util.Log
+import androidx.compose.animation.core.*
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
@@ -22,13 +27,22 @@ import androidx.compose.material.icons.outlined.DeleteForever
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.draw.drawWithContent
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberImagePainter
+import kotlinx.coroutines.async
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlin.random.Random
 
 
 @ExperimentalMaterialApi
@@ -73,9 +87,27 @@ fun cardItemEntry(
     onRemove: () -> Unit = {},
     product: CardItem
 ) {
-    //Scale animation
+
+    val isRemove = remember {
+        mutableStateOf(false)
+    }
+
+
+    var isComputed = remember { mutableStateOf(false) }
+    var height = remember { mutableStateOf(0) }
+    var width = remember { mutableStateOf(0) }
+
+    val animationScope = rememberCoroutineScope()
+
+    val alpha = remember { Animatable(initialValue = 0f) }
+
+    val particles = remember { arrayOfNulls<Particle>(PARTICLE_LENGTH * PARTICLE_LENGTH) }
+
+    val factor = remember { Animatable(initialValue = 0f) }
+
+
     val animatedProgress = remember {
-        androidx.compose.animation.core.Animatable(initialValue = 1.15f)
+        Animatable(initialValue = 0.8f)
     }
     LaunchedEffect(key1 = Unit) {
         animatedProgress.animateTo(
@@ -113,14 +145,54 @@ fun cardItemEntry(
         shape = Shapes.large,
         backgroundColor = MaterialTheme.colors.surface,
         elevation = Dimens.ElevationPadding.size,
-        modifier = animatedModifier.fillMaxWidth()
+        modifier = animatedModifier
+            .fillMaxWidth()
+            .onGloballyPositioned {
+
+                if (!isComputed.value) {
+                    height.value = it.size.height
+                    width.value = it.size.width
+
+                    val random = Random(System.currentTimeMillis())
+                    for (i in 0 until PARTICLE_LENGTH) {
+                        for (j in 0 until PARTICLE_LENGTH) {
+                            particles[(i * PARTICLE_LENGTH) + j] = generateParticle(
+                                random,
+                                height.value,
+                                width.value / 2,
+                                height.value / 2
+                            )
+                        }
+                    }
+                }
+
+
+            }
+            .drawWithContent {
+                this.drawContent()
+                for (particle in particles) {
+                    particle?.let {
+                        it.update(factor.value)
+                        if (it.alpha > 0f) {
+                            this.drawCircle(
+                                PowerSHRed,
+                                it.radius,
+                                Offset(it.cx, it.cy)
+                            )
+                        }
+                    }
+                }
+            }
+            .alpha(1f - alpha.value)
     ) {
         Row(
             modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Box(contentAlignment = Alignment.Center,
-            modifier = Modifier.weight(1f)) {
+            Box(
+                contentAlignment = Alignment.Center,
+                modifier = Modifier.weight(1f)
+            ) {
                 Column(
                     Modifier
                         .size(130.dp)
@@ -181,20 +253,76 @@ fun cardItemEntry(
                 )
                 SubtitleText(
                     subtitleName = LocalStrings.current.marketValue,
-                    subtitleData =LocalStrings.current.totalPriceValue(product.price)
+                    subtitleData = LocalStrings.current.totalPriceValue(product.price)
                 )
 
             }
 
             IconButton(
                 onClick = {
-                    onRemove()
+                    //   onRemove()
+                    animationScope.launch {
+                        if (!isComputed.value) {
+
+                            val random = Random(System.currentTimeMillis())
+                            for (i in 0 until PARTICLE_LENGTH) {
+                                for (j in 0 until PARTICLE_LENGTH) {
+                                    particles[(i * PARTICLE_LENGTH) + j] = generateParticle(
+                                        random,
+                                        height.value,
+                                        width.value / 2,
+                                        height.value / 2
+                                    )
+                                }
+                            }
+                            isComputed.value = true
+                        }
+
+                        val result = async {
+                            // Run the alpha animation
+                            alpha.animateTo(
+                                targetValue = 1f,
+                                animationSpec = keyframes {
+                                    this.durationMillis = durationMillis
+                                    0.9f at durationMillis / 2
+                                }
+                            )
+                        }
+
+
+
+                        // Run the particle animation
+                        async {
+                            factor.animateTo(
+                                targetValue = 1.5f,
+                                animationSpec = tween(
+                                    durationMillis = 400,
+                                    easing = LinearEasing
+                                )
+                            )
+
+                        }
+
+
+                        result.invokeOnCompletion {
+                            this.launch {
+                                delay(300)
+                                alpha.snapTo(0f)
+                                factor.snapTo(0f)
+                                onRemove()
+                            }
+
+                        }
+
+
+                    }
                 },
 
                 modifier = Modifier
                     .background(shape = CircleShape, color = Color.Transparent)
                     .align(Alignment.CenterVertically)
                     .padding(4.dp, 0.dp)
+
             ) {
                 Icon(
                     imageVector = Icons.Outlined.DeleteForever,
@@ -204,8 +332,8 @@ fun cardItemEntry(
                         .size(24.dp)
                         .align(Alignment.CenterVertically)
                         .graphicsLayer {
-                          rotationY = if (lyricist.languageTag == Locales.AR) 180f else 0f
-                                                    },
+                            rotationY = if (lyricist.languageTag == Locales.AR) 180f else 0f
+                        },
                 )
             }
         }

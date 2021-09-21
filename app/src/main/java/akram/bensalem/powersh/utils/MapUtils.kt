@@ -21,14 +21,29 @@ fun rememberMapViewWithLifecycle(): MapView {
     }
 
     // Makes MapView follow the lifecycle of this composable
-    val lifecycleObserver = rememberMapLifecycleObserver(mapView)
+  //  val lifecycleObserver = rememberMapLifecycleObserver(mapView)
+
+
     val lifecycle = LocalLifecycleOwner.current.lifecycle
-    DisposableEffect(lifecycle) {
+
+
+    DisposableEffect(lifecycle, mapView) {
+        // Make MapView follow the current lifecycle
+        val lifecycleObserver = getMapLifecycleObserver(mapView)
         lifecycle.addObserver(lifecycleObserver)
         onDispose {
             lifecycle.removeObserver(lifecycleObserver)
         }
     }
+
+
+    /*
+      DisposableEffect(lifecycle, mapView) {
+          lifecycle.addObserver(lifecycleObserver)
+          onDispose {
+              lifecycle.removeObserver(lifecycleObserver)
+          }
+      }*/
 
     return mapView
 }
@@ -46,5 +61,20 @@ fun rememberMapLifecycleObserver(mapView: MapView): LifecycleEventObserver =
                 Lifecycle.Event.ON_DESTROY -> mapView.onDestroy()
                 else -> throw IllegalStateException()
             }
+        }
+    }
+
+
+
+private fun getMapLifecycleObserver(mapView: MapView): LifecycleEventObserver =
+    LifecycleEventObserver { _, event ->
+        when (event) {
+            Lifecycle.Event.ON_CREATE -> mapView.onCreate(Bundle())
+            Lifecycle.Event.ON_START -> mapView.onStart()
+            Lifecycle.Event.ON_RESUME -> mapView.onResume()
+            Lifecycle.Event.ON_PAUSE -> mapView.onPause()
+            Lifecycle.Event.ON_STOP -> mapView.onStop()
+            Lifecycle.Event.ON_DESTROY -> mapView.onDestroy()
+            else -> throw IllegalStateException()
         }
     }

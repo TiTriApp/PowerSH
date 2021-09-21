@@ -97,6 +97,25 @@ fun QuantityToggle(
             verticalAlignment = Alignment.CenterVertically
         ) {
 
+            Text(
+                text = if (!isAddedToCart.value) LocalStrings.current.addedToCart else LocalStrings.current.added,
+                style = MaterialTheme.typography.button,
+                textAlign = TextAlign.Center,
+                color = if (!isAddedToCart.value) Color.White else MaterialTheme.colors.primary,
+                fontStyle = FontStyle.Normal,
+                fontWeight = if (!isAddedToCart.value) FontWeight.Normal else FontWeight.Medium,
+                fontSize = 14.sp,
+                modifier = Modifier
+                    .animateContentSize()
+                    .padding(
+                        start = if (!isAddedToCart.value) 8.dp else 0.dp,
+                        end = 8.dp,
+                        top = 0.dp,
+                        bottom = 0.dp
+                    )
+            )
+
+
             if (isAddedToCart.value) {
 
                 Icon(
@@ -105,35 +124,18 @@ fun QuantityToggle(
                     tint = if (!isAddedToCart.value) Color.White else MaterialTheme.colors.primary,
                     modifier = Modifier
                         .padding(
-                            start = 12.dp,
-                            end = 12.dp,
+                            start = 0.dp,
+                            end = 0.dp,
                             top = 0.dp,
                             bottom = 0.dp
                         )
-                        .size(iconSize)
-                                                    .graphicsLayer {
-                                                        rotationY = if (lyricist.languageTag == Locales.AR) 180f else 0f
-                                                    },
+                        .size(iconSize),
 
-                )
-            }
-            Text(
-                text = if (!isAddedToCart.value) LocalStrings.current.addedToCart else LocalStrings.current.added,
-                style = MaterialTheme.typography.button,
-                textAlign = TextAlign.Center,
-                color = if (!isAddedToCart.value) Color.White else MaterialTheme.colors.primary,
-                fontStyle = FontStyle.Normal,
-                fontWeight = if (!isAddedToCart.value) FontWeight.Normal else FontWeight.Medium,
-                fontSize = 13.sp,
-                modifier = Modifier
-                    .animateContentSize()
-                    .padding(
-                        start = if (!isAddedToCart.value) 10.dp else 0.dp,
-                        end = 10.dp,
-                        top = 0.dp,
-                        bottom = 0.dp
                     )
-            )
+            }
+
+
+
         }
     }
 }

@@ -9,6 +9,11 @@ import akram.bensalem.powersh.utils.isEmailValid
 import akram.bensalem.powersh.utils.isOnline
 import akram.bensalem.powersh.utils.isValidPasswordFormat
 import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.animation.animateColor
+import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.core.updateTransition
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.fillMaxSize
@@ -27,6 +32,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.autofill.AutofillType
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.text.AnnotatedString
@@ -39,6 +45,12 @@ import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import kotlinx.coroutines.launch
 
+
+
+private enum class LoginModeState { FILL, EMPTY }
+
+
+
 @ExperimentalMaterialApi
 @ExperimentalAnimationApi
 @OptIn(ExperimentalComposeUiApi::class)
@@ -49,6 +61,24 @@ fun LoginScreen(
     authentication: MutableState<Authenticate>,
     onLogin: () -> Unit
 ) {
+
+
+    val alphaAnimatedProgress = remember {
+        Animatable(initialValue = 0f)
+    }
+    LaunchedEffect(key1 = Unit) {
+        alphaAnimatedProgress.animateTo(
+            targetValue = 1f,
+            animationSpec = tween(300, easing = FastOutSlowInEasing)
+        )
+    }
+
+
+    val alphaAnimatedModifier = Modifier
+        .graphicsLayer(
+            alpha = alphaAnimatedProgress.value,
+        )
+
 
     val context = LocalContext.current
 
@@ -85,6 +115,33 @@ fun LoginScreen(
     }
 
     val localString = LocalStrings.current
+
+
+
+
+    val transition = updateTransition(
+        if (isValid(
+                email = emailState.value.text,
+                password = passwordState.value.text,
+            )) LoginModeState.FILL else LoginModeState.EMPTY,
+        label = ""
+    )
+
+
+    val backgroundColor by transition.animateColor { state ->
+        when (state) {
+            LoginModeState.FILL -> MaterialTheme.colors.primary
+            LoginModeState.EMPTY -> MaterialTheme.colors.surface
+        }
+    }
+
+    val contentColor by transition.animateColor { state ->
+        when (state) {
+            LoginModeState.FILL -> MaterialTheme.colors.primary
+            LoginModeState.EMPTY -> LocalContentColor.current
+        }
+    }
+
 
 
     LaunchedEffect(isForgetButtonPressed) {
@@ -184,7 +241,7 @@ fun LoginScreen(
 
 
         ClickableText(
-            modifier = Modifier
+            modifier = alphaAnimatedModifier
                 .constrainAs(forget) {
                     top.linkTo(password.bottom, margin = 16.dp)
                     bottom.linkTo(button.top, margin = 16.dp)
@@ -214,11 +271,13 @@ fun LoginScreen(
             ),
 
             colors = ButtonDefaults.buttonColors(
-                contentColor = Color.White,
-                backgroundColor = MaterialTheme.colors.primary,
+                backgroundColor = backgroundColor,
+                contentColor = contentColor,
+                disabledBackgroundColor = backgroundColor,
+                disabledContentColor = contentColor
             ),
             shape = RoundedCornerShape(12.dp),
-            modifier = Modifier
+            modifier = alphaAnimatedModifier
                 .constrainAs(button) {
                     top.linkTo(forget.bottom, margin = 16.dp)
                     bottom.linkTo(parent.bottom, margin = 32.dp)

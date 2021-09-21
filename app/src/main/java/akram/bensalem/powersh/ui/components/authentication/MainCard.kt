@@ -39,6 +39,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.google.accompanist.insets.statusBarsPadding
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.PagerState
 
@@ -60,7 +61,7 @@ fun MainCard(
     onPageSelected: (Int) -> Unit = {},
 ) {
     val animatedProgress = remember {
-        Animatable(initialValue = 0.9f)
+        Animatable(initialValue = 0.8f)
     }
 
     val scrollDp = toolbarHeight + toolbarOffset.dp
@@ -106,6 +107,7 @@ fun MainCard(
         Box(
             modifier = animatedModifier
                 .fillMaxWidth()
+                .statusBarsPadding()
                 .height(animatedCardSize)
         ) {
 

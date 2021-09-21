@@ -68,8 +68,7 @@ fun AuthenticationScreen(
 
     ModalBottomSheetLayout(
         modifier = Modifier
-            .fillMaxWidth()
-            .statusBarsPadding(),
+            .fillMaxWidth(),
         sheetContent = {
             ForgetPasswordBottomSheet(
                 authentication = authentication
