@@ -21,7 +21,7 @@
     <style name="Theme.AppSplash" parent="Theme.SplashScreen">
         <item name="windowSplashScreenBackground">@color/powerSH</item>
         <item name="windowSplashScreenAnimatedIcon">@drawable/big_circle_powersh</item>
-        <item name="windowSplashScreenAnimationDuration">10</item>
+        <item name="windowSplashScreenAnimationDuration">0</item>
         <item name="postSplashScreenTheme">@style/Theme.PowerSH</item>
     </style>
 </resources>

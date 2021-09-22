@@ -279,8 +279,23 @@ val ArStrings = Strings(
     red = "أحمر",
     white = "أبيض",
     blue = "أزرق",
-    brown = "بني"
+    brown = "بني",
+
+    addressWithout = "العنوان",
+    paymentWithout = "الدفع",
+
+    skip = "تخطي",
+
+
+    onBoarding_start = "لنبدأ",
+    onBoarding_page_1_title = "إختر حذائك المفضل",
+    onBoarding_page_1_Description = "إختر أي منتوج يعجبك من متجرنا",
+    onBoarding_page_2_title = "أضفها إلى سلة المشتريات",
+    onBoarding_page_2_Description = "أضف المنتجات إلى قائمة المشتريات",
+    onBoarding_page_3_title = "أكد طلبك",
+    onBoarding_page_3_Description = "إملئ القائمة بمعلوماتك الشخصية وانتظر قدوم المنتجات إلى منزلك",
 
 
 
-)
+
+    )

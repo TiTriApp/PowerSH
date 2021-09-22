@@ -260,6 +260,21 @@ val EnStrings = Strings(
     red = "Red",
     white = "White",
     blue = "Blue",
-    brown = "Brown"
+    brown = "Brown",
+
+    addressWithout = "Address",
+    paymentWithout = "Payment",
+
+    skip = "Skip",
+
+
+     onBoarding_start = "Lets go",
+
+ onBoarding_page_1_title = "Choose a Product",
+ onBoarding_page_1_Description = "Choose any product that you like from our store.",
+ onBoarding_page_2_title = "Add To Cart",
+ onBoarding_page_2_Description = "Add the product to your shopping cart",
+ onBoarding_page_3_title = "Confirm Order",
+ onBoarding_page_3_Description = "Fill your dilevery information and wait for your product at home.",
 
 )

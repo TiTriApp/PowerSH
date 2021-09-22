@@ -84,6 +84,10 @@ class MainActivity : AppCompatActivity(){
                 mutableStateOf(-1)
             }
 
+            val layoutDirectionValue = remember {
+                mutableStateOf(fromValueToLanguage(languageValue.value,Locale.getDefault().language ))
+            }
+
 
             LaunchedEffect(key1 = themeValue ){
                 dataStoreRepository.readThemeSetting.collect {
@@ -91,30 +95,83 @@ class MainActivity : AppCompatActivity(){
                 }
             }
 
-
             LaunchedEffect(key1 = languageValue ){
                 dataStoreRepository.readLanguageSetting.collect {
                     languageValue.value = it
-                }
-            }
 
-
-            when (languageValue.value) {
-                1 -> lyricist.languageTag = Locales.AR
-                2 -> lyricist.languageTag = Locales.FR
-                3 -> lyricist.languageTag = Locales.EN
-                else -> {
-                    when(Locale.getDefault().language){
-                        "en" -> lyricist.languageTag = Locales.EN
-                            "fr" -> lyricist.languageTag =Locales.FR
-                        "ar" -> lyricist.languageTag =Locales.AR
-                        else -> lyricist.languageTag =Locales.EN
+                    when (languageValue.value) {
+                        1 -> {
+                            lyricist.languageTag = Locales.AR
+                            layoutDirectionValue.value = LayoutDirection.Rtl
+                        }
+                        2 -> {
+                            lyricist.languageTag = Locales.FR
+                            layoutDirectionValue.value = LayoutDirection.Ltr
+                        }
+                        3 -> {
+                            lyricist.languageTag = Locales.EN
+                            layoutDirectionValue.value = LayoutDirection.Ltr
+                        }
+                        else -> {
+                            when(Locale.getDefault().language){
+                                "en" -> {
+                                    lyricist.languageTag = Locales.EN
+                                    layoutDirectionValue.value = LayoutDirection.Ltr
+                                }
+                                "fr" -> {
+                                    lyricist.languageTag =Locales.FR
+                                    layoutDirectionValue.value = LayoutDirection.Ltr
+                                }
+                                "ar" -> {
+                                    lyricist.languageTag =Locales.AR
+                                    layoutDirectionValue.value = LayoutDirection.Rtl
+                                }
+                                else -> layoutDirectionValue.value = fromValueToLanguage(languageValue.value,Locale.getDefault().language )
+                            }
+                        }
                     }
                 }
             }
 
 
-            CompositionLocalProvider(LocalLayoutDirection provides fromValueToLanguage(languageValue.value,Locale.getDefault().language )) {
+            LaunchedEffect(key1 = layoutDirectionValue ){
+                when (languageValue.value) {
+                    1 -> {
+                        lyricist.languageTag = Locales.AR
+                        layoutDirectionValue.value = LayoutDirection.Rtl
+                    }
+                    2 -> {
+                        lyricist.languageTag = Locales.FR
+                        layoutDirectionValue.value = LayoutDirection.Ltr
+                    }
+                    3 -> {
+                        lyricist.languageTag = Locales.EN
+                        layoutDirectionValue.value = LayoutDirection.Ltr
+                    }
+                    else -> {
+                        when(Locale.getDefault().language){
+                            "en" -> {
+                                lyricist.languageTag = Locales.EN
+                                layoutDirectionValue.value = LayoutDirection.Ltr
+                            }
+                            "fr" -> {
+                                lyricist.languageTag =Locales.FR
+                                layoutDirectionValue.value = LayoutDirection.Ltr
+                            }
+                            "ar" -> {
+                                lyricist.languageTag =Locales.AR
+                                layoutDirectionValue.value = LayoutDirection.Rtl
+                            }
+                            else -> layoutDirectionValue.value = fromValueToLanguage(languageValue.value,Locale.getDefault().language )
+                        }
+                    }
+                }
+            }
+
+
+
+
+            CompositionLocalProvider(LocalLayoutDirection provides layoutDirectionValue.value) {
 
 
                 ProvideStrings(lyricist, LocalStrings) {

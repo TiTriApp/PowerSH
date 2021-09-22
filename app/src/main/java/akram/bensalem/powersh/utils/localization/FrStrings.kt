@@ -193,6 +193,10 @@ val FrStrings = Strings(
     info = "informations",
     payment = "Paiement:",
     adress = "Adresse:",
+
+    addressWithout = "Adresse",
+    paymentWithout = "Paiement",
+
     product = "Les produits:",
     confirmation = "Confirmation",
     ok = "D'accord",
@@ -289,7 +293,17 @@ val FrStrings = Strings(
     red = "Rouge",
     white = "Blanche",
     blue = "Bleu",
-    brown = "Marron"
+    brown = "Marron",
+
+    skip = "Passer",
+
+    onBoarding_start = "Allons-y",
+    onBoarding_page_1_title = "Choisissez un Produit",
+    onBoarding_page_1_Description = "Choisissez n'importe quel produit que vous aimez dans notre magasin.",
+    onBoarding_page_2_title = "Ajouter au Panier",
+    onBoarding_page_2_Description = "Ajouter le produit à votre panier",
+    onBoarding_page_3_title = "Confirmer la commande",
+    onBoarding_page_3_Description = "Remplissez vos informations personnelles et attendez votre produit à la maison.",
 
 
     )

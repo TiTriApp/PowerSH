@@ -253,7 +253,7 @@ fun finalCartItem(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Box(contentAlignment = Alignment.Center,
-                modifier = Modifier.weight(1f)) {
+                modifier = Modifier) {
                 Column(
                     Modifier
                         .size(130.dp)
@@ -290,12 +290,12 @@ fun finalCartItem(
             Column(
                 verticalArrangement = Arrangement.SpaceBetween,
                 modifier = Modifier
+                    .weight(1f)
                     .padding(
                         top = Dimens.MediumPadding.size,
                         bottom = Dimens.MediumPadding.size,
                         end = Dimens.MediumPadding.size
                     )
-                    .weight(1f)
             ) {
                 Text(
                     text = product.title,
@@ -306,7 +306,14 @@ fun finalCartItem(
                 )
                 SubtitleText(
                     subtitleName = LocalStrings.current.color,
-                    subtitleData = product.color
+                    subtitleData = when(product.color){
+                        "Black" -> LocalStrings.current.black
+                        "Red" -> LocalStrings.current.red
+                        "Blue" -> LocalStrings.current.blue
+                        "White" -> LocalStrings.current.white
+                        "Brown" -> LocalStrings.current.brown
+                        else -> LocalStrings.current.black
+                    }
                 )
                 SubtitleText(
                     subtitleName = LocalStrings.current.size,
@@ -314,7 +321,7 @@ fun finalCartItem(
                 )
                 SubtitleText(
                     subtitleName = LocalStrings.current.marketValue,
-                    subtitleData = product.price.toString()
+                    subtitleData =LocalStrings.current.totalPriceValue(product.price)
                 )
             }
         }

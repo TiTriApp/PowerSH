@@ -38,7 +38,7 @@ fun CheckoutScreen(
 ) {
 
     val step = remember {
-        mutableStateOf(0)
+        mutableStateOf(2)
     }
     val selected = remember { mutableStateOf(MainPayOptions.CASH_OPTION) }
     val openDialog = remember { mutableStateOf(false) }
@@ -136,8 +136,6 @@ fun CheckoutScreen(
             )
         },
         modifier = Modifier
-            .statusBarsPadding()
-            .navigationBarsPadding()
     ) {
 
         FirstStep(
@@ -204,11 +202,12 @@ fun ifNextIsEnabled(
             && firstName.isNotEmpty()
             && lastName.isNotEmpty()
             && email.isNotEmpty()
-                    && isEmailValid(email = email)
-                    && isPhoneValid(phone = phone)
-                    && isNameValid(fullAddress)
-                    && isNameValid(firstName)
-                    && isNameValid(lastName)
+            && isEmailValid(email = email)
+            && isPhoneValid(phone = phone)
+            && isNameValid(fullAddress)
+            && isNameValid(firstName)
+            && isNameValid(lastName)
+                    && fullAddress.split(",")[1].length > 3
         }
         2 -> { true }
        else -> true

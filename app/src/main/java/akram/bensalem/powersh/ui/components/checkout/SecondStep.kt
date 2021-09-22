@@ -36,6 +36,7 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.google.accompanist.insets.navigationBarsPadding
 
 @ExperimentalComposeUiApi
 @OptIn(ExperimentalAnimationApi::class)
@@ -104,7 +105,8 @@ fun SecondStep(
                 modifier =
                 Modifier
                     .fillMaxSize()
-                    .padding(top = 0.dp, bottom = 64.dp, start = 16.dp, end = 16.dp)
+                    .padding(top = 8.dp, bottom = 48.dp, start = 16.dp, end = 16.dp)
+                    .navigationBarsPadding()
             ) {
 
 

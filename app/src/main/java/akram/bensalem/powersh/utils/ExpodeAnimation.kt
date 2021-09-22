@@ -1,14 +1,6 @@
 package akram.bensalem.powersh.utils
 
-import android.annotation.SuppressLint
 import android.content.res.Resources
-import androidx.compose.animation.core.Animatable
-import androidx.compose.animation.core.AnimationVector1D
-import androidx.compose.runtime.*
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.composed
-import androidx.compose.ui.draw.drawWithContent
-import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import kotlin.math.pow
 import kotlin.random.Random

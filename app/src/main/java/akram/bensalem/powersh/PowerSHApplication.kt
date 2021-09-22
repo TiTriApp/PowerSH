@@ -18,12 +18,12 @@ import javax.inject.Inject
 class PowerSHApplication: Application() {
     @Inject lateinit var dataStoreRepository: DataStoreRepository
     override fun onCreate() {
-       /* val scope = CoroutineScope(SupervisorJob() + Dispatchers.Main)
+        val scope = CoroutineScope(SupervisorJob() + Dispatchers.Main)
         scope.launch {
             dataStoreRepository.readThemeSetting.collect {
-              //  AppCompatDelegate.setDefaultNightMode(it)
+               AppCompatDelegate.setDefaultNightMode(it)
             }
-        }*/
+        }
 
 
         super.onCreate()

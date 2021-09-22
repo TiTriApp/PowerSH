@@ -44,13 +44,13 @@ class ListViewModel @Inject constructor(
         )
     }.stateIn(
         scope = viewModelScope,
-        started = SharingStarted.WhileSubscribed(5000),
+        started = SharingStarted.WhileSubscribed(0),
         initialValue = MainListScreenState.Empty
     )
 
     init {
-        refreshShoesList()
-        getUserSortOption()
+      //  refreshShoesList()
+      //  getUserSortOption()
     }
 
     fun refreshShoesList() {

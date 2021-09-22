@@ -10,7 +10,9 @@ import androidx.compose.animation.core.spring
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Card
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
@@ -52,16 +54,18 @@ fun ccpOption(
             modifier =
             Modifier
                 .fillMaxSize()
-                .padding(top = 0.dp, bottom = 64.dp, start = 16.dp, end = 16.dp)
+                .padding(top = 8.dp, bottom = 48.dp, start = 16.dp, end = 16.dp)
         ) {
 
             Column(
                 Modifier
                     .fillMaxSize()
+                    .verticalScroll(state = rememberScrollState())
                     .background(
                         color = CardCoverPink.copy(alpha = 0.23f),
                         shape = RoundedCornerShape(12.dp)
                     )
+
             ) {}
 
 

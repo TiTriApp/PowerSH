@@ -18,6 +18,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.text.capitalize
 import androidx.compose.ui.unit.dp
+import com.google.accompanist.insets.statusBarsPadding
 import java.util.*
 
 @Composable
@@ -37,7 +38,7 @@ fun TopAppBarCheckout(
                         Locale.getDefault()) else it.toString() }
                 )
             },
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth().statusBarsPadding(),
             navigationIcon = {
                 IconButton(onClick = {
                     onBackPress()

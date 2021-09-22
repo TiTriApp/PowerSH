@@ -7,7 +7,9 @@ import androidx.compose.animation.*
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -29,8 +31,6 @@ fun CashOption(
     modifier: Modifier,
     onCallUsClicked: () -> Unit = {},
 ) {
-
-
     AnimatedVisibility(
         visible = visible,
         enter = fadeIn() + slideInHorizontally(),
@@ -45,7 +45,7 @@ fun CashOption(
                 modifier =
                 modifier
                     .fillMaxSize()
-                    .padding(top = 0.dp, bottom = 64.dp, start = 16.dp, end = 16.dp)
+                    .padding(top = 8.dp, bottom = 48.dp, start = 16.dp, end = 16.dp)
             ) {
                 Column(
                     Modifier
@@ -54,6 +54,8 @@ fun CashOption(
                             color = CardCoverPink.copy(alpha = 0.23f),
                             shape= RoundedCornerShape(12.dp),
                         )
+                        .verticalScroll(state = rememberScrollState())
+
                 ) {}
 
                 Column(

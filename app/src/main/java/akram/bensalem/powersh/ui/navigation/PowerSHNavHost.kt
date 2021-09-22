@@ -1,5 +1,6 @@
 package akram.bensalem.powersh.ui.navigation
 
+import akram.bensalem.powersh.LocalStrings
 import akram.bensalem.powersh.data.model.CardItem
 import akram.bensalem.powersh.data.model.OrderItem
 import akram.bensalem.powersh.data.model.ShoeProduct
@@ -12,32 +13,38 @@ import akram.bensalem.powersh.ui.main.screens.login.AuthenticationScreen
 import akram.bensalem.powersh.ui.main.viewModel.DetailsViewModel
 import akram.bensalem.powersh.ui.main.viewModel.ListViewModel
 import akram.bensalem.powersh.ui.main.viewModel.SettingsViewModel
+import akram.bensalem.powersh.utils.*
 import akram.bensalem.powersh.utils.authentification.Authenticate
 import akram.bensalem.powersh.utils.localization.Locales
-import akram.bensalem.powersh.utils.scaleInEnterTransition
-import akram.bensalem.powersh.utils.scaleInPopEnterTransition
-import akram.bensalem.powersh.utils.scaleOutExitTransition
-import akram.bensalem.powersh.utils.scaleOutPopExitTransition
 import android.widget.Toast
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.ExperimentalAnimationApi
-import androidx.compose.material.DrawerValue
-import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.rememberDrawerState
-import androidx.compose.material.rememberScaffoldState
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.size
+import androidx.compose.material.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.navArgument
 import com.akram.bensalem.powersh.ui.screens.onboarding.OnBoardingContent
+import com.google.accompanist.insets.navigationBarsPadding
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.util.*
 
@@ -50,7 +57,7 @@ import java.util.*
 @Composable
 fun PowerSHNavHost(
     modifier: Modifier = Modifier,
-    startDestination: String = PowerSHScreens.OnBoardingScreen.name,
+    startDestination: String = PowerSHScreens.SplashScreen.name,
     authentication: MutableState<Authenticate> = remember { mutableStateOf(Authenticate(null)) } ,
     cartProduct: MutableList<CardItem>,
     orderList: MutableList<OrderItem>,
@@ -60,10 +67,65 @@ fun PowerSHNavHost(
     isLogged: MutableState<Boolean>,
 ) {
 
+
+
+
+
     AnimatedNavHost(
         navController = navController,
         startDestination = startDestination
     ) {
+
+        // Checkout Screen
+        composable(
+            route = PowerSHScreens.SplashScreen.name,
+            enterTransition = { _, _ ->
+                scaleInEnterTransition()
+            },
+            exitTransition = { _, _ ->
+                scaleOutExitTransition()
+            },
+            popEnterTransition = { _, _ ->
+                scaleInPopEnterTransition()
+            },
+            popExitTransition = { _, _ ->
+                scaleOutPopExitTransition()
+            }
+        ) {
+
+
+
+
+            Box(modifier = Modifier
+                .fillMaxSize()
+                .background(MaterialTheme.colors.primary)
+            ){
+
+                LaunchedEffect(key1 = null){
+                 delay(300)
+                    navController.navigate(PowerSHScreens.OnBoardingScreen.name){
+                            popUpTo(PowerSHScreens.MainListScreen.name)
+
+                    }
+
+                }
+                Image(
+                    modifier = Modifier
+                        .size(160.dp)
+                        .align(Alignment.Center),
+                    painter = painterResource(id =akram.bensalem.powersh.R.drawable.big_circle_powersh),
+                    contentDescription = LocalStrings.current.appLogo,
+                )
+
+                Text(
+                    modifier = Modifier
+                        .align(Alignment.BottomCenter)
+                        .navigationBarsPadding(),
+                    text = "Made with ❤ by Akram Bensalem",
+                    color = Color.White
+                )
+            }
+        }
 
 
         // Checkout Screen
@@ -198,10 +260,9 @@ fun PowerSHNavHost(
             }
         ) {
             val viewModel: ListViewModel = hiltViewModel()
-            val listState by viewModel.uiState.collectAsState()
-            val shoesListScreenData =
-                listState as MainListScreenState.MainListScreen
-
+         //   val listState by viewModel.uiState.collectAsState()
+         /*   val shoesListScreenData =
+                listState as MainListScreenState.MainListScreen*/
 
             val tabIndex = remember {
                 mutableStateOf(0)
@@ -231,48 +292,50 @@ fun PowerSHNavHost(
 
 
 
+
             MainListScreen(
                 modifier = modifier,
                 navController = navController,
-                shoeProductList = shoesListScreenData.shoeProductList,
+           //     shoeProductList = shoesListScreenData.shoeProductList,
+                shoeProductList = Constants.ShoesListPreview,
                 cartProductList = cartProduct,
                 orderList = orderList,
                 favouriteProduct = favouriteProduct,
-                networkLoading = shoesListScreenData.networkLoading,
+                networkLoading = false,
                 pageState = pageState,
                 scaffoldState = scaffoldState,
                 isLogged = isLogged,
                 onSearch = { query ->
-                    viewModel
-                        .getNewShoesListFromDatabase(query, index = tabIndex.value)
+                   /* viewModel
+                        .getNewShoesListFromDatabase(query, index = tabIndex.value)*/
                 },
                 onEntryClick = { shoe ->
-                    navController.navigate(
+                  /*  navController.navigate(
                         route = "$detailsScreen/${shoe.title}"
-                    )
+                    )*/
                 },
                 onTabClicked = { index ->
-                    tabIndex.value = index
+                    /*tabIndex.value = index
                     viewModel
-                        .getNewShoesListFromDatabase("", index = index)
+                        .getNewShoesListFromDatabase("", index = index)*/
                 },
-                networkError = shoesListScreenData.networkError,
-                currentSortOption = shoesListScreenData.sortOption,
+                networkError = "shoesListScreenData.networkError",
+                currentSortOption = 0,
                 onSortOptionClicked = { sort ->
-                    viewModel.sortSelected(sort, tabIndex.value)
+                  //  viewModel.sortSelected(sort, tabIndex.value)
                 },
                 onSettingsClicked = {
-                    navController.navigate(
+                  /*  navController.navigate(
                         route = PowerSHScreens.SettingsScreen.name
-                    )
+                    )*/
                 },
                 onAboutClicked = {
-                    navController.navigate(
+                  /*  navController.navigate(
                         route = PowerSHScreens.AboutScreen.name
-                    )
+                    )*/
                 },
                 onCheckUpdates = {
-                    viewModel.refreshShoesList()
+                   // viewModel.refreshShoesList()
                 }
             )
         }

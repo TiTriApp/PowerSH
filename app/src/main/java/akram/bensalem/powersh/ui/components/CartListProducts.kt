@@ -88,14 +88,13 @@ fun cardItemEntry(
     product: CardItem
 ) {
 
-    val isRemove = remember {
-        mutableStateOf(false)
-    }
 
 
-    var isComputed = remember { mutableStateOf(false) }
-    var height = remember { mutableStateOf(0) }
-    var width = remember { mutableStateOf(0) }
+
+
+    val isComputed = remember { mutableStateOf(false) }
+    val height = remember { mutableStateOf(0) }
+    val width = remember { mutableStateOf(0) }
 
     val animationScope = rememberCoroutineScope()
 

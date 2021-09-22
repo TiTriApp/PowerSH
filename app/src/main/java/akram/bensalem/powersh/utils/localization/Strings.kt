@@ -246,5 +246,20 @@ data class Strings(
     val white : String,
     val brown : String,
 
+    val paymentWithout : String,
+    val addressWithout: String,
+
+    val skip : String,
+
+
+     val onBoarding_start : String,
+
+             val onBoarding_page_1_title : String,
+             val onBoarding_page_1_Description : String,
+             val onBoarding_page_2_title : String,
+             val onBoarding_page_2_Description: String,
+             val onBoarding_page_3_title: String,
+             val onBoarding_page_3_Description : String,
+
 
     )

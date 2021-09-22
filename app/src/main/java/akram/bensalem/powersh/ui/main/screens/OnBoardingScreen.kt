@@ -1,5 +1,6 @@
 package com.akram.bensalem.powersh.ui.screens.onboarding
 
+import akram.bensalem.powersh.LocalStrings
 import akram.bensalem.powersh.R
 import akram.bensalem.powersh.data.model.OnBoardingItem
 import akram.bensalem.powersh.lyricist
@@ -167,11 +168,11 @@ fun OnboardingPageOptions(
                     skip()
                 },
                 modifier = Modifier
-                    .padding(vertical = 32.dp, horizontal = 120.dp),
+                    .padding(vertical = 0.dp, horizontal = 120.dp),
                 shape = MaterialTheme.shapes.medium
             ) {
                 Text(
-                    text = com.akram.bensalem.powersh.ui.R.string.onBoarding_start,
+                    text = LocalStrings.current.onBoarding_start,
                     style = MaterialTheme.typography.body2,
                     color = Color.White
                 )
@@ -186,7 +187,7 @@ fun OnboardingPageOptions(
                 modifier =
                 Modifier
                     .fillMaxWidth()
-                    .padding(8.dp)
+                    .padding(horizontal = 8.dp)
             ) {
                 IconButton(
                     modifier = Modifier.align(Alignment.CenterVertically),
@@ -195,7 +196,7 @@ fun OnboardingPageOptions(
                     }
                 ) {
                     Text(
-                        text = "Skip",
+                        text = LocalStrings.current.skip ,
                         color = MaterialTheme.colors.primary,
                         style = MaterialTheme.typography.body2
                     )
@@ -208,7 +209,7 @@ fun OnboardingPageOptions(
                     color = MaterialTheme.colors.primary,
                     modifier = Modifier
                         .align(Alignment.CenterVertically)
-                        .padding(16.dp)
+                        .padding(horizontal = 16.dp)
                 )
 
                 TextButton(
@@ -218,15 +219,15 @@ fun OnboardingPageOptions(
                     modifier = Modifier.align(Alignment.CenterVertically)
                 ) {
                     Text(
-                        text = "Next",
+                        text = LocalStrings.current.next,
                         color = MaterialTheme.colors.primary,
                         style = MaterialTheme.typography.button,
                     )
                     Icon(
                     modifier = Modifier
-                                                .graphicsLayer {
-                                                    rotationY = if (lyricist.languageTag == Locales.AR) 180f else 0f
-                                                },
+                        .graphicsLayer {
+                         rotationY = if (lyricist.languageTag == Locales.AR) 180f else 0f
+                         },
                         imageVector = Icons.Outlined.KeyboardArrowRight,
                         tint = MaterialTheme.colors.primary,
                         contentDescription = null
@@ -267,7 +268,12 @@ fun OnboardingPageItem(item: OnBoardingItem, rotation: Float) {
         )
 
         Text(
-            text = item.titleId,
+            text = when (item.id){
+                       1 -> LocalStrings.current.onBoarding_page_1_title
+                       2 ->    LocalStrings.current.onBoarding_page_2_title
+                    3 ->  LocalStrings.current.onBoarding_page_3_title
+                else -> ""
+                    },
             style = MaterialTheme.typography.h5,
             fontWeight = FontWeight.Medium,
             textAlign = TextAlign.Center,
@@ -277,7 +283,12 @@ fun OnboardingPageItem(item: OnBoardingItem, rotation: Float) {
             )
         )
         Text(
-            text = item.DescriptionId,
+            text = when (item.id){
+                1 -> LocalStrings.current.onBoarding_page_1_Description
+                2 ->    LocalStrings.current.onBoarding_page_2_Description
+                3 ->  LocalStrings.current.onBoarding_page_3_Description
+                else -> ""
+            },
             color = Color.Gray,
             style = MaterialTheme.typography.body2,
             textAlign = TextAlign.Center,

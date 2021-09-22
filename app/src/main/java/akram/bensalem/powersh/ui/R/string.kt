@@ -4,8 +4,7 @@ class string {
     companion object {
         const val LauncherView_text = "Developped by PICOS"
         const val onBoarding_start = "Lets go"
-        const val onBoarding_Next = "Next"
-        const val onBoarding_Skip = "Skip"
+
         const val onBoarding_page_1_title = "Choose a Product"
         const val onBoarding_page_1_Description = "Choose any product that you like from our store."
         const val onBoarding_page_2_title = "Add To Cart"

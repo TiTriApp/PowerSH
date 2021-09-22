@@ -29,6 +29,7 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.google.accompanist.insets.navigationBarsPadding
 
 @ExperimentalMaterialApi
 @OptIn(ExperimentalAnimationApi::class)
@@ -71,11 +72,7 @@ fun ThirdStep(
     )
     {
 
-        ConfirmAlertDialog(
-            openDialog = openDialog,
-            orderItem = orderItem,
-            onConfirmClicked = onConfirmClicked
-        )
+
 
         Card(
             backgroundColor = MaterialTheme.colors.background,
@@ -83,8 +80,9 @@ fun ThirdStep(
             shape = RoundedCornerShape(12.dp),
             modifier =
             Modifier
-                .fillMaxSize()
-                .padding(top = 8.dp, bottom = 64.dp, start = 16.dp, end = 16.dp)
+                .fillMaxWidth()
+                .padding(top = 8.dp, bottom = 48.dp, start = 16.dp, end = 16.dp)
+                .navigationBarsPadding()
         ) {
 
             Column(
@@ -147,8 +145,8 @@ fun ThirdStep(
                             detail = if (selected.value == MainPayOptions.CCP_OPTION) LocalStrings.current.ccp else LocalStrings.current.cashOnDelivery
                         )
                         factureText(
-                            title = LocalStrings.current.date,
-                            detail = date
+                            title =LocalStrings.current.date,
+                            detail = LocalStrings.current.at(date)
                         )
 
                         Spacer(
@@ -173,60 +171,50 @@ fun ThirdStep(
                 }
                 itemsIndexed(cartProduct) { _, row ->
                     finalCartItem(product = row)
-                    Spacer(modifier = Modifier.padding(Dimens.LargePadding.size))
+                    Spacer(modifier = Modifier.padding(Dimens.SmallPadding.size))
+                }
+                item{
+                    Column(Modifier.fillMaxWidth()) {
+                        Spacer(modifier = Modifier.weight(1f))
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(start = 16.dp)
+                        ) {
+                            Text(
+                                text = LocalStrings.current.totalAmount,
+                                color = MaterialTheme.colors.onBackground,
+                                fontSize = 16.sp,
+                                fontWeight = FontWeight.Medium,
+                                textAlign = TextAlign.Start,
+                                modifier = Modifier
+                                    .align(Alignment.CenterVertically)
+                                    .padding(top = 4.dp, bottom = 0.dp)
+                            )
+
+                            Text(
+                                text = LocalStrings.current.totalPriceValue(totalPrice.value),
+                                color = MaterialTheme.colors.primary,
+                                fontSize = 16.sp,
+                                fontWeight = FontWeight.Normal,
+                                textAlign = TextAlign.Start,
+                                modifier = Modifier
+                                    .align(Alignment.CenterVertically)
+                                    .padding(start = 4.dp, top = 4.dp, bottom = 0.dp)
+                            )
+                        }
+                    }
                 }
 
             }
 
         }
 
-
-        // here
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(
-                    top = 8.dp,
-                    bottom = Dimens.MiniSmallPadding.size,
-                    end = Dimens.MediumPadding.size
-                )
-                .background(
-                    Color.White, RoundedCornerShape(
-                        bottomEnd = 12.dp,
-                        bottomStart = 12.dp
-                    )
-                )
-        ) {
-
-            Spacer(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .weight(1f)
-            )
-
-            Text(
-                text = LocalStrings.current.totalAmount,
-                color = MaterialTheme.colors.onBackground,
-                fontSize = 16.sp,
-                fontWeight = FontWeight.Medium,
-                textAlign = TextAlign.Start,
-                modifier = Modifier
-                    .align(Alignment.CenterVertically)
-                    .padding(top = 4.dp, bottom = 4.dp)
-            )
-
-            Text(
-                text = LocalStrings.current.totalShoesValue(totalPrice.value),
-                color = MaterialTheme.colors.primary,
-                fontSize = 16.sp,
-                fontWeight = FontWeight.Normal,
-                textAlign = TextAlign.Start,
-                modifier = Modifier
-                    .align(Alignment.CenterVertically)
-                    .padding(start = 4.dp, top = 4.dp, bottom = 4.dp)
-            )
-        }
     }
 
-
+    ConfirmAlertDialog(
+        openDialog = openDialog,
+        orderItem = orderItem,
+        onConfirmClicked = onConfirmClicked
+    )
 }

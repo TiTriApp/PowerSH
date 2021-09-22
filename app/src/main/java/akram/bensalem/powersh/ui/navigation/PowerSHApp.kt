@@ -56,7 +56,7 @@ fun PowerSHApp(
 
             PowerSHNavHost(
                 modifier = Modifier,
-                startDestination = PowerSHScreens.MainListScreen.name,
+                startDestination = PowerSHScreens.SplashScreen.name,
                 authentication = authentication,
                 navController = navController,
                 cartProduct = cartProduct,
