@@ -96,5 +96,15 @@ object Deps {
     val lyricist by lazy {"cafe.adriel.lyricist:lyricist:${Versions.lyricistVersion}"}
 
 
+    val pagingRuntime by lazy {
+        "androidx.paging:paging-runtime:${Versions.pagingVersion}"
+    }
+
+    val pagingCompose by lazy {
+        "androidx.paging:paging-compose:${Versions.pagingComposeVersion}"
+    }
+
+
+
 
 }

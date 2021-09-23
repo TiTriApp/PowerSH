@@ -44,16 +44,17 @@ class ListViewModel @Inject constructor(
         )
     }.stateIn(
         scope = viewModelScope,
-        started = SharingStarted.WhileSubscribed(0),
+        started = SharingStarted.WhileSubscribed(5000),
         initialValue = MainListScreenState.Empty
     )
 
     init {
       //  refreshShoesList()
-      //  getUserSortOption()
+        getUserSortOption()
     }
 
     fun refreshShoesList() {
+
         viewModelScope.launch {
             networkLoading.value = true
 
@@ -124,7 +125,7 @@ class ListViewModel @Inject constructor(
 
 
     fun sortSelected(sort: Int, index: Int) {
-        sortOption.value = sort
+         sortOption.value = sort
         getNewShoesListFromDatabase(index = index)
     }
 }

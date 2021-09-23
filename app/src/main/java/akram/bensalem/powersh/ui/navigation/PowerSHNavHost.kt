@@ -22,7 +22,6 @@ import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.*
@@ -58,13 +57,14 @@ import java.util.*
 fun PowerSHNavHost(
     modifier: Modifier = Modifier,
     startDestination: String = PowerSHScreens.SplashScreen.name,
-    authentication: MutableState<Authenticate> = remember { mutableStateOf(Authenticate(null)) } ,
+    authentication: MutableState<Authenticate> = remember { mutableStateOf(Authenticate(null)) },
     cartProduct: MutableList<CardItem>,
     orderList: MutableList<OrderItem>,
     navController: NavHostController,
     pageState: MutableState<String>,
     favouriteProduct: MutableList<ShoeProduct>,
     isLogged: MutableState<Boolean>,
+    isOnBoardingStart: MutableState<Boolean>,
 ) {
 
 
@@ -92,20 +92,15 @@ fun PowerSHNavHost(
                 scaleOutPopExitTransition()
             }
         ) {
-
-
-
-
             Box(modifier = Modifier
                 .fillMaxSize()
                 .background(MaterialTheme.colors.primary)
             ){
 
                 LaunchedEffect(key1 = null){
-                 delay(300)
-                    navController.navigate(PowerSHScreens.OnBoardingScreen.name){
+                 delay(500)
+                    navController.navigate(if (isOnBoardingStart.value) PowerSHScreens.OnBoardingScreen.name else PowerSHScreens.MainListScreen.name){
                             popUpTo(PowerSHScreens.MainListScreen.name)
-
                     }
 
                 }
@@ -181,6 +176,8 @@ fun PowerSHNavHost(
             }
         ) {
 
+
+            val scope = rememberCoroutineScope()
 
             OnBoardingContent(
                 onActionClicked = {
@@ -260,9 +257,9 @@ fun PowerSHNavHost(
             }
         ) {
             val viewModel: ListViewModel = hiltViewModel()
-         //   val listState by viewModel.uiState.collectAsState()
-         /*   val shoesListScreenData =
-                listState as MainListScreenState.MainListScreen*/
+            val listState by viewModel.uiState.collectAsState()
+            val shoesListScreenData =
+                listState as MainListScreenState.MainListScreen
 
             val tabIndex = remember {
                 mutableStateOf(0)
@@ -296,8 +293,7 @@ fun PowerSHNavHost(
             MainListScreen(
                 modifier = modifier,
                 navController = navController,
-           //     shoeProductList = shoesListScreenData.shoeProductList,
-                shoeProductList = Constants.ShoesListPreview,
+                shoeProductList = shoesListScreenData.shoeProductList,
                 cartProductList = cartProduct,
                 orderList = orderList,
                 favouriteProduct = favouriteProduct,
@@ -306,36 +302,36 @@ fun PowerSHNavHost(
                 scaffoldState = scaffoldState,
                 isLogged = isLogged,
                 onSearch = { query ->
-                   /* viewModel
-                        .getNewShoesListFromDatabase(query, index = tabIndex.value)*/
+                    viewModel
+                        .getNewShoesListFromDatabase(query, index = tabIndex.value)
                 },
                 onEntryClick = { shoe ->
-                  /*  navController.navigate(
+                    navController.navigate(
                         route = "$detailsScreen/${shoe.title}"
-                    )*/
+                    )
                 },
                 onTabClicked = { index ->
-                    /*tabIndex.value = index
+                    tabIndex.value = index
                     viewModel
-                        .getNewShoesListFromDatabase("", index = index)*/
+                        .getNewShoesListFromDatabase("", index = index)
                 },
                 networkError = "shoesListScreenData.networkError",
                 currentSortOption = 0,
                 onSortOptionClicked = { sort ->
-                  //  viewModel.sortSelected(sort, tabIndex.value)
+                    viewModel.sortSelected(sort, tabIndex.value)
                 },
                 onSettingsClicked = {
-                  /*  navController.navigate(
+                    navController.navigate(
                         route = PowerSHScreens.SettingsScreen.name
-                    )*/
+                    )
                 },
                 onAboutClicked = {
-                  /*  navController.navigate(
+                    navController.navigate(
                         route = PowerSHScreens.AboutScreen.name
-                    )*/
+                    )
                 },
                 onCheckUpdates = {
-                   // viewModel.refreshShoesList()
+                   viewModel.refreshShoesList()
                 }
             )
         }

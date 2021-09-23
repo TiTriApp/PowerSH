@@ -50,6 +50,9 @@ fun OnBoardingContent(
     val launchDestination: Boolean by viewModel.viewState.collectAsState()
 
     if (launchDestination) {
+
+
+
         onActionClicked()
     }
 

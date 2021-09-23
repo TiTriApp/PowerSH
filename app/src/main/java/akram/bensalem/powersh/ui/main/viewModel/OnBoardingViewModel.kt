@@ -8,6 +8,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -21,8 +22,17 @@ class OnBoardingViewModel @Inject constructor(
 
     fun getStartedClick() {
         viewModelScope.launch {
-            dataStoreRepository.saveOnBoardingStart(true)
+            dataStoreRepository.saveOnBoardingStart(false)
             _state.value = true
+            saveOnBoarding(false)
+        }
+    }
+
+
+    fun saveOnBoarding(startOnbording: Boolean) {
+        viewModelScope.launch {
+            dataStoreRepository.saveOnBoardingStart(value = startOnbording)
+            Timber.d("StartOnbording Data Saved $startOnbording")
         }
     }
 

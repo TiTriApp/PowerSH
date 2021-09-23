@@ -16,6 +16,7 @@ import kotlinx.coroutines.flow.collect
 import timber.log.Timber
 import akram.bensalem.powersh.repository.DataStoreRepository
 import akram.bensalem.powersh.ui.navigation.PowerSHApp
+import akram.bensalem.powersh.ui.theme.PowerSHTheme
 import akram.bensalem.powersh.utils.authentification.Authenticate
 import akram.bensalem.powersh.utils.localization.*
 import androidx.compose.runtime.*
@@ -88,11 +89,8 @@ class MainActivity : AppCompatActivity(){
                 mutableStateOf(fromValueToLanguage(languageValue.value,Locale.getDefault().language ))
             }
 
-
-            LaunchedEffect(key1 = themeValue ){
-                dataStoreRepository.readThemeSetting.collect {
-                    themeValue.value = it
-                }
+            val isOnBoardingStart = remember {
+                mutableStateOf(true)
             }
 
             LaunchedEffect(key1 = languageValue ){
@@ -134,7 +132,8 @@ class MainActivity : AppCompatActivity(){
             }
 
 
-            LaunchedEffect(key1 = layoutDirectionValue ){
+
+          /*  LaunchedEffect(key1 = layoutDirectionValue ){
                 when (languageValue.value) {
                     1 -> {
                         lyricist.languageTag = Locales.AR
@@ -166,24 +165,44 @@ class MainActivity : AppCompatActivity(){
                         }
                     }
                 }
-            }
+            }*/
 
 
 
 
-            CompositionLocalProvider(LocalLayoutDirection provides layoutDirectionValue.value) {
-
-
-                ProvideStrings(lyricist, LocalStrings) {
-                    PowerSHApp(
-                        themeValue.value,
-                        cartProduct = cartProduct,
-                        favouriteProduct = favouriteProduct,
-                        orderList = orderList
-                    )
+            LaunchedEffect(isOnBoardingStart){
+                dataStoreRepository.readOnBoardingOption.collect {
+                    isOnBoardingStart.value = it
                 }
-                Timber.d("setContent called")
             }
+
+
+
+
+            LaunchedEffect(key1 = themeValue ){
+                dataStoreRepository.readThemeSetting.collect {
+                    themeValue.value = it
+                }
+            }
+
+            PowerSHTheme() {
+                ProvideStrings(lyricist, LocalStrings) {
+
+                    CompositionLocalProvider(LocalLayoutDirection provides layoutDirectionValue.value) {
+
+                        PowerSHApp(
+                            themeValue.value,
+                            cartProduct = cartProduct,
+                            favouriteProduct = favouriteProduct,
+                            orderList = orderList,
+                            isOnBoardingStart = isOnBoardingStart
+                        )
+                    }
+                    Timber.d("setContent called")
+                }
+            }
+
+
         }
     }
 }

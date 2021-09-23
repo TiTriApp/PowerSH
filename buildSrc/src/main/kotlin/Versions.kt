@@ -66,4 +66,9 @@ object Versions {
 
     // Lyristic
     const val lyricistVersion ="1.0.0"
+
+    // paging
+    const val pagingVersion = "3.0.1"
+    const val pagingComposeVersion = "1.0.0-alpha12"
+
 }

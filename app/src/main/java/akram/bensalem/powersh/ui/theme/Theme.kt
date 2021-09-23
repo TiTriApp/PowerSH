@@ -18,18 +18,27 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 
 @SuppressLint("ConflictingOnColor")
-private val DarkColorPalette = darkColors(
-    primary = PowerSHRed,
-    onPrimary = YellowDefaultDarkerOn,
+/*private val DarkColorPalette = darkColors(
     primaryVariant = Color.White,
     secondary = YellowDefault,
     onSecondary = YellowDefaultDarkerOn,
+    secondaryVariant = Color.Black,
+)*/
+
+private val DarkColorPalette = darkColors(
+    primary = PowerSHRed,
+    onPrimary = YellowDefaultDarkerOn,
+    primaryVariant = Color.Black,
+    secondary = Color.Black,
+    onSecondary = Color.Black,
     secondaryVariant = Color.Black,
     background = Color.Black,
     onBackground = LightGrayBackground,
     surface = LightDark,
     onSurface = LightGrayTextDark
 )
+
+
 
 private val LightColorPalette = lightColors(
     primary = PowerSHRed,
@@ -42,6 +51,9 @@ private val LightColorPalette = lightColors(
     onBackground = LightDark,
     onSurface = LightGrayText
 )
+
+
+
 
 @Composable
 fun PowerSHTheme(

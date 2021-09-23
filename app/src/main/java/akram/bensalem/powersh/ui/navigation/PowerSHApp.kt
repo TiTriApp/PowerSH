@@ -10,6 +10,7 @@ import android.app.Activity
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.snapshots.SnapshotStateList
@@ -30,6 +31,7 @@ fun PowerSHApp(
     cartProduct: MutableList<CardItem>,
     favouriteProduct: SnapshotStateList<ShoeProduct>,
     orderList: MutableList<OrderItem>,
+    isOnBoardingStart: MutableState<Boolean>,
 ) {
 
     var pageState = remember {
@@ -56,7 +58,8 @@ fun PowerSHApp(
 
             PowerSHNavHost(
                 modifier = Modifier,
-                startDestination = PowerSHScreens.SplashScreen.name,
+                startDestination =PowerSHScreens.SplashScreen.name,
+                isOnBoardingStart = isOnBoardingStart,
                 authentication = authentication,
                 navController = navController,
                 cartProduct = cartProduct,

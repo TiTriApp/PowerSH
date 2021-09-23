@@ -82,7 +82,6 @@ fun AuthenticationScreen(
         Scaffold(
             backgroundColor = MaterialTheme.colors.background,
             modifier = modifier
-                .navigationBarsPadding()
                 .fillMaxSize(),
             topBar = {
                 MainCard(

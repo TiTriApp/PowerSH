@@ -107,13 +107,6 @@ fun MainListScreen(
     },
     favouriteProduct: MutableList<ShoeProduct>
 ){
-
-    Text("Akram")
-
-}
-/*{
-
-
     val coroutineScope = rememberCoroutineScope()
     val pagerState = rememberPagerState(pageCount = 4)
 
@@ -363,7 +356,7 @@ fun MainListScreen(
     }
 
 
-}*/
+}
 
 
 @Composable

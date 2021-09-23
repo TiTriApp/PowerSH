@@ -6,6 +6,7 @@ import akram.bensalem.powersh.ui.components.CollapsingToolbarBase
 import akram.bensalem.powersh.ui.components.DetailsCards
 import akram.bensalem.powersh.ui.components.ToolbarImage
 import akram.bensalem.powersh.ui.components.details.HorizontalPagerWithOffsetTransition
+import akram.bensalem.powersh.ui.components.reviews.RatingsAndReviews
 import akram.bensalem.powersh.ui.theme.PowerSHTheme
 import akram.bensalem.powersh.utils.Constants
 import android.content.res.Configuration
@@ -92,6 +93,9 @@ fun DetailsScreen(
                     favourite = favourite,
                     onNavigateToCartScreen = onNavigateToCartScreen
                 )
+            }
+            item{
+                RatingsAndReviews()
             }
 
             // Always at the bottom
